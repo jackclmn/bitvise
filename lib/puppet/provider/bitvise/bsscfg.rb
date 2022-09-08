@@ -1,10 +1,10 @@
-require 'win32ole'
-
 Puppet::Type.type(:bitvise).provide(:bsscfg) do
   desc 'This provider manages vault policies.'
 
   defaultfor kernel: :windows
   confine    kernel: :windows
+
+  require 'win32ole'
 
   def restart_service
     Puppet.debug('restarting service')
