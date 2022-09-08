@@ -12,7 +12,7 @@ Puppet::Type.newtype(:bitvise) do
       isnamevar
     end
   
-    newproperty(:trustedLspOnly) do
+    newproperty(:trusted_lsp_only) do
       desc 'The trustedLspOnly setting'
 
       newvalue(0)
