@@ -23,7 +23,7 @@ Puppet::Type.type(:bitvise).provide(:bsscfg) do
     Puppet.debug('restarted service')
   end
 
-  # TODO add data types for method parameters
+  # TODO: add data types for method parameters
   def get_config(setting)
     Puppet.debug("get_config with setting: #{setting}")
     cfg = WIN32OLE.new('Bitvise.BssCfg')
@@ -32,21 +32,21 @@ Puppet::Type.type(:bitvise).provide(:bsscfg) do
     val
   end
 
-  # TODO add data types for method parameters
+  # TODO: add data types for method parameters
   def set_config(setting, value)
     Puppet.debug("set_config with setting: #{setting} and value: #{value}")
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
     cfg.settings.lock
-    cfg.settings.server.send(setting) = value
+    eval "cfg.settings.server.#{setting} = #{value}"
     cfg.settings.save
     cfg.settings.unlock
-    restart_service()
+    restart_service
   end
 
   def exists?
     Puppet.debug('entering exists?')
-    # TODO for now do nothing, settings will always exist w/ defaults
+    # TODO: for now do nothing, settings will always exist w/ defaults
     true
   end
 
@@ -64,11 +64,11 @@ Puppet::Type.type(:bitvise).provide(:bsscfg) do
 
   def create
     Puppet.debug('entering create')
-    # TODO do nothing since we never need to create, only modify
+    # TODO: do nothing since we never need to create, only modify
   end
 
   def destroy
     Puppet.debug('entering destroy')
-    # TODO do nothing since we never need to destroy a setting
+    # TODO: do nothing since we never need to destroy a setting
   end
 end
