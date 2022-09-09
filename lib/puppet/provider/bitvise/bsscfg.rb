@@ -6,7 +6,9 @@
 # TODO add groups
 # TODO handle fg = WIN32OLE.new('Bitvise.BssCfg') accross multiple versions, how do we query for version?
 # TODO do we create a WIN32OLE.new() for each method? Can this be global? Need to find examples of best practice
-# TODO create re-usable code for load, lock, set, save, unlock
+# * create re-usable code for load, lock, set, save, unlock
+# TODO if we continue to use eval make sure strings are appropriately contained
+# TODO stop on error
 #
 Puppet::Type.type(:bitvise).provide(:bsscfg) do
   desc 'This provider manages vault policies.'
