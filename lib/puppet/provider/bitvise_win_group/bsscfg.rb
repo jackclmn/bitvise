@@ -104,6 +104,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         cfg.settings.access.winGroups.new.group = resource[:name]
         cfg.settings.access.winGroups.new.loginAllowed = resource[:login_allowed]
         cfg.settings.access.winGroups.new.term.shellAccessType = resource[:shell_access_type]
+        cfg.settings.access.winGroups.NewCommit()
         cfg.settings.save
         cfg.settings.unlock
         restart_service
@@ -113,10 +114,15 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         Puppet.debug('entering destroy')
         cfg = WIN32OLE.new('Bitvise.BssCfg')
         cfg.settings.load
-        cfg.settings.access.winGroups.entries.each do |entry|
+        cfg.settings.lock
+        i = nil
+        cfg.settings.access.winGroups.entries.each_with_index do |entry, index|
             if entry.group == resource[:name]
-                entry.erase
+                i = index
             end
         end
+        cfg.settings.access.winGroups.Erase(i) unless i == nil
+        cfg.settings.save
+        cfg.settings.unlock
     end
 end
