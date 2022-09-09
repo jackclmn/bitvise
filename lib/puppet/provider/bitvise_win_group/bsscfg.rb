@@ -73,7 +73,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     val = nil
     cfg.settings.access.winGroups.entries.each do |entry|
       if entry.group == resource[:name]
-        val = entry.shellAccessType
+        val = entry.term.shellAccessType
       end
     end
     Puppet.debug("value of shell_access_type is #{val}")
@@ -87,7 +87,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     cfg.settings.lock
     cfg.settings.access.winGroups.entries.each do |entry|
       if entry.group == resource[:name]
-        entry.shellAccessType = value
+        entry.term.shellAccessType = value
       end
     end
     cfg.settings.save
