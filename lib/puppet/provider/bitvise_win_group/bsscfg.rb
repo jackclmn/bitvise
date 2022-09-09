@@ -95,28 +95,28 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     restart_service
   end
 
-  def create
-    Puppet.debug('entering create')
-    cfg = WIN32OLE.new('Bitvise.BssCfg')
-    cfg.settings.load
-    cfg.settings.lock
-    cfg.settings.access.winGroups.new.groupType = 1 # $cfg.enums.GroupType.local
-    cfg.settings.access.winGroups.new.group = resource[:name]
-    cfg.settings.access.winGroups.new.loginAllowed = resource[:login_allowed]
-    cfg.settings.access.winGroups.new.term.shellAccessType = resource[:shell_access_type]
-    cfg.settings.save
-    cfg.settings.unlock
-    restart_service
-  end
+    def create
+        Puppet.debug('entering create')
+        cfg = WIN32OLE.new('Bitvise.BssCfg')
+        cfg.settings.load
+        cfg.settings.lock
+        cfg.settings.access.winGroups.new.groupType = 1 # $cfg.enums.GroupType.local
+        cfg.settings.access.winGroups.new.group = resource[:name]
+        cfg.settings.access.winGroups.new.loginAllowed = resource[:login_allowed]
+        cfg.settings.access.winGroups.new.term.shellAccessType = resource[:shell_access_type]
+        cfg.settings.save
+        cfg.settings.unlock
+        restart_service
+    end
 
-  def destroy
-    Puppet.debug('entering destroy')
-    cfg = WIN32OLE.new('Bitvise.BssCfg')
-    cfg.settings.load
-    cfg.settings.access.winGroups.entries.each do |entry|
-        if entry.group == resource[:name]
-          entry.erase
+    def destroy
+        Puppet.debug('entering destroy')
+        cfg = WIN32OLE.new('Bitvise.BssCfg')
+        cfg.settings.load
+        cfg.settings.access.winGroups.entries.each do |entry|
+            if entry.group == resource[:name]
+                entry.erase
+            end
         end
-      end
-  end
+    end
 end
