@@ -29,9 +29,17 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     Puppet.debug('entering exists?')
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
-    cfg.settings.access.winGroups.entries.each do |entry|
-      if entry.group == resource[:name]
-        return true
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:name]
+          return true
+        end
+      end
+    else # Virtual group
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:name]
+          return true
+        end
       end
     end
     false
@@ -42,9 +50,17 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
     val = nil
-    cfg.settings.access.winGroups.entries.each do |entry|
-      if entry.group == resource[:name]
-        val = entry.loginAllowed
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:name]
+          val = entry.loginAllowed
+        end
+      end
+    else # Virtual group
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:name]
+          val = entry.loginAllowed
+        end
       end
     end
     Puppet.debug("value of login_allowed is #{val}")
@@ -56,9 +72,17 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
     cfg.settings.lock
-    cfg.settings.access.winGroups.entries.each do |entry|
-      if entry.group == resource[:name]
-        entry.loginAllowed = value
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:name]
+          entry.loginAllowed = value
+        end
+      end
+    else
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:name]
+          entry.loginAllowed = value
+        end
       end
     end
     cfg.settings.save
@@ -71,9 +95,17 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
     val = nil
-    cfg.settings.access.winGroups.entries.each do |entry|
-      if entry.group == resource[:name]
-        val = entry.term.shellAccessType
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:name]
+          val = entry.term.shellAccessType
+        end
+      end
+    else
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:name]
+          val = entry.term.shellAccessType
+        end
       end
     end
     Puppet.debug("value of shell_access_type is #{val}")
@@ -85,9 +117,17 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
     cfg.settings.lock
-    cfg.settings.access.winGroups.entries.each do |entry|
-      if entry.group == resource[:name]
-        entry.term.shellAccessType = value
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:name]
+          entry.term.shellAccessType = value
+        end
+      end
+    else
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:name]
+          entry.term.shellAccessType = value
+        end
       end
     end
     cfg.settings.save
@@ -100,11 +140,19 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
     cfg.settings.lock
-    cfg.settings.access.winGroups.new.groupType = 1 # $cfg.enums.GroupType.local
-    cfg.settings.access.winGroups.new.group = resource[:name]
-    cfg.settings.access.winGroups.new.loginAllowed = resource[:login_allowed]
-    cfg.settings.access.winGroups.new.term.shellAccessType = resource[:shell_access_type]
-    cfg.settings.access.winGroups.NewCommit()
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.new.groupType = 1 # $cfg.enums.GroupType.local
+      cfg.settings.access.winGroups.new.group = resource[:name]
+      cfg.settings.access.winGroups.new.loginAllowed = resource[:login_allowed]
+      cfg.settings.access.winGroups.new.term.shellAccessType = resource[:shell_access_type]
+      cfg.settings.access.winGroups.NewCommit()
+    else
+      cfg.settings.access.virtGroups.new.groupType = 1 # $cfg.enums.GroupType.local
+      cfg.settings.access.virtGroups.new.group = resource[:name]
+      cfg.settings.access.virtGroups.new.loginAllowed = resource[:login_allowed]
+      cfg.settings.access.virtGroups.new.term.shellAccessType = resource[:shell_access_type]
+      cfg.settings.access.virtGroups.NewCommit()
+    end
     cfg.settings.save
     cfg.settings.unlock
     restart_service
@@ -116,12 +164,21 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     cfg.settings.load
     cfg.settings.lock
     i = nil
-    cfg.settings.access.winGroups.entries.each_with_index do |entry, index|
-      if entry.group == resource[:name]
-        i = index
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each_with_index do |entry, index|
+        if entry.group == resource[:name]
+          i = index
+        end
       end
+      cfg.settings.access.winGroups.Erase(i) unless i.nil?
+    else
+      cfg.settings.access.virtGroups.entries.each_with_index do |entry, index|
+        if entry.group == resource[:name]
+          i = index
+        end
+      end
+      cfg.settings.access.virtGroups.Erase(i) unless i.nil?
     end
-    cfg.settings.access.winGroups.Erase(i) unless i.nil?
     cfg.settings.save
     cfg.settings.unlock
   end

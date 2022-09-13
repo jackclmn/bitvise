@@ -23,19 +23,27 @@ Puppet::Type.newtype(:bitvise_win_group) do
     isnamevar
   end
 
+  newparam(:type) do
+    desc 'The name of the windows group.'
+
+    newvalue('windows')
+    newvalue('virtual')
+    defaultto('windows')
+  end
+
   newproperty(:login_allowed) do
     desc 'The login_allowed setting'
 
     newvalue(false)
     newvalue(true)
-    defaultto(false) # TODO does this need to be :false :true ?
+    defaultto(false) # TODO: does this need to be :false :true ?
     munge do |value|
-        # convert the string above to integer
-        types = {
-            false    => 0,
-            true      => 1
-        }
-        types[value]
+      # convert the boolean above to integer
+      types = {
+        false => 0,
+          true => 1
+      }
+      types[value]
     end
   end
 
@@ -55,19 +63,19 @@ Puppet::Type.newtype(:bitvise_win_group) do
     defaultto('cmd')
 
     munge do |value|
-        # convert the string above to integer
-        types = {
-            'default'    => 1,
-            'none'       => 2,
-            'BvShell'    => 10,
-            'cmd'        => 3,
-            'PowerShell' => 4,
-            'Bash'       => 5,
-            'Git'        => 6,
-            'Telnet'     => 9,
-            'Custom'     => 7
-        }
-        types[value]
-      end
+      # convert the string above to integer
+      types = {
+        'default' => 1,
+          'none'       => 2,
+          'BvShell'    => 10,
+          'cmd'        => 3,
+          'PowerShell' => 4,
+          'Bash'       => 5,
+          'Git'        => 6,
+          'Telnet'     => 9,
+          'Custom'     => 7
+      }
+      types[value]
+    end
   end
 end
