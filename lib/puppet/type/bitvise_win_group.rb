@@ -27,10 +27,10 @@ Puppet::Type.newtype(:bitvise_win_group) do
     desc 'The name of the windows group.'
 
     validate do |value|
-        unless value in ['windows', 'virtual']
-            raise ArgumentError, 'type must be windows or virtual'
-        end
-     end
+      unless ['windows', 'virtual'].include? value
+        raise ArgumentError, 'type must be windows or virtual'
+      end
+    end
   end
 
   newproperty(:login_allowed) do
