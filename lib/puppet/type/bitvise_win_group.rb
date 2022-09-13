@@ -23,6 +23,12 @@ Puppet::Type.newtype(:bitvise_win_group) do
     isnamevar
   end
 
+  newparam(:group_name) do
+    desc 'The name of the windows group.'
+
+    isnamevar
+  end
+
   newparam(:type) do
     desc 'The name of the windows group.'
 
