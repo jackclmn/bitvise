@@ -26,35 +26,48 @@ Puppet::Type.newtype(:bitvise_win_group) do
   newproperty(:login_allowed) do
     desc 'The login_allowed setting'
 
-    newvalue(0)
-    newvalue(1)
-    defaultto(0)
-
-    validate do |value|
-      raise Puppet::Error, _('must be a number') unless value.is_a?(Integer)
-      super(value)
+    newvalue(false)
+    newvalue(true)
+    defaultto(false) # TODO does this need to be :false :true ?
+    munge do |value|
+        # convert the string above to integer
+        types = {
+            false    => 0,
+            true      => 1
+        }
+        types[value]
     end
-
-    # override default munging of newvalue() to symbol, treating input as number
-    munge { |value| value }
   end
 
   newproperty(:shell_access_type) do
-    desc 'The shell_access_type setting'
+    desc 'The shell_access_type setting. Valid options are: default, none, BvShell, cmd, PowerShell, Bash, Git, Telnet, Custom.
+        Defaults to: cmd'
 
-    newvalue(0)
-    newvalue(1)
-    newvalue(2)
-    newvalue(3)
-    newvalue(4)
-    defaultto(3)
+    newvalue('default') # 1
+    newvalue('none') # 2
+    newvalue('BvShell') # 10
+    newvalue('cmd') # 3
+    newvalue('PowerShell') # 4
+    newvalue('Bash') # 5
+    newvalue('Git') # 6
+    newvalue('Telnet') # 9
+    newvalue('Custom') # 7
+    defaultto('cmd')
 
-    validate do |value|
-      raise Puppet::Error, _('must be a number') unless value.is_a?(Integer)
-      super(value)
-    end
-
-    # override default munging of newvalue() to symbol, treating input as number
-    munge { |value| value }
+    munge do |value|
+        # convert the string above to integer
+        types = {
+            'default'    => 1,
+            'none'       => 2,
+            'BvShell'    => 10,
+            'cmd'        => 3,
+            'PowerShell' => 4,
+            'Bash'       => 5,
+            'Git'        => 6,
+            'Telnet'     => 9,
+            'Custom'     => 7
+        }
+        types[value]
+      end
   end
 end
