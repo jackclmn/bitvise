@@ -18,6 +18,31 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
 
   require 'win32ole'
 
+  # If we put in a boolean we get out an integer
+  # If we get in an integer we get out a boolean
+  def bool_int_convert(val)
+    values = {
+        false => 0,
+        true  => 1
+    }
+    [true, false].include? val ? values[val] : values.invert()[val] 
+  end
+
+  def shell_access_type_convert(val)
+    values = {
+        'default'    => 1,
+        'none'       => 2,
+        'BvShell'    => 10,
+        'cmd'        => 3,
+        'PowerShell' => 4,
+        'Bash'       => 5,
+        'Git'        => 6,
+        'Telnet'     => 9,
+        'Custom'     => 7
+    }
+    val.is_a?(Integer) ? values.invert()[val]: values[val]
+  end
+
   def restart_service
     Puppet.debug('restarting service')
     `net stop BvSshServer`
@@ -64,7 +89,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       end
     end
     Puppet.debug("value of login_allowed is #{val}")
-    val
+    bool_int_convert(val)
   end
 
   def login_allowed=(value)
@@ -75,13 +100,13 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     if resource[:type] == 'windows'
       cfg.settings.access.winGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
-          entry.loginAllowed = value
+          entry.loginAllowed = bool_int_convert(value)
         end
       end
     else
       cfg.settings.access.virtGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
-          entry.loginAllowed = value
+          entry.loginAllowed = bool_int_convert(value)
         end
       end
     end
@@ -109,7 +134,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       end
     end
     Puppet.debug("value of shell_access_type is #{val}")
-    val
+    shell_access_type_convert(val)
   end
 
   def shell_access_type=(value)
@@ -120,13 +145,13 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     if resource[:type] == 'windows'
       cfg.settings.access.winGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
-          entry.term.shellAccessType = value
+          entry.term.shellAccessType = shell_access_type_convert(value)
         end
       end
     else
       cfg.settings.access.virtGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
-          entry.term.shellAccessType = value
+          entry.term.shellAccessType = shell_access_type_convert(value)
         end
       end
     end
@@ -143,14 +168,14 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     if resource[:type] == 'windows'
       cfg.settings.access.winGroups.new.groupType = 1 # $cfg.enums.GroupType.local
       cfg.settings.access.winGroups.new.group = resource[:group_name]
-      cfg.settings.access.winGroups.new.loginAllowed = resource[:login_allowed]
-      cfg.settings.access.winGroups.new.term.shellAccessType = resource[:shell_access_type]
+      cfg.settings.access.winGroups.new.loginAllowed = bool_int_convert(resource[:login_allowed])
+      cfg.settings.access.winGroups.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
       cfg.settings.access.winGroups.NewCommit()
     else # Virtual group
       #cfg.settings.access.virtGroups.new.groupType = 1 # $cfg.enums.GroupType.local
       cfg.settings.access.virtGroups.new.group = resource[:group_name]
-      cfg.settings.access.virtGroups.new.loginAllowed = resource[:login_allowed]
-      cfg.settings.access.virtGroups.new.term.shellAccessType = resource[:shell_access_type]
+      cfg.settings.access.virtGroups.new.loginAllowed = bool_int_convert(resource[:login_allowed])
+      cfg.settings.access.virtGroups.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
       cfg.settings.access.virtGroups.NewCommit()
     end
     cfg.settings.save

@@ -43,14 +43,14 @@ Puppet::Type.newtype(:bitvise_win_group) do
     newvalue(false)
     newvalue(true)
     defaultto(false) # TODO: does this need to be :false :true ?
-    munge do |value|
-      # convert the boolean above to integer
-      types = {
-        false => 0,
-          true => 1
-      }
-      types[value]
-    end
+    # munge do |value|
+    #   # convert the boolean above to integer
+    #   types = {
+    #     false => 0,
+    #       true => 1
+    #   }
+    #   types[value]
+    # end
   end
 
   newproperty(:shell_access_type) do
@@ -68,20 +68,20 @@ Puppet::Type.newtype(:bitvise_win_group) do
     newvalue('Custom') # 7
     defaultto('cmd')
 
-    munge do |value|
-      # convert the string above to integer
-      types = {
-        'default' => 1,
-          'none'       => 2,
-          'BvShell'    => 10,
-          'cmd'        => 3,
-          'PowerShell' => 4,
-          'Bash'       => 5,
-          'Git'        => 6,
-          'Telnet'     => 9,
-          'Custom'     => 7
-      }
-      types[value]
-    end
+    # munge do |value|
+    #   # convert the string above to integer
+    #   types = {
+    #     'default' => 1,
+    #       'none'       => 2,
+    #       'BvShell'    => 10,
+    #       'cmd'        => 3,
+    #       'PowerShell' => 4,
+    #       'Bash'       => 5,
+    #       'Git'        => 6,
+    #       'Telnet'     => 9,
+    #       'Custom'     => 7
+    #   }
+    #   types[value]
+    # end
   end
 end
