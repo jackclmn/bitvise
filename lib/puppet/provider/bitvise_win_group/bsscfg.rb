@@ -32,7 +32,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
   end
 
   def shell_access_type_convert(val)
-    Puppet.debug("shell_access_type_convert with val = #{val} and val_is_a?(Integer) #{val.is_a?(Integer)} and val_is_a?(String) #{val.is_a?(String)}")
+    Puppet.debug("shell_access_type_convert with val = #{val} and val_is_a?(Integer) #{val.is_a?(Integer)} and val_is_a?(Symbol) #{val.is_a?(Symbol)}")
     values = {
         'default'    => 1,
         'none'       => 2,
