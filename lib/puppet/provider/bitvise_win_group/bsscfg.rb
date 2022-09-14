@@ -21,15 +21,18 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
   # If we put in a boolean we get out an integer
   # If we get in an integer we get out a boolean
   def bool_int_convert(val)
+    Puppet.debug("bool_int_convert with val = #{val} and [true, false].include? val #{[true, false].include? val}")
     values = {
         false => 0,
         true  => 1
     }
     r = [true, false].include? val ? values[val] : values.invert()[val]
+    Puppet.debug("bool_int_convert with r = #{r}")
     r
   end
 
   def shell_access_type_convert(val)
+    Puppet.debug("shell_access_type_convert with val = #{val} and val_is_a?(Integer) #{val.is_a?(Integer)}")
     values = {
         'default'    => 1,
         'none'       => 2,
@@ -42,6 +45,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         'Custom'     => 7
     }
     r = val.is_a?(Integer) ? values.invert()[val]: values[val]
+    Puppet.debug("shell_access_type_convert with r = #{r}")
     r
   end
 
@@ -90,24 +94,26 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         end
       end
     end
-    Puppet.debug("value of login_allowed is #{val}")
+    Puppet.debug("value of login_allowed found is #{val}, value converted to be returned is #{bool_int_convert(val)}")
     bool_int_convert(val)
   end
 
   def login_allowed=(value)
-    Puppet.debug("entering login_allowed=value with name: #{resource[:group_name]} and login_allowed #{resource[:login_allowed]}")
+    Puppet.debug("entering login_allowed=value with name: #{resource[:group_name]} and login_allowed #{resource[:login_allowed]} and value #{value}")
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
     cfg.settings.lock
     if resource[:type] == 'windows'
       cfg.settings.access.winGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
+          Puppet.debug("setting loginAllowed to #{bool_int_convert(value)}")
           entry.loginAllowed = bool_int_convert(value)
         end
       end
     else
       cfg.settings.access.virtGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
+          Puppet.debug("setting loginAllowed to #{bool_int_convert(value)}")
           entry.loginAllowed = bool_int_convert(value)
         end
       end
@@ -135,24 +141,26 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         end
       end
     end
-    Puppet.debug("value of shell_access_type is #{val}")
+    Puppet.debug("value of shell_access_type is #{val} and converted to be returned is #{shell_access_type_convert(val)}")
     shell_access_type_convert(val)
   end
 
   def shell_access_type=(value)
-    Puppet.debug("entering shell_access_type=value with group_name: #{resource[:group_name]} and shell_access_type #{resource[:shell_access_type]}")
+    Puppet.debug("entering shell_access_type=value with group_name: #{resource[:group_name]} and shell_access_type #{resource[:shell_access_type]} and value #{value}")
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
     cfg.settings.lock
     if resource[:type] == 'windows'
       cfg.settings.access.winGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
+          Puppet.debug("setting shellAccessType to #{shell_access_type_convert(value)}")
           entry.term.shellAccessType = shell_access_type_convert(value)
         end
       end
     else
       cfg.settings.access.virtGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
+          Puppet.debug("setting shellAccessType to #{shell_access_type_convert(value)}")
           entry.term.shellAccessType = shell_access_type_convert(value)
         end
       end
