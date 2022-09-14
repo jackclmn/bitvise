@@ -146,8 +146,8 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.new.loginAllowed = resource[:login_allowed]
       cfg.settings.access.winGroups.new.term.shellAccessType = resource[:shell_access_type]
       cfg.settings.access.winGroups.NewCommit()
-    else
-      cfg.settings.access.virtGroups.new.groupType = 1 # $cfg.enums.GroupType.local
+    else # Virtual group
+      #cfg.settings.access.virtGroups.new.groupType = 1 # $cfg.enums.GroupType.local
       cfg.settings.access.virtGroups.new.group = resource[:group_name]
       cfg.settings.access.virtGroups.new.loginAllowed = resource[:login_allowed]
       cfg.settings.access.virtGroups.new.term.shellAccessType = resource[:shell_access_type]
