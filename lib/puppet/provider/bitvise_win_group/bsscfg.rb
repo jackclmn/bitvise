@@ -44,7 +44,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         'Telnet'     => 9,
         'Custom'     => 7
     }
-    r = val.is_a?(Integer) ? values.invert()[val] : values[val]
+    r = val.is_a?(Integer) ? values.invert()[val] : values[val.to_s]
     Puppet.debug("shell_access_type_convert with r = #{r}")
     r
   end
