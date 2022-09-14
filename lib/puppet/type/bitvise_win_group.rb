@@ -43,6 +43,7 @@ Puppet::Type.newtype(:bitvise_win_group) do
     newvalue(false)
     newvalue(true)
     defaultto(false) # TODO: does this need to be :false :true ?
+    munge { |value| value }
     # munge do |value|
     #   # convert the boolean above to integer
     #   types = {
