@@ -25,7 +25,8 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         false => 0,
         true  => 1
     }
-    [true, false].include? val ? values[val] : values.invert()[val] 
+    r = [true, false].include? val ? values[val] : values.invert()[val]
+    r
   end
 
   def shell_access_type_convert(val)
@@ -40,7 +41,8 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         'Telnet'     => 9,
         'Custom'     => 7
     }
-    val.is_a?(Integer) ? values.invert()[val]: values[val]
+    r = val.is_a?(Integer) ? values.invert()[val]: values[val]
+    r
   end
 
   def restart_service
