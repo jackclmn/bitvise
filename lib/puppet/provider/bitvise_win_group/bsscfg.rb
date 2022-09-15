@@ -182,40 +182,6 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     restart_service
   end
 
-  def group_type
-    Puppet.debug('entering group_type getter')
-    cfg = WIN32OLE.new('Bitvise.BssCfg')
-    cfg.settings.load
-    val = nil
-    if resource[:type] == 'windows'
-      cfg.settings.access.winGroups.entries.each do |entry|
-        if entry.group == resource[:group_name]
-          val = entry.groupType
-        end
-      end
-    end
-    Puppet.debug("value of group_type is #{val} and converted to be returned is #{group_type_convert(val)}")
-    val.nil? ? group_type_convert(val) : nil
-  end
-
-  def group_type=(value)
-    Puppet.debug("entering group_type=value with group_name: #{resource[:group_name]} and group_type #{resource[:group_type]} and value #{value}")
-    cfg = WIN32OLE.new('Bitvise.BssCfg')
-    cfg.settings.load
-    cfg.settings.lock
-    if resource[:type] == 'windows'
-      cfg.settings.access.winGroups.entries.each do |entry|
-        if entry.group == resource[:group_name]
-          Puppet.debug("setting groupType to #{group_type_convert(value)}")
-          entry.term.groupType = group_type_convert(value)
-        end
-      end
-    end
-    cfg.settings.save
-    cfg.settings.unlock
-    restart_service
-  end
-
   def create
     Puppet.debug('entering create')
     cfg = WIN32OLE.new('Bitvise.BssCfg')

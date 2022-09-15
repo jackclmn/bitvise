@@ -62,13 +62,14 @@ Puppet::Type.newtype(:bitvise_win_group) do
     defaultto('cmd')
   end
 
-  newproperty(:group_type) do
+  newparam(:group_type) do
     desc 'The shell_access_type setting. Valid options are: default, none, BvShell, cmd, PowerShell, Bash, Git, Telnet, Custom.
         Defaults to: cmd'
 
-    newvalue('everyone') # 0
-    newvalue('local') # 1
-    newvalue('domain') # 2
-    #defaultto('everyone')
+    validate do |value|
+        unless ['everyone', 'local', 'domain'].include? value
+            raise ArgumentError, 'group_type must be everyone, local, or domain'
+        end
+    end
   end
 end
