@@ -207,7 +207,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
           Puppet.debug("setting groupType to #{group_type_convert(value)}")
-          entry.term.shellAccessType = group_type_convert(value)
+          entry.term.groupType = group_type_convert(value)
         end
       end
     end
