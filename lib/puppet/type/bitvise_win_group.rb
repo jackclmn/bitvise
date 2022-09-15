@@ -44,14 +44,6 @@ Puppet::Type.newtype(:bitvise_win_group) do
     newvalue(true)
     defaultto(false) # TODO: does this need to be :false :true ?
     munge { |value| value }
-    # munge do |value|
-    #   # convert the boolean above to integer
-    #   types = {
-    #     false => 0,
-    #       true => 1
-    #   }
-    #   types[value]
-    # end
   end
 
   newproperty(:shell_access_type) do
@@ -68,21 +60,15 @@ Puppet::Type.newtype(:bitvise_win_group) do
     newvalue('Telnet') # 9
     newvalue('Custom') # 7
     defaultto('cmd')
+  end
 
-    # munge do |value|
-    #   # convert the string above to integer
-    #   types = {
-    #     'default' => 1,
-    #       'none'       => 2,
-    #       'BvShell'    => 10,
-    #       'cmd'        => 3,
-    #       'PowerShell' => 4,
-    #       'Bash'       => 5,
-    #       'Git'        => 6,
-    #       'Telnet'     => 9,
-    #       'Custom'     => 7
-    #   }
-    #   types[value]
-    # end
+  newproperty(:group_type) do
+    desc 'The shell_access_type setting. Valid options are: default, none, BvShell, cmd, PowerShell, Bash, Git, Telnet, Custom.
+        Defaults to: cmd'
+
+    newvalue('everyone') # 0
+    newvalue('local') # 1
+    newvalue('domain') # 2
+    #defaultto('everyone')
   end
 end

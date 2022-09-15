@@ -49,6 +49,18 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     r
   end
 
+  def group_type_convert(val)
+    Puppet.debug("group_type_convert with val = #{val} and val_is_a?(Integer) #{val.is_a?(Integer)} and val_is_a?(Symbol) #{val.is_a?(Symbol)}")
+    values = {
+        'everyone' => 0,
+        'local'    => 1,
+        'domain'   => 2
+    }
+    r = val.is_a?(Integer) ? values.invert()[val] : values[val.to_s]
+    Puppet.debug("group_type_convert with r = #{r}")
+    r
+  end
+
   def restart_service
     Puppet.debug('restarting service')
     `net stop BvSshServer`
@@ -170,13 +182,47 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     restart_service
   end
 
+  def group_type
+    Puppet.debug('entering group_type getter')
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    val = nil
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          val = entry.groupType
+        end
+      end
+    end
+    Puppet.debug("value of group_type is #{val} and converted to be returned is #{group_type_convert(val)}")
+    val.nil? ? group_type_convert(val) : nil
+  end
+
+  def group_type=(value)
+    Puppet.debug("entering group_type=value with group_name: #{resource[:group_name]} and group_type #{resource[:group_type]} and value #{value}")
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    cfg.settings.lock
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          Puppet.debug("setting groupType to #{group_type_convert(value)}")
+          entry.term.shellAccessType = group_type_convert(value)
+        end
+      end
+    end
+    cfg.settings.save
+    cfg.settings.unlock
+    restart_service
+  end
+
   def create
     Puppet.debug('entering create')
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
     cfg.settings.lock
     if resource[:type] == 'windows'
-      cfg.settings.access.winGroups.new.groupType = 1 # $cfg.enums.GroupType.local
+      cfg.settings.access.winGroups.new.groupType = group_type_convert(resource[:group_type]) # $cfg.enums.GroupType.local
       cfg.settings.access.winGroups.new.group = resource[:group_name]
       cfg.settings.access.winGroups.new.loginAllowed = bool_int_convert(resource[:login_allowed])
       cfg.settings.access.winGroups.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
