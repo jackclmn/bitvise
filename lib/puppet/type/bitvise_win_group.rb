@@ -76,4 +76,13 @@ Puppet::Type.newtype(:bitvise_win_group) do
   newparam(:domain) do
     desc 'The domain to be used for domain accounts and groups.'
   end
+
+  newproperty(:logon_type) do
+    desc 'Logon type. Valid values are: interactie, network, bash. Default is: network.'
+
+    newvalue('interactive') # 1
+    newvalue('network') # 2
+    newvalue('bash') # 3
+    defaultto('network')
+  end
 end

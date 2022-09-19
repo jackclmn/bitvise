@@ -61,6 +61,18 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     r
   end
 
+  def logon_type_convert(val)
+    Puppet.debug("logon_type_convert with val = #{val} and val_is_a?(Integer) #{val.is_a?(Integer)} and val_is_a?(Symbol) #{val.is_a?(Symbol)}")
+    values = {
+        'interactive' => 1,
+        'network'     => 2,
+        'bash'        => 3
+    }
+    r = val.is_a?(Integer) ? values.invert()[val] : values[val.to_s]
+    Puppet.debug("logon_type_convert with r = #{r}")
+    r
+  end
+
   def restart_service
     Puppet.debug('restarting service')
     `net stop BvSshServer`
@@ -182,6 +194,53 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     restart_service
   end
 
+  def logon_type
+    Puppet.debug('entering logon_type getter')
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    val = nil
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          val = entry.session.logonType
+        end
+      end
+    else
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          val = entry.session.logonType
+        end
+      end
+    end
+    Puppet.debug("value of logon_type is #{val} and converted to be returned is #{logon_type_convert(val)}")
+    logon_type_convert(val)
+  end
+
+  def logon_type=(value)
+    Puppet.debug("entering logon_type=value with group_name: #{resource[:group_name]} and logon_type #{resource[:logon_type]} and value #{value}")
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    cfg.settings.lock
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          Puppet.debug("setting logonType to #{logon_type_convert(value)}")
+          entry.session.logonType = logon_type_convert(value)
+        end
+      end
+    else
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          Puppet.debug("setting logonType to #{logon_type_convert(value)}")
+          entry.session.logonType = logon_type_convert(value)
+        end
+      end
+    end
+    cfg.settings.save
+    cfg.settings.unlock
+    restart_service
+  end
+
   def create
     Puppet.debug('entering create')
     cfg = WIN32OLE.new('Bitvise.BssCfg')
@@ -193,12 +252,14 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.new.winDomain = resource[:domain] unless resource[:domain].nil?
       cfg.settings.access.winGroups.new.loginAllowed = bool_int_convert(resource[:login_allowed])
       cfg.settings.access.winGroups.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
+      cfg.settings.access.winGroups.new.session.logonType = logon_type_convert(resource[:logon_type])
       cfg.settings.access.winGroups.NewCommit()
     else # Virtual group
       #cfg.settings.access.virtGroups.new.groupType = 1 # $cfg.enums.GroupType.local
       cfg.settings.access.virtGroups.new.group = resource[:group_name]
       cfg.settings.access.virtGroups.new.loginAllowed = bool_int_convert(resource[:login_allowed])
       cfg.settings.access.virtGroups.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
+      cfg.settings.access.virtGroups.new.session.logonType = logon_type_convert(resource[:logon_type])
       cfg.settings.access.virtGroups.NewCommit()
     end
     cfg.settings.save
