@@ -356,6 +356,53 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     restart_service
   end
 
+  def permit_init_dir_fallback
+    Puppet.debug('entering permit_init_dir_fallback getter')
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    val = nil
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          val = entry.term.permitInitDirFallback
+        end
+      end
+    else
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          val = entry.term.permitInitDirFallback
+        end
+      end
+    end
+    Puppet.debug("value of permit_init_dir_fallback is #{val} and converted to be returned is #{val}")
+    val
+  end
+
+  def permit_init_dir_fallback=(value)
+    Puppet.debug("entering permit_init_dir_fallback=value with group_name: #{resource[:group_name]} and permit_init_dir_fallback #{resource[:permit_init_dir_fallback]} and value #{value}")
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    cfg.settings.lock
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          Puppet.debug("setting permitInitDirFallback to #{value}")
+          entry.term.permitInitDirFallback = value
+        end
+      end
+    else
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          Puppet.debug("setting permitInitDirFallback to #{value}")
+          entry.term.permitInitDirFallback = value
+        end
+      end
+    end
+    cfg.settings.save
+    cfg.settings.unlock
+    restart_service
+  end
+
   def create
     Puppet.debug('entering create')
     cfg = WIN32OLE.new('Bitvise.BssCfg')
@@ -370,6 +417,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.new.session.logonType = logon_type_convert(resource[:logon_type])
       cfg.settings.access.winGroups.new.session.onAccountInfoFailure = account_failure_convert(resource[:on_account_info_failure])
       cfg.settings.access.winGroups.new.session.windowsOnLogonCmd.maxWaitTime = resource[:max_wait_time]
+      cfg.settings.access.winGroups.new.term.permitInitDirFallback = resource[:permit_init_dir_fallback]
       cfg.settings.access.winGroups.NewCommit()
     else # Virtual group
       #cfg.settings.access.virtGroups.new.groupType = 1 # $cfg.enums.GroupType.local
@@ -379,6 +427,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.virtGroups.new.session.logonType = logon_type_convert(resource[:logon_type])
       cfg.settings.access.virtGroups.new.session.onAccountInfoFailure = account_failure_convert(resource[:on_account_info_failure])
       cfg.settings.access.virtGroups.new.session.windowsOnLogonCmd.maxWaitTime = resource[:max_wait_time]
+      cfg.settings.access.winGroups.new.term.permitInitDirFallback = resource[:permit_init_dir_fallback]
       cfg.settings.access.virtGroups.NewCommit()
     end
     cfg.settings.save

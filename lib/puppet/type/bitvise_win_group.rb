@@ -109,4 +109,13 @@ Puppet::Type.newtype(:bitvise_win_group) do
     # override default munging of newvalue() to symbol, treating input as number
     munge { |value| value }
   end
+
+  newproperty(:permit_init_dir_fallback) do
+    desc 'The permit_init_dir_fallback setting. Valid values: true, false. Default: '
+
+    newvalue(false)
+    newvalue(true)
+    defaultto(true) # TODO: does this need to be :false :true ?
+    munge { |value| value }
+  end
 end
