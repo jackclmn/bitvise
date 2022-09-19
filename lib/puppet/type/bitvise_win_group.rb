@@ -67,9 +67,9 @@ Puppet::Type.newtype(:bitvise_win_group) do
         Defaults to: cmd'
 
     validate do |value|
-        unless ['everyone', 'local', 'domain'].include? value
-            raise ArgumentError, 'group_type must be everyone, local, or domain'
-        end
+      unless ['everyone', 'local', 'domain'].include? value
+        raise ArgumentError, 'group_type must be everyone, local, or domain'
+      end
     end
   end
 
@@ -102,10 +102,10 @@ Puppet::Type.newtype(:bitvise_win_group) do
     defaultto(300)
 
     validate do |value|
-        raise Puppet::Error, _('must be a number') unless value.is_a?(Integer)
-        super(value)
+      raise Puppet::Error, _('must be a number') unless value.is_a?(Integer)
+      super(value)
     end
-  
+
     # override default munging of newvalue() to symbol, treating input as number
     munge { |value| value }
   end

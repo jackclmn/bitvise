@@ -27,10 +27,10 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
   def bool_int_convert(val)
     Puppet.debug("bool_int_convert with val = #{val} and [true, false].include? val #{[true, false].include? val}")
     values = {
-        false => 0,
-        true  => 1
+      false => 0,
+        true => 1
     }
-    r = [true, false].include?(val) ? values[val] : values.invert()[val]
+    r = [true, false].include?(val) ? values[val] : values.invert[val]
     Puppet.debug("bool_int_convert with r = #{r}")
     r
   end
@@ -38,7 +38,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
   def shell_access_type_convert(val)
     Puppet.debug("shell_access_type_convert with val = #{val} and val_is_a?(Integer) #{val.is_a?(Integer)} and val_is_a?(Symbol) #{val.is_a?(Symbol)}")
     values = {
-        'default'    => 1,
+      'default' => 1,
         'none'       => 2,
         'BvShell'    => 10,
         'cmd'        => 3,
@@ -48,7 +48,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         'Telnet'     => 9,
         'Custom'     => 7
     }
-    r = val.is_a?(Integer) ? values.invert()[val] : values[val.to_s]
+    r = val.is_a?(Integer) ? values.invert[val] : values[val.to_s]
     Puppet.debug("shell_access_type_convert with r = #{r}")
     r
   end
@@ -56,11 +56,11 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
   def group_type_convert(val)
     Puppet.debug("group_type_convert with val = #{val} and val_is_a?(Integer) #{val.is_a?(Integer)} and val_is_a?(Symbol) #{val.is_a?(Symbol)}")
     values = {
-        'everyone' => 0,
+      'everyone' => 0,
         'local'    => 1,
         'domain'   => 2
     }
-    r = val.is_a?(Integer) ? values.invert()[val] : values[val.to_s]
+    r = val.is_a?(Integer) ? values.invert[val] : values[val.to_s]
     Puppet.debug("group_type_convert with r = #{r}")
     r
   end
@@ -68,11 +68,11 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
   def logon_type_convert(val)
     Puppet.debug("logon_type_convert with val = #{val} and val_is_a?(Integer) #{val.is_a?(Integer)} and val_is_a?(Symbol) #{val.is_a?(Symbol)}")
     values = {
-        'interactive' => 1,
+      'interactive' => 1,
         'network'     => 2,
         'bash'        => 3
     }
-    r = val.is_a?(Integer) ? values.invert()[val] : values[val.to_s]
+    r = val.is_a?(Integer) ? values.invert[val] : values[val.to_s]
     Puppet.debug("logon_type_convert with r = #{r}")
     r
   end
@@ -80,12 +80,12 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
   def account_failure_convert(val)
     Puppet.debug("account_failure_convert with val = #{val} and val_is_a?(Integer) #{val.is_a?(Integer)} and val_is_a?(Symbol) #{val.is_a?(Symbol)}")
     values = {
-        'deny login'      => 1,
+      'deny login' => 1,
         'restrict access' => 2,
         'disable profile' => 3,
         'no restrictions' => 4
     }
-    r = val.is_a?(Integer) ? values.invert()[val] : values[val.to_s]
+    r = val.is_a?(Integer) ? values.invert[val] : values[val.to_s]
     Puppet.debug("account_failure_convert with r = #{r}")
     r
   end
@@ -357,7 +357,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
   end
 
   def permit_init_dir_fallback
-    Puppet.debug('entering permit_init_dir_fallback getter')
+    Puppet.debug("entering permit_init_dir_fallback getter with group_name: #{resource[:group_name]} and value #{resource[:permit_init_dir_fallback]}")
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
     val = nil
@@ -404,7 +404,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
   end
 
   def allow_agent_fwd_cygwin
-    Puppet.debug('entering allow_agent_fwd_cygwin getter')
+    Puppet.debug("entering allow_agent_fwd_cygwin getter with group_name: #{resource[:group_name]} and value #{resource[:allow_agent_fwd_cygwin]}")
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
     val = nil
@@ -426,7 +426,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
   end
 
   def allow_agent_fwd_cygwin=(value)
-    Puppet.debug("entering allow_agent_fwd_cygwin=value with group_name: #{resource[:group_name]} and allow_agent_fwd_cygwin #{resource[:allow_agent_fqd_putty]} and value #{value}")
+    Puppet.debug("entering allow_agent_fwd_cygwin=value with group_name: #{resource[:group_name]} and allow_agent_fwd_cygwin #{resource[:allow_agent_fwd_cygwin]} and value #{value}")
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
     cfg.settings.lock
@@ -451,7 +451,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
   end
 
   def allow_agent_fqd_putty
-    Puppet.debug('entering allow_agent_fqd_putty getter')
+    Puppet.debug("entering allow_agent_fqd_putty getter with group_name: #{resource[:group_name]} and value #{resource[:allow_agent_fqd_putty]}")
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
     val = nil
@@ -511,21 +511,21 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.new.session.logonType = logon_type_convert(resource[:logon_type])
       cfg.settings.access.winGroups.new.session.onAccountInfoFailure = account_failure_convert(resource[:on_account_info_failure])
       cfg.settings.access.winGroups.new.session.windowsOnLogonCmd.maxWaitTime = resource[:max_wait_time]
-      cfg.settings.access.winGroups.new.term.permitInitDirFallback = resource[:permit_init_dir_fallback]
-      cfg.settings.access.winGroups.new.term.allowAgentFwdCygwin = resource[:allow_agent_fwd_cygwin]
-      cfg.settings.access.winGroups.new.term.allowAgentFwdPutty = resource[:allow_agent_fqd_putty]
+      cfg.settings.access.winGroups.new.term.permitInitDirFallback = bool_int_convert(resource[:permit_init_dir_fallback])
+      cfg.settings.access.winGroups.new.term.allowAgentFwdCygwin = bool_int_convert(resource[:allow_agent_fwd_cygwin])
+      cfg.settings.access.winGroups.new.term.allowAgentFwdPutty = bool_int_convert(resource[:allow_agent_fqd_putty])
       cfg.settings.access.winGroups.NewCommit()
     else # Virtual group
-      #cfg.settings.access.virtGroups.new.groupType = 1 # $cfg.enums.GroupType.local
+      # cfg.settings.access.virtGroups.new.groupType = 1 # $cfg.enums.GroupType.local
       cfg.settings.access.virtGroups.new.group = resource[:group_name]
       cfg.settings.access.virtGroups.new.loginAllowed = bool_int_convert(resource[:login_allowed])
       cfg.settings.access.virtGroups.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
       cfg.settings.access.virtGroups.new.session.logonType = logon_type_convert(resource[:logon_type])
       cfg.settings.access.virtGroups.new.session.onAccountInfoFailure = account_failure_convert(resource[:on_account_info_failure])
       cfg.settings.access.virtGroups.new.session.windowsOnLogonCmd.maxWaitTime = resource[:max_wait_time]
-      cfg.settings.access.virtGroups.new.term.permitInitDirFallback = resource[:permit_init_dir_fallback]
-      cfg.settings.access.virtGroups.new.term.allowAgentFwdCygwin = resource[:allow_agent_fwd_cygwin]
-      cfg.settings.access.virtGroups.new.term.allowAgentFwdPutty = resource[:allow_agent_fqd_putty]
+      cfg.settings.access.virtGroups.new.term.permitInitDirFallback = bool_int_convert(resource[:permit_init_dir_fallback])
+      cfg.settings.access.virtGroups.new.term.allowAgentFwdCygwin = bool_int_convert(resource[:allow_agent_fwd_cygwin])
+      cfg.settings.access.virtGroups.new.term.allowAgentFwdPutty = bool_int_convert(resource[:allow_agent_fqd_putty])
       cfg.settings.access.virtGroups.NewCommit()
     end
     cfg.settings.save
