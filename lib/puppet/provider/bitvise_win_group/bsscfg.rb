@@ -18,6 +18,10 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
 
   require 'win32ole'
 
+  #
+  # Conversion helper functions
+  #
+
   # If we put in a boolean we get out an integer
   # If we get in an integer we get out a boolean
   def bool_int_convert(val)
@@ -73,12 +77,29 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     r
   end
 
+  def account_failure_convert(val)
+    Puppet.debug("account_failure_convert with val = #{val} and val_is_a?(Integer) #{val.is_a?(Integer)} and val_is_a?(Symbol) #{val.is_a?(Symbol)}")
+    values = {
+        'deny login'      => 1,
+        'restrict access' => 2,
+        'disable profile' => 3,
+        'no restrictions' => 4
+    }
+    r = val.is_a?(Integer) ? values.invert()[val] : values[val.to_s]
+    Puppet.debug("account_failure_convert with r = #{r}")
+    r
+  end
+
   def restart_service
     Puppet.debug('restarting service')
     `net stop BvSshServer`
     `net start BvSshServer`
     Puppet.debug('restarted service')
   end
+
+  #
+  # Type and Provider methods
+  #
 
   def exists?
     Puppet.debug('entering exists?')
@@ -241,6 +262,53 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     restart_service
   end
 
+  def on_account_info_failure
+    Puppet.debug('entering on_account_info_failure getter')
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    val = nil
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          val = entry.session.onAccountInfoFailure
+        end
+      end
+    else
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          val = entry.session.onAccountInfoFailure
+        end
+      end
+    end
+    Puppet.debug("value of on_account_info_failure is #{val} and converted to be returned is #{account_failure_convert(val)}")
+    account_failure_convert(val)
+  end
+
+  def on_account_info_failure=(value)
+    Puppet.debug("entering on_account_info_failure=value with group_name: #{resource[:group_name]} and on_account_info_failure #{resource[:on_account_info_failure]} and value #{value}")
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    cfg.settings.lock
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          Puppet.debug("setting onAccountInfoFailure to #{account_failure_convert(value)}")
+          entry.session.onAccountInfoFailure = account_failure_convert(value)
+        end
+      end
+    else
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          Puppet.debug("setting onAccountInfoFailure to #{account_failure_convert(value)}")
+          entry.session.onAccountInfoFailure = account_failure_convert(value)
+        end
+      end
+    end
+    cfg.settings.save
+    cfg.settings.unlock
+    restart_service
+  end
+
   def create
     Puppet.debug('entering create')
     cfg = WIN32OLE.new('Bitvise.BssCfg')
@@ -253,6 +321,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.new.loginAllowed = bool_int_convert(resource[:login_allowed])
       cfg.settings.access.winGroups.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
       cfg.settings.access.winGroups.new.session.logonType = logon_type_convert(resource[:logon_type])
+      cfg.settings.access.winGroups.new.session.onAccountInfoFailure = account_failure_convert(resource[:on_account_info_failure])
       cfg.settings.access.winGroups.NewCommit()
     else # Virtual group
       #cfg.settings.access.virtGroups.new.groupType = 1 # $cfg.enums.GroupType.local
@@ -260,6 +329,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.virtGroups.new.loginAllowed = bool_int_convert(resource[:login_allowed])
       cfg.settings.access.virtGroups.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
       cfg.settings.access.virtGroups.new.session.logonType = logon_type_convert(resource[:logon_type])
+      cfg.settings.access.winGroups.new.session.onAccountInfoFailure = account_failure_convert(resource[:on_account_info_failure])
       cfg.settings.access.virtGroups.NewCommit()
     end
     cfg.settings.save

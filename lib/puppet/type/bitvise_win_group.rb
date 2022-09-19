@@ -85,4 +85,14 @@ Puppet::Type.newtype(:bitvise_win_group) do
     newvalue('bash') # 3
     defaultto('network')
   end
+
+  newproperty(:on_account_info_failure) do
+    desc 'on_account_info_failure. Valid values are: deny login, restrict access, disable profile, no restrictions. Default is: restrict access.'
+
+    newvalue('deny login') # 1
+    newvalue('restrict access') # 2
+    newvalue('disable profile') # 3
+    newvalue('no restrictions') # 4
+    defaultto('restrict access')
+  end
 end
