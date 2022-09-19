@@ -99,7 +99,7 @@ Puppet::Type.newtype(:bitvise_win_group) do
   newproperty(:max_wait_time) do
     desc 'max_wait_time. Valid values are: any integer. Default is: 0.'
 
-    defaultto(0)
+    defaultto(300)
 
     validate do |value|
         raise Puppet::Error, _('must be a number') unless value.is_a?(Integer)
