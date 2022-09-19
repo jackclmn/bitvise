@@ -190,6 +190,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     if resource[:type] == 'windows'
       cfg.settings.access.winGroups.new.groupType = group_type_convert(resource[:group_type]) # $cfg.enums.GroupType.local
       cfg.settings.access.winGroups.new.group = resource[:group_name]
+      cfg.settings.access.winGroups.new.winDomain = resource[:domain] unless domain.nil?
       cfg.settings.access.winGroups.new.loginAllowed = bool_int_convert(resource[:login_allowed])
       cfg.settings.access.winGroups.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
       cfg.settings.access.winGroups.NewCommit()

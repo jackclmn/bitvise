@@ -72,4 +72,8 @@ Puppet::Type.newtype(:bitvise_win_group) do
         end
     end
   end
+
+  newparam(:domain) do
+    desc 'The domain to be used for domain accounts and groups.'
+  end
 end
