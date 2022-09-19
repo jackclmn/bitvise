@@ -118,4 +118,22 @@ Puppet::Type.newtype(:bitvise_win_group) do
     defaultto(true) # TODO: does this need to be :false :true ?
     munge { |value| value }
   end
+
+  newproperty(:allow_agent_fwd_cygwin) do
+    desc 'The allow_agent_fwd_cygwin setting. Valid values: true, false. Default: '
+
+    newvalue(false)
+    newvalue(true)
+    defaultto(true) # TODO: does this need to be :false :true ?
+    munge { |value| value }
+  end
+
+  newproperty(:allow_agent_fqd_putty) do
+    desc 'The allow_agent_fqd_putty setting. Valid values: true, false. Default: '
+
+    newvalue(false)
+    newvalue(true)
+    defaultto(true) # TODO: does this need to be :false :true ?
+    munge { |value| value }
+  end
 end
