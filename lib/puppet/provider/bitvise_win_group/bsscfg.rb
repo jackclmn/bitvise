@@ -374,7 +374,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         end
       end
     end
-    Puppet.debug("value of permit_init_dir_fallback is #{val} and converted to be returned is #{bool_int_convert(val)}")
+    Puppet.debug("value of permit_init_dir_fallback is #{val} and converted to be returned is #{bool_int_convert(val)} and [true, false].include? val #{[true, false].include? bool_int_convert(val)}")
     bool_int_convert(val)
   end
 
@@ -421,7 +421,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         end
       end
     end
-    Puppet.debug("value of allow_agent_fwd_cygwin is #{val} and converted to be returned is #{bool_int_convert(val)}")
+    Puppet.debug("value of allow_agent_fwd_cygwin is #{val} and converted to be returned is #{bool_int_convert(val)} and [true, false].include? val #{[true, false].include? bool_int_convert(val)}")
     bool_int_convert(val)
   end
 
@@ -468,7 +468,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         end
       end
     end
-    Puppet.debug("value of allow_agent_fqd_putty is #{val} and converted to be returned is #{bool_int_convert(val)}")
+    Puppet.debug("value of allow_agent_fqd_putty is #{val} and converted to be returned is #{bool_int_convert(val)} and [true, false].include? val #{[true, false].include? bool_int_convert(val)}")
     bool_int_convert(val)
   end
 
