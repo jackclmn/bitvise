@@ -95,4 +95,18 @@ Puppet::Type.newtype(:bitvise_win_group) do
     newvalue('no restrictions') # 4
     defaultto('restrict access')
   end
+
+  newproperty(:max_wait_time) do
+    desc 'max_wait_time. Valid values are: any integer. Default is: 0.'
+
+    defaultto(0)
+
+    validate do |value|
+        raise Puppet::Error, _('must be a number') unless value.is_a?(Integer)
+        super(value)
+    end
+  
+    # override default munging of newvalue() to symbol, treating input as number
+    munge { |value| value }
+  end
 end
