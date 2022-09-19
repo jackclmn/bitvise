@@ -111,7 +111,7 @@ Puppet::Type.newtype(:bitvise_win_group) do
   end
 
   newproperty(:permit_init_dir_fallback) do
-    desc 'The permit_init_dir_fallback setting. Valid values: true, false. Default: '
+    desc 'The permit_init_dir_fallback setting. Valid values: true, false. Default: true'
 
     newvalue(false)
     newvalue(true)
@@ -120,7 +120,7 @@ Puppet::Type.newtype(:bitvise_win_group) do
   end
 
   newproperty(:allow_agent_fwd_cygwin) do
-    desc 'The allow_agent_fwd_cygwin setting. Valid values: true, false. Default: '
+    desc 'The allow_agent_fwd_cygwin setting. Valid values: true, false. Default: true'
 
     newvalue(false)
     newvalue(true)
@@ -129,11 +129,29 @@ Puppet::Type.newtype(:bitvise_win_group) do
   end
 
   newproperty(:allow_agent_fqd_putty) do
-    desc 'The allow_agent_fqd_putty setting. Valid values: true, false. Default: '
+    desc 'The allow_agent_fqd_putty setting. Valid values: true, false. Default: true'
 
     newvalue(false)
     newvalue(true)
     defaultto(true) # TODO: does this need to be :false :true ?
     munge { |value| value }
+  end
+
+  newproperty(:load_profile_for_file_xfer) do
+    desc 'The load_profile_for_file_xfer setting. Valid values: true, false. Default: false'
+
+    newvalue(false)
+    newvalue(true)
+    defaultto(false) # TODO: does this need to be :false :true ?
+    munge { |value| value }
+  end
+
+  newproperty(:display_time) do
+    desc 'The display_time setting. Valid values: local with offset, local, UTC. Default: local'
+
+    newvalue('local with offset')
+    newvalue('local')
+    newvalue('UTC')
+    defaultto('local')
   end
 end

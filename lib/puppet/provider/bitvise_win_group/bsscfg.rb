@@ -28,7 +28,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     Puppet.debug("bool_int_convert with val = #{val} and [true, false].include? val #{[true, false].include? val}")
     values = {
       false => 0,
-        true => 1
+      true  => 1
     }
     r = [true, false].include?(val) ? values[val] : values.invert[val]
     Puppet.debug("bool_int_convert with r = #{r}")
@@ -38,15 +38,15 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
   def shell_access_type_convert(val)
     Puppet.debug("shell_access_type_convert with val = #{val} and val_is_a?(Integer) #{val.is_a?(Integer)} and val_is_a?(Symbol) #{val.is_a?(Symbol)}")
     values = {
-      'default' => 1,
-        'none'       => 2,
-        'BvShell'    => 10,
-        'cmd'        => 3,
-        'PowerShell' => 4,
-        'Bash'       => 5,
-        'Git'        => 6,
-        'Telnet'     => 9,
-        'Custom'     => 7
+      'default'    => 1,
+      'none'       => 2,
+      'BvShell'    => 10,
+      'cmd'        => 3,
+      'PowerShell' => 4,
+      'Bash'       => 5,
+      'Git'        => 6,
+      'Telnet'     => 9,
+      'Custom'     => 7
     }
     r = val.is_a?(Integer) ? values.invert[val] : values[val.to_s]
     Puppet.debug("shell_access_type_convert with r = #{r}")
@@ -57,8 +57,8 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     Puppet.debug("group_type_convert with val = #{val} and val_is_a?(Integer) #{val.is_a?(Integer)} and val_is_a?(Symbol) #{val.is_a?(Symbol)}")
     values = {
       'everyone' => 0,
-        'local'    => 1,
-        'domain'   => 2
+      'local'    => 1,
+      'domain'   => 2
     }
     r = val.is_a?(Integer) ? values.invert[val] : values[val.to_s]
     Puppet.debug("group_type_convert with r = #{r}")
@@ -69,8 +69,8 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     Puppet.debug("logon_type_convert with val = #{val} and val_is_a?(Integer) #{val.is_a?(Integer)} and val_is_a?(Symbol) #{val.is_a?(Symbol)}")
     values = {
       'interactive' => 1,
-        'network'     => 2,
-        'bash'        => 3
+      'network'     => 2,
+      'bash'        => 3
     }
     r = val.is_a?(Integer) ? values.invert[val] : values[val.to_s]
     Puppet.debug("logon_type_convert with r = #{r}")
@@ -80,10 +80,22 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
   def account_failure_convert(val)
     Puppet.debug("account_failure_convert with val = #{val} and val_is_a?(Integer) #{val.is_a?(Integer)} and val_is_a?(Symbol) #{val.is_a?(Symbol)}")
     values = {
-      'deny login' => 1,
-        'restrict access' => 2,
-        'disable profile' => 3,
-        'no restrictions' => 4
+      'deny login'       => 1,
+      'restrict access'  => 2,
+      'disable profile'  => 3,
+       'no restrictions' => 4
+    }
+    r = val.is_a?(Integer) ? values.invert[val] : values[val.to_s]
+    Puppet.debug("account_failure_convert with r = #{r}")
+    r
+  end
+
+  def display_time_convert(val)
+    Puppet.debug("display_time_convert with val = #{val} and val_is_a?(Integer) #{val.is_a?(Integer)} and val_is_a?(Symbol) #{val.is_a?(Symbol)}")
+    values = {
+      'local with offset' => 1,
+      'local'             => 2,
+      'UTC'               => 3
     }
     r = val.is_a?(Integer) ? values.invert[val] : values[val.to_s]
     Puppet.debug("account_failure_convert with r = #{r}")
@@ -497,6 +509,100 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     restart_service
   end
 
+  def load_profile_for_file_xfer
+    Puppet.debug("entering load_profile_for_file_xfer getter with group_name: #{resource[:group_name]} and value #{resource[:load_profile_for_file_xfer]}")
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    val = nil
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          val = entry.xfer.loadProfileForFileXfer
+        end
+      end
+    else
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          val = entry.xfer.loadProfileForFileXfer
+        end
+      end
+    end
+    Puppet.debug("value of load_profile_for_file_xfer is #{val} and converted to be returned is #{bool_int_convert(val)} and [true, false].include? val #{[true, false].include? bool_int_convert(val)}")
+    bool_int_convert(val)
+  end
+
+  def load_profile_for_file_xfer=(value)
+    Puppet.debug("entering load_profile_for_file_xfer=value with group_name: #{resource[:group_name]} and load_profile_for_file_xfer #{resource[:load_profile_for_file_xfer]} and value #{value}")
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    cfg.settings.lock
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          Puppet.debug("setting loadProfileForFileXfer to #{bool_int_convert(value)}")
+          entry.xfer.loadProfileForFileXfer = bool_int_convert(value)
+        end
+      end
+    else
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          Puppet.debug("setting loadProfileForFileXfer to #{bool_int_convert(value)}")
+          entry.xfer.loadProfileForFileXfer = bool_int_convert(value)
+        end
+      end
+    end
+    cfg.settings.save
+    cfg.settings.unlock
+    restart_service
+  end
+
+  def display_time
+    Puppet.debug("entering display_time getter with group_name: #{resource[:group_name]} and value #{resource[:display_time]}")
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    val = nil
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          val = entry.xfer.displayTime
+        end
+      end
+    else
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          val = entry.xfer.displayTime
+        end
+      end
+    end
+    Puppet.debug("value of display_time is #{val} and converted to be returned is #{display_time_convert(val)} and [true, false].include? val #{[true, false].include? bool_int_convert(val)}")
+    display_time_convert(val)
+  end
+
+  def display_time=(value)
+    Puppet.debug("entering display_time=value with group_name: #{resource[:group_name]} and display_time #{resource[:display_time]} and value #{value}")
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    cfg.settings.lock
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          Puppet.debug("setting displayTime to #{display_time_convert(value)}")
+          entry.xfer.displayTime = display_time_convert(value)
+        end
+      end
+    else
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          Puppet.debug("setting displayTime to #{display_time_convert(value)}")
+          entry.xfer.displayTime = display_time_convert(value)
+        end
+      end
+    end
+    cfg.settings.save
+    cfg.settings.unlock
+    restart_service
+  end
+
   def create
     Puppet.debug('entering create')
     cfg = WIN32OLE.new('Bitvise.BssCfg')
@@ -514,6 +620,8 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.new.term.permitInitDirFallback = bool_int_convert(resource[:permit_init_dir_fallback])
       cfg.settings.access.winGroups.new.term.allowAgentFwdCygwin = bool_int_convert(resource[:allow_agent_fwd_cygwin])
       cfg.settings.access.winGroups.new.term.allowAgentFwdPutty = bool_int_convert(resource[:allow_agent_fqd_putty])
+      cfg.settings.access.winGroups.new.xfer.loadProfileForFileXfer = bool_int_convert(resource[:load_profile_for_file_xfer])
+      cfg.settings.access.winGroups.new.xfer.displayTime = display_time_convert(resource[:display_time])
       cfg.settings.access.winGroups.NewCommit()
     else # Virtual group
       # cfg.settings.access.virtGroups.new.groupType = 1 # $cfg.enums.GroupType.local
@@ -526,6 +634,8 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.virtGroups.new.term.permitInitDirFallback = bool_int_convert(resource[:permit_init_dir_fallback])
       cfg.settings.access.virtGroups.new.term.allowAgentFwdCygwin = bool_int_convert(resource[:allow_agent_fwd_cygwin])
       cfg.settings.access.virtGroups.new.term.allowAgentFwdPutty = bool_int_convert(resource[:allow_agent_fqd_putty])
+      cfg.settings.access.virtGroups.new.xfer.loadProfileForFileXfer = bool_int_convert(resource[:load_profile_for_file_xfer])
+      cfg.settings.access.virtGroups.new.xfer.displayTime = display_time_convert(resource[:display_time])
       cfg.settings.access.virtGroups.NewCommit()
     end
     cfg.settings.save
