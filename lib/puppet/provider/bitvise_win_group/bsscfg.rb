@@ -374,8 +374,8 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         end
       end
     end
-    Puppet.debug("value of permit_init_dir_fallback is #{val} and converted to be returned is #{val}")
-    val
+    Puppet.debug("value of permit_init_dir_fallback is #{val} and converted to be returned is #{bool_int_convert(val)}")
+    bool_int_convert(val)
   end
 
   def permit_init_dir_fallback=(value)
@@ -386,15 +386,15 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     if resource[:type] == 'windows'
       cfg.settings.access.winGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
-          Puppet.debug("setting permitInitDirFallback to #{value}")
-          entry.term.permitInitDirFallback = value
+          Puppet.debug("setting permitInitDirFallback to #{bool_int_convert(value)}")
+          entry.term.permitInitDirFallback = bool_int_convert(value)
         end
       end
     else
       cfg.settings.access.virtGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
-          Puppet.debug("setting permitInitDirFallback to #{value}")
-          entry.term.permitInitDirFallback = value
+          Puppet.debug("setting permitInitDirFallback to #{bool_int_convert(value)}")
+          entry.term.permitInitDirFallback = bool_int_convert(value)
         end
       end
     end
@@ -421,8 +421,8 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         end
       end
     end
-    Puppet.debug("value of allow_agent_fwd_cygwin is #{val} and converted to be returned is #{val}")
-    val
+    Puppet.debug("value of allow_agent_fwd_cygwin is #{val} and converted to be returned is #{bool_int_convert(val)}")
+    bool_int_convert(val)
   end
 
   def allow_agent_fwd_cygwin=(value)
@@ -433,15 +433,15 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     if resource[:type] == 'windows'
       cfg.settings.access.winGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
-          Puppet.debug("setting allowAgentFwdCygwin to #{value}")
-          entry.term.allowAgentFwdCygwin = value
+          Puppet.debug("setting allowAgentFwdCygwin to #{bool_int_convert(value)}")
+          entry.term.allowAgentFwdCygwin = bool_int_convert(value)
         end
       end
     else
       cfg.settings.access.virtGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
-          Puppet.debug("setting allowAgentFwdCygwin to #{value}")
-          entry.term.allowAgentFwdCygwin = value
+          Puppet.debug("setting allowAgentFwdCygwin to #{bool_int_convert(value)}")
+          entry.term.allowAgentFwdCygwin = bool_int_convert(value)
         end
       end
     end
@@ -468,8 +468,8 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         end
       end
     end
-    Puppet.debug("value of allow_agent_fqd_putty is #{val} and converted to be returned is #{val}")
-    val
+    Puppet.debug("value of allow_agent_fqd_putty is #{val} and converted to be returned is #{bool_int_convert(val)}")
+    bool_int_convert(val)
   end
 
   def allow_agent_fqd_putty=(value)
@@ -480,15 +480,15 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     if resource[:type] == 'windows'
       cfg.settings.access.winGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
-          Puppet.debug("setting allowAgentFwdPutty to #{value}")
-          entry.term.allowAgentFwdPutty = value
+          Puppet.debug("setting allowAgentFwdPutty to #{bool_int_convert(value)}")
+          entry.term.allowAgentFwdPutty = bool_int_convert(value)
         end
       end
     else
       cfg.settings.access.virtGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
-          Puppet.debug("setting allowAgentFwdPutty to #{value}")
-          entry.term.allowAgentFwdPutty = value
+          Puppet.debug("setting allowAgentFwdPutty to #{bool_int_convert(value)}")
+          entry.term.allowAgentFwdPutty = bool_int_convert(value)
         end
       end
     end
