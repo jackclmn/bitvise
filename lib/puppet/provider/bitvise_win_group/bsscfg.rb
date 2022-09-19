@@ -317,13 +317,13 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     if resource[:type] == 'windows'
       cfg.settings.access.winGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
-          val = entry.session.onUploadCmd.maxWaitTime
+          val = entry.session.windowsOnLogonCmd.maxWaitTime
         end
       end
     else
       cfg.settings.access.virtGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
-          val = entry.session.onUploadCmd.maxWaitTime
+          val = entry.session.windowsOnLogonCmd.maxWaitTime
         end
       end
     end
@@ -340,14 +340,14 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
           Puppet.debug("setting maxWaitTime to #{value}")
-          entry.session.onUploadCmd.maxWaitTime = value
+          entry.session.windowsOnLogonCmd.maxWaitTime = value
         end
       end
     else
       cfg.settings.access.virtGroups.entries.each do |entry|
         if entry.group == resource[:group_name]
           Puppet.debug("setting maxWaitTime to #{value}")
-          entry.session.onUploadCmd.maxWaitTime = value
+          entry.session.windowsOnLogonCmd.maxWaitTime = value
         end
       end
     end
@@ -369,7 +369,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
       cfg.settings.access.winGroups.new.session.logonType = logon_type_convert(resource[:logon_type])
       cfg.settings.access.winGroups.new.session.onAccountInfoFailure = account_failure_convert(resource[:on_account_info_failure])
-      cfg.settings.access.winGroups.new.session.onUploadCmd.maxWaitTime = resource[:max_wait_time]
+      cfg.settings.access.winGroups.new.session.windowsOnLogonCmd.maxWaitTime = resource[:max_wait_time]
       cfg.settings.access.winGroups.NewCommit()
     else # Virtual group
       #cfg.settings.access.virtGroups.new.groupType = 1 # $cfg.enums.GroupType.local
@@ -378,7 +378,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.virtGroups.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
       cfg.settings.access.virtGroups.new.session.logonType = logon_type_convert(resource[:logon_type])
       cfg.settings.access.virtGroups.new.session.onAccountInfoFailure = account_failure_convert(resource[:on_account_info_failure])
-      cfg.settings.access.virtGroups.new.session.onUploadCmd.maxWaitTime = resource[:max_wait_time]
+      cfg.settings.access.virtGroups.new.session.windowsOnLogonCmd.maxWaitTime = resource[:max_wait_time]
       cfg.settings.access.virtGroups.NewCommit()
     end
     cfg.settings.save
