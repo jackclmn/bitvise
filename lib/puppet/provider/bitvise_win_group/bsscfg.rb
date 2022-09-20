@@ -717,6 +717,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.new.xfer.loadProfileForFileXfer = bool_int_convert(resource[:load_profile_for_file_xfer])
       cfg.settings.access.winGroups.new.xfer.displayTime = display_time_convert(resource[:display_time])
       # Mount points
+      cfg.settings.access.winGroups.new.xfer.mountPoints.Clear()
       resource[:mounts].each do | mount |
         cfg.settings.access.winGroups.new.xfer.mountPoints.new.SetDefaults()
         cfg.settings.access.winGroups.new.xfer.mountPoints.new.sfsMountPath = mount['sfs_mount_path'] unless mount['sfs_mount_path'].nil?
@@ -741,6 +742,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.virtGroups.new.xfer.loadProfileForFileXfer = bool_int_convert(resource[:load_profile_for_file_xfer])
       cfg.settings.access.virtGroups.new.xfer.displayTime = display_time_convert(resource[:display_time])
       # Mount points
+      cfg.settings.access.winGroups.new.xfer.mountPoints.Clear()
       resource[:mounts].each do | mount |
         cfg.settings.access.virtGroups.new.xfer.mountPoints.new.SetDefaults()
         cfg.settings.access.winGroups.new.xfer.mountPoints.new.sfsMountPath = mount['sfs_mount_path'] unless mount['sfs_mount_path'].nil?
