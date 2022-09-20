@@ -722,7 +722,6 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         cfg.settings.access.winGroups.new.xfer.mountPoints.new.allowUnlimitedAccess = mount['allow_unlimited_access'] unless mount['allow_unlimited_access'].nil?
         cfg.settings.access.winGroups.new.xfer.mountPoints.new.realRootPath = mount['real_root_path'] unless mount['real_root_path'].nil?
         cfg.settings.access.winGroups.new.xfer.mountPoints.new.fileSharingBeh = mount['file_sharing_behavior'] unless mount['file_sharing_behavior'].nil?
-        cfg.settings.access.winGroups.new.xfer.mountPoints.new.fileSharing = mount['file_sharing'] unless mount['file_sharing'].nil?
         cfg.settings.access.winGroups.new.xfer.mountPoints.NewCommit()
       end
       cfg.settings.access.winGroups.new.xfer.sfsHomeDir = display_time_convert(resource[:sfs_home_dir])
@@ -746,7 +745,6 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         cfg.settings.access.virtGroups.new.xfer.mountPoints.new.allowUnlimitedAccess = mount['allow_unlimited_access'] unless mount['allow_unlimited_access'].nil?
         cfg.settings.access.virtGroups.new.xfer.mountPoints.new.realRootPath = mount['real_root_path'] unless mount['real_root_path'].nil?
         cfg.settings.access.virtGroups.new.xfer.mountPoints.new.fileSharingBeh = mount['file_sharing_behavior'] unless mount['file_sharing_behavior'].nil?
-        cfg.settings.access.virtGroups.new.xfer.mountPoints.new.fileSharing = mount['file_sharing'] unless mount['file_sharing'].nil?
         cfg.settings.access.virtGroups.new.xfer.mountPoints.NewCommit()
       end
       cfg.settings.access.virtGroups.new.xfer.sfsHomeDir = display_time_convert(resource[:sfs_home_dir])
