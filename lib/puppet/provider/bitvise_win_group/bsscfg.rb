@@ -650,6 +650,53 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     restart_service
   end
 
+#   def mounts
+#     Puppet.debug("entering mounts getter with group_name: #{resource[:group_name]} and value #{resource[:mounts]}")
+#     cfg = WIN32OLE.new('Bitvise.BssCfg')
+#     cfg.settings.load
+#     val = nil
+#     if resource[:type] == 'windows'
+#       cfg.settings.access.winGroups.entries.each do |entry|
+#         if entry.group == resource[:group_name]
+#           val = entry.xfer.sfsHomeDir
+#         end
+#       end
+#     else
+#       cfg.settings.access.virtGroups.entries.each do |entry|
+#         if entry.group == resource[:group_name]
+#           val = entry.xfer.sfsHomeDir
+#         end
+#       end
+#     end
+#     Puppet.debug("value of mounts is #{val}}")
+#     val
+#   end
+
+#   def mounts=(value)
+#     Puppet.debug("entering mounts=value with group_name: #{resource[:group_name]} and mounts #{resource[:mounts]} and value #{value}")
+#     cfg = WIN32OLE.new('Bitvise.BssCfg')
+#     cfg.settings.load
+#     cfg.settings.lock
+#     if resource[:type] == 'windows'
+#       cfg.settings.access.winGroups.entries.each do |entry|
+#         if entry.group == resource[:group_name]
+#           Puppet.debug("setting sfsHomeDir to #{value}")
+#           entry.xfer.sfsHomeDir = value
+#         end
+#       end
+#     else
+#       cfg.settings.access.virtGroups.entries.each do |entry|
+#         if entry.group == resource[:group_name]
+#           Puppet.debug("setting sfsHomeDir to #{value}")
+#           entry.xfer.sfsHomeDir = value
+#         end
+#       end
+#     end
+#     cfg.settings.save
+#     cfg.settings.unlock
+#     restart_service
+#   end
+
   def create
     Puppet.debug('entering create')
     cfg = WIN32OLE.new('Bitvise.BssCfg')
@@ -669,6 +716,15 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.new.term.allowAgentFwdPutty = bool_int_convert(resource[:allow_agent_fqd_putty])
       cfg.settings.access.winGroups.new.xfer.loadProfileForFileXfer = bool_int_convert(resource[:load_profile_for_file_xfer])
       cfg.settings.access.winGroups.new.xfer.displayTime = display_time_convert(resource[:display_time])
+      # Mount points
+      resource[:mounts].each do | mount |
+        cfg.settings.access.winGroups.new.xfer.mountPoints.new.SetDefaults()
+        cfg.settings.access.winGroups.new.xfer.mountPoints.new.allowUnlimitedAccess = mount['allow_unlimited_access'] unless mount['allow_unlimited_access'].nil?
+        cfg.settings.access.winGroups.new.xfer.mountPoints.new.realRootPath = mount['real_root_path'] unless mount['real_root_path'].nil?
+        cfg.settings.access.winGroups.new.xfer.mountPoints.new.fileSharingBeh = mount['file_sharing_behavior'] unless mount['file_sharing_behavior'].nil?
+        cfg.settings.access.winGroups.new.xfer.mountPoints.new.fileSharing = mount['file_sharing'] unless mount['file_sharing'].nil?
+        cfg.settings.access.winGroups.new.xfer.mountPoints.NewCommit()
+      end
       cfg.settings.access.winGroups.new.xfer.sfsHomeDir = display_time_convert(resource[:sfs_home_dir])
       cfg.settings.access.winGroups.NewCommit()
     else # Virtual group
@@ -684,6 +740,15 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.virtGroups.new.term.allowAgentFwdPutty = bool_int_convert(resource[:allow_agent_fqd_putty])
       cfg.settings.access.virtGroups.new.xfer.loadProfileForFileXfer = bool_int_convert(resource[:load_profile_for_file_xfer])
       cfg.settings.access.virtGroups.new.xfer.displayTime = display_time_convert(resource[:display_time])
+      # Mount points
+      resource[:mounts].each do | mount |
+        cfg.settings.access.virtGroups.new.xfer.mountPoints.new.SetDefaults()
+        cfg.settings.access.virtGroups.new.xfer.mountPoints.new.allowUnlimitedAccess = mount['allow_unlimited_access'] unless mount['allow_unlimited_access'].nil?
+        cfg.settings.access.virtGroups.new.xfer.mountPoints.new.realRootPath = mount['real_root_path'] unless mount['real_root_path'].nil?
+        cfg.settings.access.virtGroups.new.xfer.mountPoints.new.fileSharingBeh = mount['file_sharing_behavior'] unless mount['file_sharing_behavior'].nil?
+        cfg.settings.access.virtGroups.new.xfer.mountPoints.new.fileSharing = mount['file_sharing'] unless mount['file_sharing'].nil?
+        cfg.settings.access.virtGroups.new.xfer.mountPoints.NewCommit()
+      end
       cfg.settings.access.virtGroups.new.xfer.sfsHomeDir = display_time_convert(resource[:sfs_home_dir])
       cfg.settings.access.virtGroups.NewCommit()
     end

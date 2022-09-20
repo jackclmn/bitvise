@@ -159,4 +159,8 @@ Puppet::Type.newtype(:bitvise_win_group) do
     desc 'The sfs_home_dir setting. Default: %HOME%'
     defaultto('/%HOME%')
   end
+
+  newproperty(:mounts, :array_matching => :all) do
+    desc 'The mount points for the group. Default: none'
+  end
 end
