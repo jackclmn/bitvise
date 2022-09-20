@@ -603,6 +603,53 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     restart_service
   end
 
+  def sfs_home_dir
+    Puppet.debug("entering sfs_home_dir getter with group_name: #{resource[:group_name]} and value #{resource[:sfs_home_dir]}")
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    val = nil
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          val = entry.xfer.sfsHomeDir
+        end
+      end
+    else
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          val = entry.xfer.sfsHomeDir
+        end
+      end
+    end
+    Puppet.debug("value of sfs_home_dir is #{val}}")
+    val
+  end
+
+  def sfs_home_dir=(value)
+    Puppet.debug("entering sfs_home_dir=value with group_name: #{resource[:group_name]} and sfs_home_dir #{resource[:sfs_home_dir]} and value #{value}")
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    cfg.settings.lock
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          Puppet.debug("setting sfsHomeDir to #{value}")
+          entry.xfer.sfsHomeDir = value
+        end
+      end
+    else
+      cfg.settings.access.virtGroups.entries.each do |entry|
+        if entry.group == resource[:group_name]
+          Puppet.debug("setting sfsHomeDir to #{value}")
+          entry.xfer.sfsHomeDir = value
+        end
+      end
+    end
+    cfg.settings.save
+    cfg.settings.unlock
+    restart_service
+  end
+
   def create
     Puppet.debug('entering create')
     cfg = WIN32OLE.new('Bitvise.BssCfg')
@@ -622,6 +669,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.new.term.allowAgentFwdPutty = bool_int_convert(resource[:allow_agent_fqd_putty])
       cfg.settings.access.winGroups.new.xfer.loadProfileForFileXfer = bool_int_convert(resource[:load_profile_for_file_xfer])
       cfg.settings.access.winGroups.new.xfer.displayTime = display_time_convert(resource[:display_time])
+      cfg.settings.access.winGroups.new.xfer.sfsHomeDir = display_time_convert(resource[:sfs_home_dir])
       cfg.settings.access.winGroups.NewCommit()
     else # Virtual group
       # cfg.settings.access.virtGroups.new.groupType = 1 # $cfg.enums.GroupType.local
@@ -636,6 +684,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.virtGroups.new.term.allowAgentFwdPutty = bool_int_convert(resource[:allow_agent_fqd_putty])
       cfg.settings.access.virtGroups.new.xfer.loadProfileForFileXfer = bool_int_convert(resource[:load_profile_for_file_xfer])
       cfg.settings.access.virtGroups.new.xfer.displayTime = display_time_convert(resource[:display_time])
+      cfg.settings.access.virtGroups.new.xfer.sfsHomeDir = display_time_convert(resource[:sfs_home_dir])
       cfg.settings.access.virtGroups.NewCommit()
     end
     cfg.settings.save

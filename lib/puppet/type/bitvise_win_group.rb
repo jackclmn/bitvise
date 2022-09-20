@@ -154,4 +154,9 @@ Puppet::Type.newtype(:bitvise_win_group) do
     newvalue('UTC')
     defaultto('local')
   end
+
+  newproperty(:sfs_home_dir) do
+    desc 'The sfs_home_dir setting. Default: %HOME%'
+    defaultto('%HOME%')
+  end
 end
