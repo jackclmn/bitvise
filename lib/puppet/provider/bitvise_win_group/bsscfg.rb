@@ -728,6 +728,30 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         cfg.settings.access.winGroups.new.xfer.mountPoints.NewCommit()
       end
       cfg.settings.access.winGroups.new.xfer.sfsHomeDir = resource[:sfs_home_dir]
+      # Listen rules
+      cfg.settings.access.winGroups.new.fwding.SetDefaults()
+      cfg.settings.access.winGroups.new.fwding.listenRules.Clear()
+      resource[:listen_rules].each do | rule |
+        cfg.settings.access.winGroups.new.fwding.listenRules.new.SetDefaults()
+        cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.SetDefaults()
+        cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.intfType = rule['intf_type'] unless rule['intf_type'].nil?
+        cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.ipv4range = rule['ipv4_range'] unless rule['ipv4_range'].nil?
+        cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.ipv4end = rule['ipv4_end'] unless rule['ipv4_end'].nil?
+        cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.ipv6range = rule['ipv6_range'] unless rule['ipv6_range'].nil?
+        cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.ipv6end = rule['ipv6_end'] unless rule['ipv6_end'].nil?
+        cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.SetDefaults()
+        cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.overrideListenInterface = rule['override_listen_interface'] unless rule['override_listen_interface'].nil?
+        cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.Clear()
+        cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
+        rule['accept_rules'].each do | r |
+            cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.SetDefaults()
+            cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.addressType = r['address_type'] unless r['address_type'].nil?
+            cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4range = r['ipv4_range'] unless r['ipv4_range'].nil?
+            cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4end = r['ipv4_end'] unless r['ipv4_end'].nil?
+            cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.NewCommit()
+        end
+        cfg.settings.access.winGroups.new.fwding.listenRules.NewCommit()
+      end
       cfg.settings.access.winGroups.NewCommit()
     else # Virtual group
       # cfg.settings.access.virtGroups.new.groupType = 1 # $cfg.enums.GroupType.local
@@ -743,7 +767,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.virtGroups.new.xfer.loadProfileForFileXfer = bool_int_convert(resource[:load_profile_for_file_xfer])
       cfg.settings.access.virtGroups.new.xfer.displayTime = display_time_convert(resource[:display_time])
       # Mount points
-      cfg.settings.access.winGroups.new.xfer.mountPoints.Clear()
+      cfg.settings.access.virtGroups.new.xfer.mountPoints.Clear()
       resource[:mounts].each do | mount |
         cfg.settings.access.virtGroups.new.xfer.mountPoints.new.SetDefaults()
         cfg.settings.access.virtGroups.new.xfer.mountPoints.new.sfsMountPath = mount['sfs_mount_path'] unless mount['sfs_mount_path'].nil?
@@ -754,6 +778,30 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         cfg.settings.access.virtGroups.new.xfer.mountPoints.NewCommit()
       end
       cfg.settings.access.virtGroups.new.xfer.sfsHomeDir = resource[:sfs_home_dir]
+      # Listen rules
+      cfg.settings.access.virtGroups.new.fwding.SetDefaults()
+      cfg.settings.access.virtGroups.new.fwding.listenRules.Clear()
+      resource[:listen_rules].each do | rule |
+        cfg.settings.access.virtGroups.new.fwding.listenRules.new.SetDefaults()
+        cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.SetDefaults()
+        cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.intfType = rule['intf_type'] unless rule['intf_type'].nil?
+        cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.ipv4range = rule['ipv4_range'] unless rule['ipv4_range'].nil?
+        cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.ipv4end = rule['ipv4_end'] unless rule['ipv4_end'].nil?
+        cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.ipv6range = rule['ipv6_range'] unless rule['ipv6_range'].nil?
+        cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.ipv6end = rule['ipv6_end'] unless rule['ipv6_end'].nil?
+        cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.SetDefaults()
+        cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.overrideListenInterface = rule['override_listen_interface'] unless rule['override_listen_interface'].nil?
+        cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.Clear()
+        cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
+        rule['accept_rules'].each do | r |
+            cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.SetDefaults()
+            cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.addressType = r['address_type'] unless r['address_type'].nil?
+            cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4range = r['ipv4_range'] unless r['ipv4_range'].nil?
+            cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4end = r['ipv4_end'] unless r['ipv4_end'].nil?
+            cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.NewCommit()
+        end
+        cfg.settings.access.virtGroups.new.fwding.listenRules.NewCommit()
+      end
       cfg.settings.access.virtGroups.NewCommit()
     end
     cfg.settings.save

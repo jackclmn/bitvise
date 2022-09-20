@@ -163,4 +163,8 @@ Puppet::Type.newtype(:bitvise_win_group) do
   newproperty(:mounts, :array_matching => :all) do
     desc 'The mount points for the group. Default: none'
   end
+
+  newproperty(:listen_rules, :array_matching => :all) do
+    desc 'The mount points for the group. Default: none'
+  end
 end
