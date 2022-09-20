@@ -736,7 +736,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         Puppet.debug('enter listen rules loop and set defaults')
         cfg.settings.access.winGroups.new.fwding.listenRules.new.SetDefaults()
         cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.SetDefaults()
-        cfg.settings.access.winGroups.new.fwding.listenRules.newportRangeRule.portFrom = rule['port_from'] unless rule['port_from'].nil?
+        cfg.settings.access.winGroups.new.fwding.listenRules.new.portRangeRule.portFrom = rule['port_from'] unless rule['port_from'].nil?
         cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.intfType = rule['intf_type'] unless rule['intf_type'].nil?
         cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.ipv4range = rule['ipv4_range'] unless rule['ipv4_range'].nil?
         cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.ipv4end = rule['ipv4_end'] unless rule['ipv4_end'].nil?
@@ -792,7 +792,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       resource[:listen_rules].each do | rule |
         cfg.settings.access.virtGroups.new.fwding.listenRules.new.SetDefaults()
         cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.SetDefaults()
-        cfg.settings.access.virtGroups.new.fwding.listenRules.newportRangeRule.portFrom = rule['port_from'] unless rule['port_from'].nil?
+        cfg.settings.access.virtGroups.new.fwding.listenRules.new.portRangeRule.portFrom = rule['port_from'] unless rule['port_from'].nil?
         cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.intfType = rule['intf_type'] unless rule['intf_type'].nil?
         cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.ipv4range = rule['ipv4_range'] unless rule['ipv4_range'].nil?
         cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.ipv4end = rule['ipv4_end'] unless rule['ipv4_end'].nil?
