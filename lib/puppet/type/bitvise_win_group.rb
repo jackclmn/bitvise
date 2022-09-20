@@ -157,6 +157,6 @@ Puppet::Type.newtype(:bitvise_win_group) do
 
   newproperty(:sfs_home_dir) do
     desc 'The sfs_home_dir setting. Default: %HOME%'
-    defaultto('%HOME%')
+    defaultto('/%HOME%')
   end
 end
