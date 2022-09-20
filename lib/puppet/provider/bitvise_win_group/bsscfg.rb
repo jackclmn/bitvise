@@ -730,8 +730,10 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.new.xfer.sfsHomeDir = resource[:sfs_home_dir]
       # Listen rules
       cfg.settings.access.winGroups.new.fwding.SetDefaults()
+      Puppet.debug('clearing listenin rules')
       cfg.settings.access.winGroups.new.fwding.listenRules.Clear()
       resource[:listen_rules].each do | rule |
+        Puppet.debug('enter listen rules loop and set defaults')
         cfg.settings.access.winGroups.new.fwding.listenRules.new.SetDefaults()
         cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.SetDefaults()
         cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.intfType = rule['intf_type'] unless rule['intf_type'].nil?
@@ -741,17 +743,22 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.ipv6end = rule['ipv6_end'] unless rule['ipv6_end'].nil?
         cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.SetDefaults()
         cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.overrideListenInterface = rule['override_listen_interface'] unless rule['override_listen_interface'].nil?
+        Puppet.debug('clear acceptrules')
         cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.Clear()
         rule['accept_rules'].each do | r |
+            Puppet.debug('enter accept rules loop and set defaults')
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.SetDefaults()
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.addressType = r['address_type'] unless r['address_type'].nil?
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4range = r['ipv4_range'] unless r['ipv4_range'].nil?
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4end = r['ipv4_end'] unless r['ipv4_end'].nil?
+            Puppet.debug('try to commit the accept rule')
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.NewCommit()
         end
+        Puppet.debug('exit accept rules loop and commit the listen rule')
         cfg.settings.access.winGroups.new.fwding.listenRules.NewCommit()
       end
+      Puppet.debug('commit the wingroup')
       cfg.settings.access.winGroups.NewCommit()
     else # Virtual group
       # cfg.settings.access.virtGroups.new.groupType = 1 # $cfg.enums.GroupType.local
