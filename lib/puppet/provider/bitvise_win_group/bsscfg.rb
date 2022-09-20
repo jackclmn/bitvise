@@ -742,8 +742,8 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.SetDefaults()
         cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.overrideListenInterface = rule['override_listen_interface'] unless rule['override_listen_interface'].nil?
         cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.Clear()
-        cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
         rule['accept_rules'].each do | r |
+            cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.SetDefaults()
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.addressType = r['address_type'] unless r['address_type'].nil?
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4range = r['ipv4_range'] unless r['ipv4_range'].nil?
@@ -792,8 +792,8 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.SetDefaults()
         cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.overrideListenInterface = rule['override_listen_interface'] unless rule['override_listen_interface'].nil?
         cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.Clear()
-        cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
         rule['accept_rules'].each do | r |
+            cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
             cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.SetDefaults()
             cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.addressType = r['address_type'] unless r['address_type'].nil?
             cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4range = r['ipv4_range'] unless r['ipv4_range'].nil?
