@@ -719,6 +719,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       # Mount points
       resource[:mounts].each do | mount |
         cfg.settings.access.winGroups.new.xfer.mountPoints.new.SetDefaults()
+        cfg.settings.access.winGroups.new.xfer.mountPoints.new.sfsMountPath = mount['sfs_mount_path'] unless mount['sfs_mount_path'].nil?
         cfg.settings.access.winGroups.new.xfer.mountPoints.new.allowUnlimitedAccess = mount['allow_unlimited_access'] unless mount['allow_unlimited_access'].nil?
         cfg.settings.access.winGroups.new.xfer.mountPoints.new.realRootPath = mount['real_root_path'] unless mount['real_root_path'].nil?
         cfg.settings.access.winGroups.new.xfer.mountPoints.new.fileSharingBeh = mount['file_sharing_behavior'] unless mount['file_sharing_behavior'].nil?
