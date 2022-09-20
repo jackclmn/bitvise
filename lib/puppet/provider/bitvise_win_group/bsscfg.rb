@@ -726,7 +726,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         cfg.settings.access.winGroups.new.xfer.mountPoints.new.fileSharingBeh = mount['file_sharing_behavior'] unless mount['file_sharing_behavior'].nil?
         cfg.settings.access.winGroups.new.xfer.mountPoints.NewCommit()
       end
-      cfg.settings.access.winGroups.new.xfer.sfsHomeDir = display_time_convert(resource[:sfs_home_dir])
+      cfg.settings.access.winGroups.new.xfer.sfsHomeDir = resource[:sfs_home_dir]
       cfg.settings.access.winGroups.NewCommit()
     else # Virtual group
       # cfg.settings.access.virtGroups.new.groupType = 1 # $cfg.enums.GroupType.local
@@ -751,7 +751,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         cfg.settings.access.virtGroups.new.xfer.mountPoints.new.fileSharingBeh = mount['file_sharing_behavior'] unless mount['file_sharing_behavior'].nil?
         cfg.settings.access.virtGroups.new.xfer.mountPoints.NewCommit()
       end
-      cfg.settings.access.virtGroups.new.xfer.sfsHomeDir = display_time_convert(resource[:sfs_home_dir])
+      cfg.settings.access.virtGroups.new.xfer.sfsHomeDir = resource[:sfs_home_dir]
       cfg.settings.access.virtGroups.NewCommit()
     end
     cfg.settings.save
