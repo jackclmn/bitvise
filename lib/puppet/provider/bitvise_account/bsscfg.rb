@@ -261,6 +261,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     else # Virtual group
       cfg.settings.access.virtAccounts.new.SetDefaults()
       cfg.settings.access.virtAccounts.new.virtAccount = resource[:account_name]
+      cfg.settings.access.virtAccounts.new.group = resource[:group] unless resource[:group].nil?
       cfg.settings.access.virtAccounts.new.loginAllowed = bool_int_convert(resource[:login_allowed])
       cfg.settings.access.virtAccounts.new.securityContext = security_context_convert(resource[:security_context])
       cfg.settings.access.virtAccounts.new.winAccount = resource[:win_account] unless resource[:win_account].nil?
