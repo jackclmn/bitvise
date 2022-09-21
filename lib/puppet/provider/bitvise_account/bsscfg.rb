@@ -261,11 +261,10 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     else # Virtual group
       cfg.settings.access.virtAccounts.new.SetDefaults()
       cfg.settings.access.virtAccounts.new.virtAccount = resource[:account_name]
-      cfg.settings.access.virtAccounts.new.specifyGroup = resource[:specify_group]
-      cfg.settings.access.virtAccounts.new.groupType = group_type_convert(resource[:group_type]) unless resource[:group_type].nil? # optional if specify_group is false
-      cfg.settings.access.virtAccounts.new.group = resource[:group] unless resource[:group].nil? # optional if specify_group is false
       cfg.settings.access.virtAccounts.new.loginAllowed = bool_int_convert(resource[:login_allowed])
       cfg.settings.access.virtAccounts.new.securityContext = security_context_convert(resource[:security_context])
+      cfg.settings.access.virtAccounts.new.winAccount = resource[:win_account] unless resource[:win_account].nil?
+      cfg.settings.access.virtAccounts.new.winDomain = resource[:win_domain] unless resource[:win_domain].nil?
       cfg.settings.access.virtAccounts.new.term.SetDefaults()
       cfg.settings.access.virtAccounts.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
       # TODO: keys

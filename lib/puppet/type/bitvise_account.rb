@@ -59,6 +59,14 @@ Puppet::Type.newtype(:bitvise_account) do
     desc 'The name of the group. Valid values: String'
   end
 
+  newproperty(:win_account) do
+    desc 'The name of the win_account. Valid values: String'
+  end
+
+  newproperty(:win_domain) do
+    desc 'The name of the win_domain. Valid values: String'
+  end
+
   newproperty(:security_context) do
     desc 'The security context. Valid values: default, auto, local, domain, service, microsoft. Defualt: default.
       This setting only applies when account_type = virtual.'
