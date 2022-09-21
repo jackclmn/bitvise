@@ -77,7 +77,6 @@ Puppet::Type.newtype(:bitvise_account) do
     newvalue('domain') # 3
     newvalue('service') # 4
     newvalue('microsoft') # 5
-    defaultto('default')
   end
 
   newproperty(:login_allowed) do
