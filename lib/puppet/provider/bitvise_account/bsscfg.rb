@@ -10,8 +10,8 @@
 # TODO if we continue to use eval make sure strings are appropriately contained
 # TODO stop on error
 #
-Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
-  desc 'This provider manages bitvise windows groups'
+Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
+  desc 'This provider manages bitvise accounts'
 
   defaultfor kernel: :windows
   confine    kernel: :windows
