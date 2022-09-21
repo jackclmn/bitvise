@@ -63,7 +63,7 @@ Puppet::Type.newtype(:bitvise_win_group) do
   end
 
   newparam(:group_type) do
-    desc 'The shell_access_type setting. Valid options are: default, none, BvShell, cmd, PowerShell, Bash, Git, Telnet, Custom.
+    desc 'The group_type setting. Valid options are: everyone, local, domain.
         Defaults to: cmd'
 
     validate do |value|
@@ -160,11 +160,11 @@ Puppet::Type.newtype(:bitvise_win_group) do
     defaultto('/%HOME%')
   end
 
-  newproperty(:mounts, :array_matching => :all) do
+  newproperty(:mounts, array_matching: :all) do
     desc 'The mount points for the group. Default: none'
   end
 
-  newproperty(:listen_rules, :array_matching => :all) do
+  newproperty(:listen_rules, array_matching: :all) do
     desc 'The mount points for the group. Default: none'
   end
 end

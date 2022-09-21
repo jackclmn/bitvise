@@ -98,7 +98,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       'UTC'               => 3
     }
     r = val.is_a?(Integer) ? values.invert[val] : values[val.to_s]
-    Puppet.debug("account_failure_convert with r = #{r}")
+    Puppet.debug("display_time_convert with r = #{r}")
     r
   end
 
@@ -527,7 +527,8 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         end
       end
     end
-    Puppet.debug("value of load_profile_for_file_xfer is #{val} and converted to be returned is #{bool_int_convert(val)} and [true, false].include? val #{[true, false].include? bool_int_convert(val)}")
+    Puppet.debug("value of load_profile_for_file_xfer is #{val} and converted to be returned is #{bool_int_convert(val)} and [true, false].include? val #{[true,
+                                                                                                                                                           false].include? bool_int_convert(val)}")
     bool_int_convert(val)
   end
 
@@ -650,52 +651,52 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
     restart_service
   end
 
-#   def mounts
-#     Puppet.debug("entering mounts getter with group_name: #{resource[:group_name]} and value #{resource[:mounts]}")
-#     cfg = WIN32OLE.new('Bitvise.BssCfg')
-#     cfg.settings.load
-#     val = nil
-#     if resource[:type] == 'windows'
-#       cfg.settings.access.winGroups.entries.each do |entry|
-#         if entry.group == resource[:group_name]
-#           val = entry.xfer.sfsHomeDir
-#         end
-#       end
-#     else
-#       cfg.settings.access.virtGroups.entries.each do |entry|
-#         if entry.group == resource[:group_name]
-#           val = entry.xfer.sfsHomeDir
-#         end
-#       end
-#     end
-#     Puppet.debug("value of mounts is #{val}}")
-#     val
-#   end
+  #   def mounts
+  #     Puppet.debug("entering mounts getter with group_name: #{resource[:group_name]} and value #{resource[:mounts]}")
+  #     cfg = WIN32OLE.new('Bitvise.BssCfg')
+  #     cfg.settings.load
+  #     val = nil
+  #     if resource[:type] == 'windows'
+  #       cfg.settings.access.winGroups.entries.each do |entry|
+  #         if entry.group == resource[:group_name]
+  #           val = entry.xfer.sfsHomeDir
+  #         end
+  #       end
+  #     else
+  #       cfg.settings.access.virtGroups.entries.each do |entry|
+  #         if entry.group == resource[:group_name]
+  #           val = entry.xfer.sfsHomeDir
+  #         end
+  #       end
+  #     end
+  #     Puppet.debug("value of mounts is #{val}}")
+  #     val
+  #   end
 
-#   def mounts=(value)
-#     Puppet.debug("entering mounts=value with group_name: #{resource[:group_name]} and mounts #{resource[:mounts]} and value #{value}")
-#     cfg = WIN32OLE.new('Bitvise.BssCfg')
-#     cfg.settings.load
-#     cfg.settings.lock
-#     if resource[:type] == 'windows'
-#       cfg.settings.access.winGroups.entries.each do |entry|
-#         if entry.group == resource[:group_name]
-#           Puppet.debug("setting sfsHomeDir to #{value}")
-#           entry.xfer.sfsHomeDir = value
-#         end
-#       end
-#     else
-#       cfg.settings.access.virtGroups.entries.each do |entry|
-#         if entry.group == resource[:group_name]
-#           Puppet.debug("setting sfsHomeDir to #{value}")
-#           entry.xfer.sfsHomeDir = value
-#         end
-#       end
-#     end
-#     cfg.settings.save
-#     cfg.settings.unlock
-#     restart_service
-#   end
+  #   def mounts=(value)
+  #     Puppet.debug("entering mounts=value with group_name: #{resource[:group_name]} and mounts #{resource[:mounts]} and value #{value}")
+  #     cfg = WIN32OLE.new('Bitvise.BssCfg')
+  #     cfg.settings.load
+  #     cfg.settings.lock
+  #     if resource[:type] == 'windows'
+  #       cfg.settings.access.winGroups.entries.each do |entry|
+  #         if entry.group == resource[:group_name]
+  #           Puppet.debug("setting sfsHomeDir to #{value}")
+  #           entry.xfer.sfsHomeDir = value
+  #         end
+  #       end
+  #     else
+  #       cfg.settings.access.virtGroups.entries.each do |entry|
+  #         if entry.group == resource[:group_name]
+  #           Puppet.debug("setting sfsHomeDir to #{value}")
+  #           entry.xfer.sfsHomeDir = value
+  #         end
+  #       end
+  #     end
+  #     cfg.settings.save
+  #     cfg.settings.unlock
+  #     restart_service
+  #   end
 
   def create
     Puppet.debug('entering create')
@@ -718,7 +719,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.new.xfer.displayTime = display_time_convert(resource[:display_time])
       # Mount points
       cfg.settings.access.winGroups.new.xfer.mountPoints.Clear()
-      resource[:mounts].each do | mount |
+      resource[:mounts].each do |mount|
         cfg.settings.access.winGroups.new.xfer.mountPoints.new.SetDefaults()
         cfg.settings.access.winGroups.new.xfer.mountPoints.new.sfsMountPath = mount['sfs_mount_path'] unless mount['sfs_mount_path'].nil?
         cfg.settings.access.winGroups.new.xfer.mountPoints.new.allowUnlimitedAccess = mount['allow_unlimited_access'] unless mount['allow_unlimited_access'].nil?
@@ -732,7 +733,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.new.fwding.SetDefaults()
       Puppet.debug('clearing listenin rules')
       cfg.settings.access.winGroups.new.fwding.listenRules.Clear()
-      resource[:listen_rules].each do | rule |
+      resource[:listen_rules].each do |rule|
         Puppet.debug('enter listen rules loop and set defaults')
         cfg.settings.access.winGroups.new.fwding.listenRules.new.SetDefaults()
         cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.SetDefaults()
@@ -746,15 +747,15 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.overrideListenInterface = rule['override_listen_interface'] unless rule['override_listen_interface'].nil?
         Puppet.debug('clear acceptrules')
         cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.Clear() unless rule['accept_rules'].empty?
-        rule['accept_rules'].each do | r |
-            Puppet.debug('enter accept rules loop and set defaults')
-            cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
-            cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.SetDefaults()
-            cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.addressType = r['address_type'] unless r['address_type'].nil?
-            cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4range = r['ipv4_range'] unless r['ipv4_range'].nil?
-            cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4end = r['ipv4_end'] unless r['ipv4_end'].nil?
-            Puppet.debug('try to commit the accept rule')
-            cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.NewCommit()
+        rule['accept_rules'].each do |r|
+          Puppet.debug('enter accept rules loop and set defaults')
+          cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
+          cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.SetDefaults()
+          cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.addressType = r['address_type'] unless r['address_type'].nil?
+          cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4range = r['ipv4_range'] unless r['ipv4_range'].nil?
+          cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4end = r['ipv4_end'] unless r['ipv4_end'].nil?
+          Puppet.debug('try to commit the accept rule')
+          cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.NewCommit()
         end
         Puppet.debug('exit accept rules loop and commit the listen rule')
         cfg.settings.access.winGroups.new.fwding.listenRules.NewCommit()
@@ -776,7 +777,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       cfg.settings.access.virtGroups.new.xfer.displayTime = display_time_convert(resource[:display_time])
       # Mount points
       cfg.settings.access.virtGroups.new.xfer.mountPoints.Clear()
-      resource[:mounts].each do | mount |
+      resource[:mounts].each do |mount|
         cfg.settings.access.virtGroups.new.xfer.mountPoints.new.SetDefaults()
         cfg.settings.access.virtGroups.new.xfer.mountPoints.new.sfsMountPath = mount['sfs_mount_path'] unless mount['sfs_mount_path'].nil?
         cfg.settings.access.virtGroups.new.xfer.mountPoints.new.allowUnlimitedAccess = mount['allow_unlimited_access'] unless mount['allow_unlimited_access'].nil?
@@ -789,7 +790,7 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
       # Listen rules
       cfg.settings.access.virtGroups.new.fwding.SetDefaults()
       cfg.settings.access.virtGroups.new.fwding.listenRules.Clear()
-      resource[:listen_rules].each do | rule |
+      resource[:listen_rules].each do |rule|
         cfg.settings.access.virtGroups.new.fwding.listenRules.new.SetDefaults()
         cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.SetDefaults()
         cfg.settings.access.virtGroups.new.fwding.listenRules.new.portRangeRule.portFrom = rule['port_from'] unless rule['port_from'].nil?
@@ -801,13 +802,13 @@ Puppet::Type.type(:bitvise_win_group).provide(:bsscfg) do
         cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.SetDefaults()
         cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.overrideListenInterface = rule['override_listen_interface'] unless rule['override_listen_interface'].nil?
         cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.Clear() unless rule['accept_rules'].empty?
-        rule['accept_rules'].each do | r |
-            cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
-            cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.SetDefaults()
-            cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.addressType = r['address_type'] unless r['address_type'].nil?
-            cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4range = r['ipv4_range'] unless r['ipv4_range'].nil?
-            cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4end = r['ipv4_end'] unless r['ipv4_end'].nil?
-            cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.NewCommit()
+        rule['accept_rules'].each do |r|
+          cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
+          cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.SetDefaults()
+          cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.addressType = r['address_type'] unless r['address_type'].nil?
+          cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4range = r['ipv4_range'] unless r['ipv4_range'].nil?
+          cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4end = r['ipv4_end'] unless r['ipv4_end'].nil?
+          cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.NewCommit()
         end
         cfg.settings.access.virtGroups.new.fwding.listenRules.NewCommit()
       end
