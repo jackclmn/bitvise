@@ -242,6 +242,242 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     restart_service
   end
 
+  def specify_group
+    Puppet.debug('entering specify_group getter')
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    val = nil
+    if resource[:account_type] == 'windows'
+      cfg.settings.access.winAccounts.entries.each do |entry|
+        if entry.winAccount == resource[:account_name]
+          val = entry.specifyGroup
+        end
+      end
+    else # Virtual account
+      cfg.settings.access.virtAccounts.entries.each do |entry|
+        if entry.virtAccount == resource[:account_name]
+          val = entry.specifyGroup
+        end
+      end
+    end
+    Puppet.debug("value of specify_group found is #{val}, value converted to be returned is #{bool_int_convert(val)}")
+    bool_int_convert(val)
+  end
+
+  def specify_group=(value)
+    Puppet.debug("entering specify_group=value with name: #{resource[:account_name]} and specify_group #{resource[:specify_group]} and value #{value}")
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    cfg.settings.lock
+    if resource[:account_type] == 'windows'
+      cfg.settings.access.winAccounts.entries.each do |entry|
+        if entry.winAccount == resource[:account_name]
+          Puppet.debug("setting specifyGroup to #{bool_int_convert(value)}")
+          entry.specifyGroup = bool_int_convert(value)
+        end
+      end
+    else
+      cfg.settings.access.virtAccounts.entries.each do |entry|
+        if entry.virtAccount == resource[:account_name]
+          Puppet.debug("setting specifyGroup to #{bool_int_convert(value)}")
+          entry.specifyGroup = bool_int_convert(value)
+        end
+      end
+    end
+    cfg.settings.save
+    cfg.settings.unlock
+    restart_service
+  end
+
+  def group
+    Puppet.debug('entering group getter')
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    val = nil
+    if resource[:account_type] == 'windows'
+      cfg.settings.access.winAccounts.entries.each do |entry|
+        if entry.winAccount == resource[:account_name]
+          val = entry.group
+        end
+      end
+    else # Virtual account
+      cfg.settings.access.virtAccounts.entries.each do |entry|
+        if entry.virtAccount == resource[:account_name]
+          val = entry.group
+        end
+      end
+    end
+    Puppet.debug("value of group found is #{val}, value converted to be returned is #{val}")
+    val
+  end
+
+  def group=(value)
+    Puppet.debug("entering group=value with name: #{resource[:account_name]} and group #{resource[:group]} and value #{value}")
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    cfg.settings.lock
+    if resource[:account_type] == 'windows'
+      cfg.settings.access.winAccounts.entries.each do |entry|
+        if entry.winAccount == resource[:account_name]
+          Puppet.debug("setting group to #{value}")
+          entry.group = value
+        end
+      end
+    else
+      cfg.settings.access.virtAccounts.entries.each do |entry|
+        if entry.virtAccount == resource[:account_name]
+          Puppet.debug("setting group to #{value}")
+          entry.group = value
+        end
+      end
+    end
+    cfg.settings.save
+    cfg.settings.unlock
+    restart_service
+  end
+
+  def win_account
+    Puppet.debug('entering win_account getter')
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    val = nil
+    if resource[:account_type] == 'windows'
+      cfg.settings.access.winAccounts.entries.each do |entry|
+        if entry.winAccount == resource[:account_name]
+          val = entry.winAccount
+        end
+      end
+    else # Virtual account
+      cfg.settings.access.virtAccounts.entries.each do |entry|
+        if entry.virtAccount == resource[:account_name]
+          val = entry.winAccount
+        end
+      end
+    end
+    Puppet.debug("value of win_account found is #{val}, value converted to be returned is #{val}")
+    val
+  end
+
+  def win_account=(value)
+    Puppet.debug("entering win_account=value with name: #{resource[:account_name]} and win_account #{resource[:win_account]} and value #{value}")
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    cfg.settings.lock
+    if resource[:account_type] == 'windows'
+      cfg.settings.access.winAccounts.entries.each do |entry|
+        if entry.winAccount == resource[:account_name]
+          Puppet.debug("setting winAccount to #{value}")
+          entry.winAccount = value
+        end
+      end
+    else
+      cfg.settings.access.virtAccounts.entries.each do |entry|
+        if entry.virtAccount == resource[:account_name]
+          Puppet.debug("setting winAccount to #{value}")
+          entry.winAccount = value
+        end
+      end
+    end
+    cfg.settings.save
+    cfg.settings.unlock
+    restart_service
+  end
+
+  def win_domain
+    Puppet.debug('entering win_domain getter')
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    val = nil
+    if resource[:account_type] == 'windows'
+      cfg.settings.access.winAccounts.entries.each do |entry|
+        if entry.winAccount == resource[:account_name]
+          val = entry.winDomain
+        end
+      end
+    else # Virtual account
+      cfg.settings.access.virtAccounts.entries.each do |entry|
+        if entry.virtAccount == resource[:account_name]
+          val = entry.winDomain
+        end
+      end
+    end
+    Puppet.debug("value of win_domain found is #{val}, value converted to be returned is #{val}")
+    val
+  end
+
+  def win_domain=(value)
+    Puppet.debug("entering win_domain=value with name: #{resource[:account_name]} and win_domain #{resource[:win_domain]} and value #{value}")
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    cfg.settings.lock
+    if resource[:account_type] == 'windows'
+      cfg.settings.access.winAccounts.entries.each do |entry|
+        if entry.winAccount == resource[:account_name]
+          Puppet.debug("setting winDomain to #{value}")
+          entry.winDomain = value
+        end
+      end
+    else
+      cfg.settings.access.virtAccounts.entries.each do |entry|
+        if entry.virtAccount == resource[:account_name]
+          Puppet.debug("setting winDomain to #{value}")
+          entry.winDomain = value
+        end
+      end
+    end
+    cfg.settings.save
+    cfg.settings.unlock
+    restart_service
+  end
+
+  def security_context
+    Puppet.debug('entering security_context getter')
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    val = nil
+    if resource[:account_type] == 'windows'
+      cfg.settings.access.winAccounts.entries.each do |entry|
+        if entry.winAccount == resource[:account_name]
+          val = entry.securityContext
+        end
+      end
+    else
+      cfg.settings.access.virtAccounts.entries.each do |entry|
+        if entry.virtAccount == resource[:account_name]
+          val = entry.securityContext
+        end
+      end
+    end
+    Puppet.debug("value of security_context is #{val} and converted to be returned is #{security_context_convert(val)}")
+    security_context_convert(val)
+  end
+
+  def security_context=(value)
+    Puppet.debug("entering security_context=value with account_name: #{resource[:account_name]} and security_context #{resource[:security_context]} and value #{value}")
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    cfg.settings.lock
+    if resource[:account_type] == 'windows'
+      cfg.settings.access.winAccounts.entries.each do |entry|
+        if entry.winAccount == resource[:account_name]
+          Puppet.debug("setting securityContext to #{security_context_convert(value)}")
+          entry.securityContext = security_context_convert(value)
+        end
+      end
+    else
+      cfg.settings.access.virtAccounts.entries.each do |entry|
+        if entry.virtAccount == resource[:account_name]
+          Puppet.debug("setting shellAccessType to #{security_context_convert(value)}")
+          entry.securityContext = security_context_convert(value)
+        end
+      end
+    end
+    cfg.settings.save
+    cfg.settings.unlock
+    restart_service
+  end
+
+
   def create
     Puppet.debug('entering create')
     cfg = WIN32OLE.new('Bitvise.BssCfg')
