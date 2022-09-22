@@ -4,7 +4,7 @@
 # TODO figure out approach for exists, create, destroy
 # TODO remove trusted_lsp_only since it was only for testing
 # TODO add groups
-# TODO handle fg = WIN32OLE.new(resource[:com]) accross multiple versions, how do we query for version?
+# TODO handle fg = WIN32OLE.new(resource[:com_object]) accross multiple versions, how do we query for version?
 # TODO do we create a WIN32OLE.new() for each method? Can this be global? Need to find examples of best practice
 # * create re-usable code for load, lock, set, save, unlock
 # TODO if we continue to use eval make sure strings are appropriately contained
@@ -115,7 +115,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def exists?
     Puppet.debug('entering exists?')
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     if resource[:type] == 'windows'
       cfg.settings.access.winGroups.entries.each do |entry|
@@ -135,7 +135,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def login_allowed
     Puppet.debug('entering login_allowed getter')
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     val = nil
     if resource[:type] == 'windows'
@@ -157,7 +157,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def login_allowed=(value)
     Puppet.debug("entering login_allowed=value with name: #{resource[:group_name]} and login_allowed #{resource[:login_allowed]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     cfg.settings.lock
     if resource[:type] == 'windows'
@@ -182,7 +182,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def shell_access_type
     Puppet.debug('entering shell_access_type getter')
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     val = nil
     if resource[:type] == 'windows'
@@ -204,7 +204,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def shell_access_type=(value)
     Puppet.debug("entering shell_access_type=value with group_name: #{resource[:group_name]} and shell_access_type #{resource[:shell_access_type]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     cfg.settings.lock
     if resource[:type] == 'windows'
@@ -229,7 +229,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def logon_type
     Puppet.debug('entering logon_type getter')
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     val = nil
     if resource[:type] == 'windows'
@@ -251,7 +251,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def logon_type=(value)
     Puppet.debug("entering logon_type=value with group_name: #{resource[:group_name]} and logon_type #{resource[:logon_type]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     cfg.settings.lock
     if resource[:type] == 'windows'
@@ -276,7 +276,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def on_account_info_failure
     Puppet.debug('entering on_account_info_failure getter')
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     val = nil
     if resource[:type] == 'windows'
@@ -298,7 +298,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def on_account_info_failure=(value)
     Puppet.debug("entering on_account_info_failure=value with group_name: #{resource[:group_name]} and on_account_info_failure #{resource[:on_account_info_failure]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     cfg.settings.lock
     if resource[:type] == 'windows'
@@ -323,7 +323,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def max_wait_time
     Puppet.debug('entering max_wait_time getter')
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     val = nil
     if resource[:type] == 'windows'
@@ -345,7 +345,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def max_wait_time=(value)
     Puppet.debug("entering max_wait_time=value with group_name: #{resource[:group_name]} and max_wait_time #{resource[:max_wait_time]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     cfg.settings.lock
     if resource[:type] == 'windows'
@@ -370,7 +370,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def permit_init_dir_fallback
     Puppet.debug("entering permit_init_dir_fallback getter with group_name: #{resource[:group_name]} and value #{resource[:permit_init_dir_fallback]}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     val = nil
     if resource[:type] == 'windows'
@@ -393,7 +393,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def permit_init_dir_fallback=(value)
     Puppet.debug("entering permit_init_dir_fallback=value with group_name: #{resource[:group_name]} and permit_init_dir_fallback #{resource[:permit_init_dir_fallback]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     cfg.settings.lock
     if resource[:type] == 'windows'
@@ -418,7 +418,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def allow_agent_fwd_cygwin
     Puppet.debug("entering allow_agent_fwd_cygwin getter with group_name: #{resource[:group_name]} and value #{resource[:allow_agent_fwd_cygwin]}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     val = nil
     if resource[:type] == 'windows'
@@ -440,7 +440,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def allow_agent_fwd_cygwin=(value)
     Puppet.debug("entering allow_agent_fwd_cygwin=value with group_name: #{resource[:group_name]} and allow_agent_fwd_cygwin #{resource[:allow_agent_fwd_cygwin]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     cfg.settings.lock
     if resource[:type] == 'windows'
@@ -465,7 +465,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def allow_agent_fqd_putty
     Puppet.debug("entering allow_agent_fqd_putty getter with group_name: #{resource[:group_name]} and value #{resource[:allow_agent_fqd_putty]}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     val = nil
     if resource[:type] == 'windows'
@@ -487,7 +487,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def allow_agent_fqd_putty=(value)
     Puppet.debug("entering allow_agent_fqd_putty=value with group_name: #{resource[:group_name]} and allow_agent_fqd_putty #{resource[:allow_agent_fqd_putty]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     cfg.settings.lock
     if resource[:type] == 'windows'
@@ -512,7 +512,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def load_profile_for_file_xfer
     Puppet.debug("entering load_profile_for_file_xfer getter with group_name: #{resource[:group_name]} and value #{resource[:load_profile_for_file_xfer]}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     val = nil
     if resource[:type] == 'windows'
@@ -535,7 +535,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def load_profile_for_file_xfer=(value)
     Puppet.debug("entering load_profile_for_file_xfer=value with group_name: #{resource[:group_name]} and load_profile_for_file_xfer #{resource[:load_profile_for_file_xfer]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     cfg.settings.lock
     if resource[:type] == 'windows'
@@ -560,7 +560,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def display_time
     Puppet.debug("entering display_time getter with group_name: #{resource[:group_name]} and value #{resource[:display_time]}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     val = nil
     if resource[:type] == 'windows'
@@ -582,7 +582,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def display_time=(value)
     Puppet.debug("entering display_time=value with group_name: #{resource[:group_name]} and display_time #{resource[:display_time]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     cfg.settings.lock
     if resource[:type] == 'windows'
@@ -607,7 +607,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def sfs_home_dir
     Puppet.debug("entering sfs_home_dir getter with group_name: #{resource[:group_name]} and value #{resource[:sfs_home_dir]}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     val = nil
     if resource[:type] == 'windows'
@@ -629,7 +629,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def sfs_home_dir=(value)
     Puppet.debug("entering sfs_home_dir=value with group_name: #{resource[:group_name]} and sfs_home_dir #{resource[:sfs_home_dir]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     cfg.settings.lock
     if resource[:type] == 'windows'
@@ -654,7 +654,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   #   def mounts
   #     Puppet.debug("entering mounts getter with group_name: #{resource[:group_name]} and value #{resource[:mounts]}")
-  #     cfg = WIN32OLE.new(resource[:com])
+  #     cfg = WIN32OLE.new(resource[:com_object])
   #     cfg.settings.load
   #     val = nil
   #     if resource[:type] == 'windows'
@@ -676,7 +676,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   #   def mounts=(value)
   #     Puppet.debug("entering mounts=value with group_name: #{resource[:group_name]} and mounts #{resource[:mounts]} and value #{value}")
-  #     cfg = WIN32OLE.new(resource[:com])
+  #     cfg = WIN32OLE.new(resource[:com_object])
   #     cfg.settings.load
   #     cfg.settings.lock
   #     if resource[:type] == 'windows'
@@ -701,7 +701,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def create
     Puppet.debug('entering create')
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     cfg.settings.lock
     if resource[:type] == 'windows'
@@ -822,7 +822,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
 
   def destroy
     Puppet.debug('entering destroy')
-    cfg = WIN32OLE.new(resource[:com])
+    cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
     cfg.settings.lock
     i = nil
