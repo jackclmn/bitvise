@@ -25,34 +25,27 @@ Puppet::Type.newtype(:bitvise_setting) do
 
   newproperty(:send_fwding_rule_descs) do
     desc 'Valid values: true, false. Defaults to false'
-    newvalue(false)
-    newvalue(true)
-    defaultto(false) # TODO: does this need to be :false :true ?
+    newvalue(:false)
+    newvalue(:true)
     munge { |value| value }
   end
 
   newproperty(:log_file_rollover_by_size) do
     desc 'Valid values: true, false. Defaults to false'
-    newvalue(false)
-    newvalue(true)
-    defaultto(false) # TODO: does this need to be :false :true ?
-    munge { |value| value }
+    newvalue(:false)
+    newvalue(:true)
   end
 
   newproperty(:ssh_dss) do
     desc 'Valid values: true, false. Defaults to false'
-    newvalue(false)
-    newvalue(true)
-    defaultto(false) # TODO: does this need to be :false :true ?
-    munge { |value| value }
+    newvalue(:false)
+    newvalue(:true)
   end
 
   newproperty(:alg_3des_ctr) do
     desc 'Valid values: true, false. Defaults to false'
-    newvalue(false)
-    newvalue(true)
-    defaultto(false) # TODO: does this need to be :false :true ?
-    munge { |value| value }
+    newvalue(:false)
+    newvalue(:true)
   end
 
   newproperty(:min_rsa_key_bits) do
