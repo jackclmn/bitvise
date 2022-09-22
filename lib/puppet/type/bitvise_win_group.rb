@@ -23,7 +23,7 @@ Puppet::Type.newtype(:bitvise_win_group) do
     isnamevar
   end
 
-  newparam(:bsscfg) do
+  newparam(:com) do
     desc 'The name of the com object for your version.'
   end
 

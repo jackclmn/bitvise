@@ -4,7 +4,7 @@
 # TODO figure out approach for exists, create, destroy
 # TODO remove trusted_lsp_only since it was only for testing
 # TODO add groups
-# TODO handle fg = WIN32OLE.new(resource[:bsscfg]) accross multiple versions, how do we query for version?
+# TODO handle fg = WIN32OLE.new(resource[:com]) accross multiple versions, how do we query for version?
 # TODO do we create a WIN32OLE.new() for each method? Can this be global? Need to find examples of best practice
 # * create re-usable code for load, lock, set, save, unlock
 # TODO if we continue to use eval make sure strings are appropriately contained
@@ -130,7 +130,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def exists?
     Puppet.debug('entering exists?')
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     if resource[:account_type] == 'windows'
       cfg.settings.access.winAccounts.entries.each do |entry|
@@ -150,7 +150,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def login_allowed
     Puppet.debug('entering login_allowed getter')
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -172,7 +172,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def login_allowed=(value)
     Puppet.debug("entering login_allowed=value with name: #{resource[:account_name]} and login_allowed #{resource[:login_allowed]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -197,7 +197,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def shell_access_type
     Puppet.debug('entering shell_access_type getter')
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -219,7 +219,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def shell_access_type=(value)
     Puppet.debug("entering shell_access_type=value with account_name: #{resource[:account_name]} and shell_access_type #{resource[:shell_access_type]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -244,7 +244,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def specify_group
     Puppet.debug('entering specify_group getter')
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -266,7 +266,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def specify_group=(value)
     Puppet.debug("entering specify_group=value with name: #{resource[:account_name]} and specify_group #{resource[:specify_group]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -291,7 +291,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def group
     Puppet.debug('entering group getter')
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -313,7 +313,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def group=(value)
     Puppet.debug("entering group=value with name: #{resource[:account_name]} and group #{resource[:group]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -338,7 +338,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def win_account
     Puppet.debug('entering win_account getter')
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -360,7 +360,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def win_account=(value)
     Puppet.debug("entering win_account=value with name: #{resource[:account_name]} and win_account #{resource[:win_account]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -385,7 +385,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def win_domain
     Puppet.debug('entering win_domain getter')
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -407,7 +407,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def win_domain=(value)
     Puppet.debug("entering win_domain=value with name: #{resource[:account_name]} and win_domain #{resource[:win_domain]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -432,7 +432,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def security_context
     Puppet.debug('entering security_context getter')
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -454,7 +454,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def security_context=(value)
     Puppet.debug("entering security_context=value with account_name: #{resource[:account_name]} and security_context #{resource[:security_context]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -479,7 +479,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def keys
     Puppet.debug('entering keys getter')
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -501,7 +501,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def keys=(value)
     Puppet.debug("entering keys=value with name: #{resource[:account_name]} and keys #{resource[:keys]} and value #{value}")
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -526,7 +526,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def create
     Puppet.debug('entering create')
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -560,7 +560,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   def destroy
     Puppet.debug('entering destroy')
-    cfg = WIN32OLE.new(resource[:bsscfg])
+    cfg = WIN32OLE.new(resource[:com])
     cfg.settings.load
     cfg.settings.lock
     i = nil
