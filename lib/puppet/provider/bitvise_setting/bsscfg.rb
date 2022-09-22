@@ -30,7 +30,7 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
       :false => 0,
       :true  => 1
     }
-    r = [true, false].include?(val) ? values[val] : values.invert[val]
+    r = [:true, :false].include?(val) ? values[val] : values.invert[val]
     Puppet.debug("bool_int_convert with r = #{r}")
     r
   end
