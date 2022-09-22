@@ -154,7 +154,7 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
   end
 
   def log_file_rollover_by_size
-    Puppet.debug('entering log_file_rollover_by_size getter')
+    Puppet.debug("entering log_file_rollover_by_size getter with resource set to #{resource[:log_file_rollover_by_size]}")
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
     val = cfg.settings.logging.logFileRolloverBySize
