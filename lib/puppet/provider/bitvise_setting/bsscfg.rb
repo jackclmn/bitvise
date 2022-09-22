@@ -157,7 +157,7 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     Puppet.debug('entering log_file_rollover_by_size getter')
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
-    val = cfg.settings.server.logging.logFileRolloverBySize
+    val = cfg.settings.logging.logFileRolloverBySize
     Puppet.debug("value of log_file_rollover_by_size found is #{val}, value converted to be returned is #{bool_int_convert(val)}")
     bool_int_convert(val)
   end
@@ -167,7 +167,7 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg = WIN32OLE.new('Bitvise.BssCfg')
     cfg.settings.load
     cfg.settings.lock
-    cfg.settings.server.logging.logFileRolloverBySize = bool_int_convert(value)
+    cfg.settings.logging.logFileRolloverBySize = bool_int_convert(value)
     cfg.settings.save
     cfg.settings.unlock
     restart_service
