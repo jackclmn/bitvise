@@ -477,52 +477,52 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     restart_service
   end
 
-#   def keys
-#     Puppet.debug('entering keys getter')
-#     cfg = WIN32OLE.new(resource[:com_object])
-#     cfg.settings.load
-#     val = nil
-#     if resource[:account_type] == 'windows'
-#       cfg.settings.access.winAccounts.entries.each do |entry|
-#         if entry.winAccount == resource[:account_name]
-#           val = entry.auth.keys
-#         end
-#       end
-#     else # Virtual account
-#       cfg.settings.access.virtAccounts.entries.each do |entry|
-#         if entry.virtAccount == resource[:account_name]
-#           val = entry.auth.keys
-#         end
-#       end
-#     end
-#     Puppet.debug("value of keys found is #{val}, value converted to be returned is #{val}")
-#     val
-#   end
+  #   def keys
+  #     Puppet.debug('entering keys getter')
+  #     cfg = WIN32OLE.new(resource[:com_object])
+  #     cfg.settings.load
+  #     val = nil
+  #     if resource[:account_type] == 'windows'
+  #       cfg.settings.access.winAccounts.entries.each do |entry|
+  #         if entry.winAccount == resource[:account_name]
+  #           val = entry.auth.keys
+  #         end
+  #       end
+  #     else # Virtual account
+  #       cfg.settings.access.virtAccounts.entries.each do |entry|
+  #         if entry.virtAccount == resource[:account_name]
+  #           val = entry.auth.keys
+  #         end
+  #       end
+  #     end
+  #     Puppet.debug("value of keys found is #{val}, value converted to be returned is #{val}")
+  #     val
+  #   end
 
-#   def keys=(value)
-#     Puppet.debug("entering keys=value with name: #{resource[:account_name]} and keys #{resource[:keys]} and value #{value}")
-#     cfg = WIN32OLE.new(resource[:com_object])
-#     cfg.settings.load
-#     cfg.settings.lock
-#     if resource[:account_type] == 'windows'
-#       cfg.settings.access.winAccounts.entries.each do |entry|
-#         if entry.winAccount == resource[:account_name]
-#           Puppet.debug("setting keys to #{value}")
-#           entry.keys = value
-#         end
-#       end
-#     else
-#       cfg.settings.access.virtAccounts.entries.each do |entry|
-#         if entry.virtAccount == resource[:account_name]
-#           Puppet.debug("setting keys to #{value}")
-#           entry.keys = value
-#         end
-#       end
-#     end
-#     cfg.settings.save
-#     cfg.settings.unlock
-#     restart_service
-#   end
+  #   def keys=(value)
+  #     Puppet.debug("entering keys=value with name: #{resource[:account_name]} and keys #{resource[:keys]} and value #{value}")
+  #     cfg = WIN32OLE.new(resource[:com_object])
+  #     cfg.settings.load
+  #     cfg.settings.lock
+  #     if resource[:account_type] == 'windows'
+  #       cfg.settings.access.winAccounts.entries.each do |entry|
+  #         if entry.winAccount == resource[:account_name]
+  #           Puppet.debug("setting keys to #{value}")
+  #           entry.keys = value
+  #         end
+  #       end
+  #     else
+  #       cfg.settings.access.virtAccounts.entries.each do |entry|
+  #         if entry.virtAccount == resource[:account_name]
+  #           Puppet.debug("setting keys to #{value}")
+  #           entry.keys = value
+  #         end
+  #       end
+  #     end
+  #     cfg.settings.save
+  #     cfg.settings.unlock
+  #     restart_service
+  #   end
 
   def create
     Puppet.debug('entering create')
