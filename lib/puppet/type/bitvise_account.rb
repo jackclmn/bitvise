@@ -44,7 +44,6 @@ Puppet::Type.newtype(:bitvise_account) do
     desc 'Valid values: true, false. Defaults to false'
     newvalue(:false)
     newvalue(:true)
-    defaultto(:false)
   end
 
   newparam(:group_type) do
