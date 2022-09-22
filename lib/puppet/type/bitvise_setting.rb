@@ -23,7 +23,7 @@ Puppet::Type.newtype(:bitvise_setting) do
     isnamevar
   end
 
-  newparam(:com) do
+  newparam(:com_object) do
     desc 'The name of the com object for your version.'
   end
 
