@@ -40,10 +40,9 @@ Puppet::Type.newtype(:bitvise_win_group) do
   newproperty(:login_allowed) do
     desc 'The login_allowed setting'
 
-    newvalue(false)
-    newvalue(true)
-    defaultto(false) # TODO: does this need to be :false :true ?
-    munge { |value| value }
+    newvalue(:false)
+    newvalue(:true)
+    defaultto(:false)
   end
 
   newproperty(:shell_access_type) do
@@ -113,37 +112,33 @@ Puppet::Type.newtype(:bitvise_win_group) do
   newproperty(:permit_init_dir_fallback) do
     desc 'The permit_init_dir_fallback setting. Valid values: true, false. Default: true'
 
-    newvalue(false)
-    newvalue(true)
-    defaultto(true) # TODO: does this need to be :false :true ?
-    munge { |value| value }
+    newvalue(:false)
+    newvalue(:true)
+    defaultto(:true)
   end
 
   newproperty(:allow_agent_fwd_cygwin) do
     desc 'The allow_agent_fwd_cygwin setting. Valid values: true, false. Default: true'
 
-    newvalue(false)
-    newvalue(true)
-    defaultto(true) # TODO: does this need to be :false :true ?
-    munge { |value| value }
+    newvalue(:false)
+    newvalue(:true)
+    defaultto(:true)
   end
 
   newproperty(:allow_agent_fqd_putty) do
     desc 'The allow_agent_fqd_putty setting. Valid values: true, false. Default: true'
 
-    newvalue(false)
-    newvalue(true)
-    defaultto(true) # TODO: does this need to be :false :true ?
-    munge { |value| value }
+    newvalue(:false)
+    newvalue(:true)
+    defaultto(:true)
   end
 
   newproperty(:load_profile_for_file_xfer) do
     desc 'The load_profile_for_file_xfer setting. Valid values: true, false. Default: false'
 
-    newvalue(false)
-    newvalue(true)
-    defaultto(false) # TODO: does this need to be :false :true ?
-    munge { |value| value }
+    newvalue(:false)
+    newvalue(:true)
+    defaultto(:false)
   end
 
   newproperty(:display_time) do

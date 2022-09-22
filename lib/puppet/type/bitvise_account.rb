@@ -38,10 +38,9 @@ Puppet::Type.newtype(:bitvise_account) do
 
   newproperty(:specify_group) do
     desc 'Valid values: true, false. Defaults to false'
-    newvalue(false)
-    newvalue(true)
-    defaultto(false) # TODO: does this need to be :false :true ?
-    munge { |value| value }
+    newvalue(:false)
+    newvalue(:true)
+    defaultto(:false)
   end
 
   newparam(:group_type) do
@@ -82,10 +81,9 @@ Puppet::Type.newtype(:bitvise_account) do
   newproperty(:login_allowed) do
     desc 'The login_allowed setting'
 
-    newvalue(false)
-    newvalue(true)
-    defaultto(false) # TODO: does this need to be :false :true ?
-    munge { |value| value }
+    newvalue(:false)
+    newvalue(:true)
+    defaultto(:false)
   end
 
   newproperty(:shell_access_type) do
