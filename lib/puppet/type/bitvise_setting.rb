@@ -23,6 +23,10 @@ Puppet::Type.newtype(:bitvise_setting) do
     isnamevar
   end
 
+  newparam(:bsscfg) do
+    desc 'The name of the com object for your version.'
+  end
+
   newproperty(:send_fwding_rule_descs) do
     desc 'Valid values: true, false. Defaults to false'
     newvalue(:false)

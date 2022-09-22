@@ -27,6 +27,10 @@ Puppet::Type.newtype(:bitvise_account) do
     desc 'The name of the account.'
   end
 
+  newparam(:bsscfg) do
+    desc 'The name of the com object for your version.'
+  end
+
   newparam(:account_type) do
     desc 'The type of the account. Valid values: windows, virtual. Defaults to: windows'
     validate do |value|
