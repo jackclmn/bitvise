@@ -219,7 +219,7 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.load
     val = cfg.settings.algs.sig.minRsaKeyBits
     Puppet.debug("value of min_rsa_key_bits found is #{val}")
-    bool_int_convert(val)
+    val
   end
 
   def min_rsa_key_bits=(value)
@@ -239,7 +239,7 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.load
     val = cfg.settings.algs.sig.minDsaKeyBits
     Puppet.debug("value of min_dsa_key_bits found is #{val}")
-    bool_int_convert(val)
+    val
   end
 
   def min_dsa_key_bits=(value)
@@ -259,7 +259,7 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.load
     val = cfg.settings.ipBlock.totalThreshold
     Puppet.debug("value of total_threshold found is #{val}")
-    bool_int_convert(val)
+    val
   end
 
   def total_threshold=(value)
@@ -279,7 +279,7 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.load
     val = cfg.settings.ipBlock.lockoutMins
     Puppet.debug("value of lockout_mins found is #{val}")
-    bool_int_convert(val)
+    val
   end
 
   def lockout_mins=(value)
