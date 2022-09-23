@@ -163,16 +163,16 @@ Puppet::Type.newtype(:bitvise_group) do
   newproperty(:mounts, array_matching: :all) do
     desc 'The mount points for the group.'
 
-    validate do |value|
-      raise ArgumentError, 'Value must be an Array' unless value.is_a?(Array)
-    end
+    # validate do |value|
+    #   raise ArgumentError, 'Value must be an Array' unless value.is_a?(Array)
+    # end
   end
 
   newproperty(:listen_rules, array_matching: :all) do
     desc 'The listen rules for the group.'
 
-    validate do |value|
-      raise ArgumentError, 'Value must be an Array' unless value.is_a?(Array)
-    end
+    # validate do |value|
+    #   raise ArgumentError, 'Value must be an Array' unless value.is_a?(Array)
+    # end
   end
 end
