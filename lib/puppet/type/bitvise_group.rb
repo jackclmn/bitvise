@@ -164,7 +164,7 @@ Puppet::Type.newtype(:bitvise_group) do
     desc 'The mount points for the group.'
 
     validate do |value|
-      raise ArgumentError, "Value must be a String'" unless value.is_a?(Array)
+      raise ArgumentError, 'Value must be an Array' unless value.is_a?(Array)
     end
   end
 
@@ -172,7 +172,7 @@ Puppet::Type.newtype(:bitvise_group) do
     desc 'The listen rules for the group.'
 
     validate do |value|
-      raise ArgumentError, "Value must be a String'" unless value.is_a?(Array)
+      raise ArgumentError, 'Value must be an Array' unless value.is_a?(Array)
     end
   end
 end

@@ -113,7 +113,7 @@ Puppet::Type.newtype(:bitvise_account) do
     desc 'The public keys to import.'
 
     validate do |value|
-      raise ArgumentError, "Value must be a String'" unless value.is_a?(Array)
+      raise ArgumentError, "Value must be an Array'" unless value.is_a?(Array)
     end
   end
 end

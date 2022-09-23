@@ -17,12 +17,12 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   ##                ##
 
   # Returns the BssCfg object
-  def cfg_object()
+  def cfg_object
     keys = nil
     Win32::Registry::HKEY_LOCAL_MACHINE.open('SOFTWARE\Classes') do |regkey|
-        keys = regkey.keys
+      keys = regkey.keys
     end
-    obj = keys.select{ |i| i[/^\w+\.\w+$/] }.select{ |i| i[/BssCfg/] }[0]
+    keys.select { |i| i[%r{^\w+\.\w+$}] }.select { |i| i[%r{BssCfg}] }[0]
   end
 
   # If we put in a boolean we get out an integer
@@ -80,7 +80,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   # Returns the major version of the bitvise config
   def cfg_major_version
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.version.cfgFormatVersion.split('.')[0].to_i
   end
 
@@ -91,7 +91,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   # This method determines if the account exists
   def exists?
     # load settings
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
 
     # loop through windows or virtual accounts to find the matching account
@@ -114,7 +114,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   # If ensure => present is set and exists? returns false this method is called to create the account
   def create
     # Load and lock the settings so they cannot be modified while we are making changes
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
     cfg.settings.lock
 
@@ -128,7 +128,6 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
       cfg.settings.access.winAccounts.new.loginAllowed = bool_int_convert(resource[:login_allowed])
       cfg.settings.access.winAccounts.new.term.SetDefaults()
       cfg.settings.access.winAccounts.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
-      # TODO: keys
       cfg.settings.access.winAccounts.NewCommit()
     else # Virtual account
       cfg.settings.access.virtAccounts.new.SetDefaults()
@@ -140,8 +139,24 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
       cfg.settings.access.virtAccounts.new.winDomain = resource[:win_domain] unless resource[:win_domain].nil?
       cfg.settings.access.virtAccounts.new.term.SetDefaults()
       cfg.settings.access.virtAccounts.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
-      # TODO: keys
       cfg.settings.access.virtAccounts.NewCommit()
+    end
+
+    # Import public keys once account is created
+    resource[:keys].each do |key|
+      if resource[:account_type] == 'windows'
+        cfg.settings.access.winAccounts.entries.each do |entry|
+          if entry.winAccount == resource[:account_name]
+            entry.auth.keys.importFromBase64String(key)
+          end
+        end
+      else # Virtual account
+        cfg.settings.access.virtAccounts.entries.each do |entry|
+          if entry.winAccount == resource[:account_name]
+            entry.auth.keys.importFromBase64String(key)
+          end
+        end
+      end
     end
 
     # Save settings and unlock when we are done
@@ -152,7 +167,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   # If ensure => absent is set and exists? returns true this method is called to destroy the account
   def destroy
     # Load and lock settings
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
     cfg.settings.lock
 
@@ -184,7 +199,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   ##                       ##
 
   def login_allowed
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -204,7 +219,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def login_allowed=(value)
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -225,7 +240,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def shell_access_type
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -245,7 +260,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def shell_access_type=(value)
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -266,7 +281,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def specify_group
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -286,7 +301,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def specify_group=(value)
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -307,7 +322,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def group
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -327,7 +342,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def group=(value)
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -348,7 +363,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def win_account
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -368,7 +383,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def win_account=(value)
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -389,7 +404,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def win_domain
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -409,7 +424,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def win_domain=(value)
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -430,7 +445,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def security_context
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -450,7 +465,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def security_context=(value)
-    cfg = WIN32OLE.new(cfg_object())
+    cfg = WIN32OLE.new(cfg_object)
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -470,50 +485,50 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     cfg.settings.unlock
   end
 
-  #   def keys
-  #     Puppet.debug('entering keys getter')
-  #     cfg = WIN32OLE.new(cfg_object())
-  #     cfg.settings.load
-  #     val = nil
-  #     if resource[:account_type] == 'windows'
-  #       cfg.settings.access.winAccounts.entries.each do |entry|
-  #         if entry.winAccount == resource[:account_name]
-  #           val = entry.auth.keys
-  #         end
-  #       end
-  #     else # Virtual account
-  #       cfg.settings.access.virtAccounts.entries.each do |entry|
-  #         if entry.virtAccount == resource[:account_name]
-  #           val = entry.auth.keys
-  #         end
-  #       end
-  #     end
-  #     Puppet.debug("value of keys found is #{val}, value converted to be returned is #{val}")
-  #     val
-  #   end
+  def keys
+    #   Puppet.debug('entering keys getter')
+    #   cfg = WIN32OLE.new(cfg_object())
+    #   cfg.settings.load
+    #   val = nil
+    #   if resource[:account_type] == 'windows'
+    #     cfg.settings.access.winAccounts.entries.each do |entry|
+    #       if entry.winAccount == resource[:account_name]
+    #         val = entry.auth.keys
+    #       end
+    #     end
+    #   else # Virtual account
+    #     cfg.settings.access.virtAccounts.entries.each do |entry|
+    #       if entry.virtAccount == resource[:account_name]
+    #         val = entry.auth.keys
+    #       end
+    #     end
+    #   end
+    #   Puppet.debug("value of keys found is #{val}, value converted to be returned is #{val}")
+    #   val
+    resource[:keys]
+  end
 
-  #   def keys=(value)
-  #     Puppet.debug("entering keys=value with name: #{resource[:account_name]} and keys #{resource[:keys]} and value #{value}")
-  #     cfg = WIN32OLE.new(cfg_object())
-  #     cfg.settings.load
-  #     cfg.settings.lock
-  #     if resource[:account_type] == 'windows'
-  #       cfg.settings.access.winAccounts.entries.each do |entry|
-  #         if entry.winAccount == resource[:account_name]
-  #           Puppet.debug("setting keys to #{value}")
-  #           entry.keys = value
-  #         end
-  #       end
-  #     else
-  #       cfg.settings.access.virtAccounts.entries.each do |entry|
-  #         if entry.virtAccount == resource[:account_name]
-  #           Puppet.debug("setting keys to #{value}")
-  #           entry.keys = value
-  #         end
-  #       end
-  #     end
-  #     cfg.settings.save
-  #     cfg.settings.unlock
-  #
-  #   end
+  def keys=(value)
+    #   Puppet.debug("entering keys=value with name: #{resource[:account_name]} and keys #{resource[:keys]} and value #{value}")
+    #   cfg = WIN32OLE.new(cfg_object())
+    #   cfg.settings.load
+    #   cfg.settings.lock
+    #   if resource[:account_type] == 'windows'
+    #     cfg.settings.access.winAccounts.entries.each do |entry|
+    #       if entry.winAccount == resource[:account_name]
+    #         Puppet.debug("setting keys to #{value}")
+    #         entry.keys = value
+    #       end
+    #     end
+    #   else
+    #     cfg.settings.access.virtAccounts.entries.each do |entry|
+    #       if entry.virtAccount == resource[:account_name]
+    #         Puppet.debug("setting keys to #{value}")
+    #         entry.keys = value
+    #       end
+    #     end
+    #   end
+    #   cfg.settings.save
+    #   cfg.settings.unlock
+  end
 end
