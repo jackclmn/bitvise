@@ -83,6 +83,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   def exists?
 
     # test
+    r = nil
     Win32::Registry::HKEY_LOCAL_MACHINE.open('SOFTWARE\Microsoft\Windows NT\CurrentVersion') do |regkey|
         r = regkey['EditionID']
     end
