@@ -16,6 +16,15 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
   ## Helper Methods ##
   ##                ##
 
+  # Returns the BssCfg object
+  def cfg_object()
+    keys = nil
+    Win32::Registry::HKEY_LOCAL_MACHINE.open('SOFTWARE\Classes') do |regkey|
+        keys = regkey.keys
+    end
+    obj = keys.select{ |i| i[/^\w+\.\w+$/] }.select{ |i| i[/BssCfg/] }[0]
+  end
+
   # If we put in a boolean we get out an integer
   # If we put in an integer we get out a boolean
   # Used to convert 0/1s used by bsscfg to human readable values
@@ -32,7 +41,7 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
 
   # Returns the major version of the bitvise config
   def cfg_major_version
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.version.cfgFormatVersion.split('.')[0].to_i
   end
 
@@ -41,14 +50,14 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
   ##                       ##
 
   def send_fwding_rule_descs
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     val = cfg.settings.server.sendFwdingRuleDescs
     bool_int_convert(val)
   end
 
   def send_fwding_rule_descs=(value)
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
     cfg.settings.server.sendFwdingRuleDescs = bool_int_convert(value)
@@ -57,14 +66,14 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
   end
 
   def log_file_rollover_by_size
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     val = cfg.settings.logging.logFileRolloverBySize
     bool_int_convert(val)
   end
 
   def log_file_rollover_by_size=(value)
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
     cfg.settings.logging.logFileRolloverBySize = bool_int_convert(value)
@@ -73,14 +82,14 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
   end
 
   def ssh_dss
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     val = cfg.settings.algs.sig.sshDss
     bool_int_convert(val)
   end
 
   def ssh_dss=(value)
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
     cfg.settings.algs.sig.sshDss = bool_int_convert(value)
@@ -89,14 +98,14 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
   end
 
   def alg_3des_ctr
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     val = cfg.settings.algs.encr.alg_3des_ctr
     bool_int_convert(val)
   end
 
   def alg_3des_ctr=(value)
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
     cfg.settings.algs.encr.alg_3des_ctr = bool_int_convert(value)
@@ -105,14 +114,14 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
   end
 
   def min_rsa_key_bits
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     val = cfg.settings.algs.sig.minRsaKeyBits
     val
   end
 
   def min_rsa_key_bits=(value)
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
     cfg.settings.algs.sig.minRsaKeyBits = value
@@ -121,14 +130,14 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
   end
 
   def min_dsa_key_bits
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     val = cfg.settings.algs.sig.minDsaKeyBits
     val
   end
 
   def min_dsa_key_bits=(value)
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
     cfg.settings.algs.sig.minDsaKeyBits = value
@@ -137,14 +146,14 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
   end
 
   def total_threshold
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     val = cfg.settings.ipBlock.totalThreshold
     val
   end
 
   def total_threshold=(value)
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
     cfg.settings.ipBlock.totalThreshold = value
@@ -153,14 +162,14 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
   end
 
   def lockout_mins
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     val = cfg.settings.ipBlock.lockoutMins
     val
   end
 
   def lockout_mins=(value)
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
     cfg.settings.ipBlock.lockoutMins = value

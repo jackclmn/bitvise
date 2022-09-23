@@ -16,6 +16,15 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   ## Helper Methods ##
   ##                ##
 
+  # Returns the BssCfg object
+  def cfg_object()
+    keys = nil
+    Win32::Registry::HKEY_LOCAL_MACHINE.open('SOFTWARE\Classes') do |regkey|
+        keys = regkey.keys
+    end
+    obj = keys.select{ |i| i[/^\w+\.\w+$/] }.select{ |i| i[/BssCfg/] }[0]
+  end
+
   # If we put in a boolean we get out an integer
   # If we put in an integer we get out a boolean
   # Used to convert 0/1s used by bsscfg to human readable values
@@ -71,7 +80,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   # Returns the major version of the bitvise config
   def cfg_major_version
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.version.cfgFormatVersion.split('.')[0].to_i
   end
 
@@ -81,18 +90,8 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   # This method determines if the account exists
   def exists?
-
-    # test
-    r = nil
-    Win32::Registry::HKEY_LOCAL_MACHINE.open('SOFTWARE\Classes') do |regkey|
-        r = regkey.keys
-    end
-    c = r.select{ |i| i[/^\w+\.\w+$/] }.select{ |i| i[/BssCfg/] }
-    Puppet.debug("REG VALUE")
-    Puppet.debug("REG VALUE #{c}")
-    Puppet.debug("REG VALUE")
     # load settings
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
 
     # loop through windows or virtual accounts to find the matching account
@@ -115,7 +114,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   # If ensure => present is set and exists? returns false this method is called to create the account
   def create
     # Load and lock the settings so they cannot be modified while we are making changes
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
 
@@ -153,7 +152,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   # If ensure => absent is set and exists? returns true this method is called to destroy the account
   def destroy
     # Load and lock settings
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
 
@@ -185,7 +184,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   ##                       ##
 
   def login_allowed
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -205,7 +204,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def login_allowed=(value)
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -226,7 +225,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def shell_access_type
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -246,7 +245,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def shell_access_type=(value)
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -267,7 +266,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def specify_group
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -287,7 +286,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def specify_group=(value)
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -308,7 +307,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def group
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -328,7 +327,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def group=(value)
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -349,7 +348,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def win_account
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -369,7 +368,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def win_account=(value)
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -390,7 +389,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def win_domain
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -410,7 +409,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def win_domain=(value)
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -431,7 +430,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def security_context
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     val = nil
     if resource[:account_type] == 'windows'
@@ -451,7 +450,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def security_context=(value)
-    cfg = WIN32OLE.new(resource[:com_object])
+    cfg = WIN32OLE.new(cfg_object())
     cfg.settings.load
     cfg.settings.lock
     if resource[:account_type] == 'windows'
@@ -473,7 +472,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   #   def keys
   #     Puppet.debug('entering keys getter')
-  #     cfg = WIN32OLE.new(resource[:com_object])
+  #     cfg = WIN32OLE.new(cfg_object())
   #     cfg.settings.load
   #     val = nil
   #     if resource[:account_type] == 'windows'
@@ -495,7 +494,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   #   def keys=(value)
   #     Puppet.debug("entering keys=value with name: #{resource[:account_name]} and keys #{resource[:keys]} and value #{value}")
-  #     cfg = WIN32OLE.new(resource[:com_object])
+  #     cfg = WIN32OLE.new(cfg_object())
   #     cfg.settings.load
   #     cfg.settings.lock
   #     if resource[:account_type] == 'windows'

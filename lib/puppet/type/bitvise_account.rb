@@ -23,14 +23,6 @@ Puppet::Type.newtype(:bitvise_account) do
     end
   end
 
-  newparam(:com_object) do
-    desc 'The name of the com object for the version of bitvise. Example: BssCfg815.BssCfg815'
-
-    validate do |value|
-      raise ArgumentError, "Value must be a String'" unless value.is_a?(String)
-    end
-  end
-
   newparam(:account_type) do
     desc 'The type of account to be created. Valid values: windows, virtual.'
 

@@ -15,14 +15,6 @@ Puppet::Type.newtype(:bitvise_group) do
     isnamevar
   end
 
-  newparam(:com_object) do
-    desc 'The name of the com object for the version of bitvise. Example: BssCfg815.BssCfg815'
-
-    validate do |value|
-      raise ArgumentError, "Value must be a String'" unless value.is_a?(String)
-    end
-  end
-
   newparam(:group_name) do
     desc 'The name of the windows group to be created.'
 
