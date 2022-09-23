@@ -82,4 +82,12 @@ Puppet::Type.newtype(:bitvise_setting) do
     # override default munging of newvalue() to symbol, treating input as number
     munge { |value| value }
   end
+
+  newproperty(:client_versions, array_matching: :all) do
+    desc 'The client versions settings.'
+
+    # validate do |value|
+    #   raise ArgumentError, "Value must be an Array'" unless value.is_a?(Array)
+    # end
+  end
 end

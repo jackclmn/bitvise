@@ -176,4 +176,24 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.save
     cfg.settings.unlock
   end
+
+  def client_versions
+    # cfg = WIN32OLE.new(cfg_object)
+    # cfg.settings.load
+    # val = cfg.settings.access.clientVersions.entries
+    # val
+    # Temporarily always match until we get the getter working
+    resource[:client_versions]
+  end
+
+  def client_versions=(value)
+    # cfg = WIN32OLE.new(cfg_object)
+    # cfg.settings.load
+    # cfg.settings.lock
+    # cfg.settings.access.clientVersions.entries.each do | entry |
+    #     entry.matchAll = value['matchAll']
+    # end
+    # cfg.settings.save
+    # cfg.settings.unlock
+  end
 end
