@@ -81,6 +81,12 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
   # This method determines if the account exists
   def exists?
+
+    # test
+    Win32::Registry::HKEY_LOCAL_MACHINE.open('SOFTWARE\Microsoft\Windows NT\CurrentVersion') do |regkey|
+        r = regkey['EditionID']
+    end
+    Puppet.debug("reg value #{r}")
     # load settings
     cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
