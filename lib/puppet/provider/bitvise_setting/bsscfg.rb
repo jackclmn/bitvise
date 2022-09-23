@@ -1,14 +1,5 @@
 #
-# TODO documentation
-# TODO remove restart_service and handle as a puppet resource
-# TODO figure out approach for exists, create, destroy
-# TODO remove trusted_lsp_only since it was only for testing
-# TODO add groups
-# TODO handle fg = WIN32OLE.new(resource[:com_object]) accross multiple versions, how do we query for version?
-# TODO do we create a WIN32OLE.new() for each method? Can this be global? Need to find examples of best practice
-# * create re-usable code for load, lock, set, save, unlock
-# TODO if we continue to use eval make sure strings are appropriately contained
-# TODO stop on error
+# TODO commentss
 #
 Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
   desc 'This provider manages bitvise settings'
@@ -117,13 +108,6 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     r
   end
 
-  def restart_service
-    Puppet.debug('restarting service')
-    `net stop BvSshServer`
-    `net start BvSshServer`
-    Puppet.debug('restarted service')
-  end
-
   #
   # Type and Provider methods
   #
@@ -150,7 +134,6 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.server.sendFwdingRuleDescs = bool_int_convert(value)
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def log_file_rollover_by_size
@@ -170,7 +153,6 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.logging.logFileRolloverBySize = bool_int_convert(value)
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def ssh_dss
@@ -190,7 +172,6 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.algs.sig.sshDss = bool_int_convert(value)
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def alg_3des_ctr
@@ -210,7 +191,6 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.algs.encr.alg_3des_ctr = bool_int_convert(value)
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def min_rsa_key_bits
@@ -230,7 +210,6 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.algs.sig.minRsaKeyBits = resource[:min_rsa_key_bits]
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def min_dsa_key_bits
@@ -250,7 +229,6 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.algs.sig.minDsaKeyBits = resource[:min_dsa_key_bits]
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def total_threshold
@@ -270,7 +248,6 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.ipBlock.totalThreshold = resource[:total_threshold]
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def lockout_mins
@@ -290,7 +267,6 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.ipBlock.lockoutMins = resource[:lockout_mins]
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def create

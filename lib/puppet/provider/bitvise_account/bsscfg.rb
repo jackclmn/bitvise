@@ -1,15 +1,5 @@
-#
-# TODO documentation
-# TODO remove restart_service and handle as a puppet resource
-# TODO figure out approach for exists, create, destroy
-# TODO remove trusted_lsp_only since it was only for testing
-# TODO add groups
-# TODO handle fg = WIN32OLE.new(resource[:com_object]) accross multiple versions, how do we query for version?
-# TODO do we create a WIN32OLE.new() for each method? Can this be global? Need to find examples of best practice
-# * create re-usable code for load, lock, set, save, unlock
-# TODO if we continue to use eval make sure strings are appropriately contained
-# TODO stop on error
-#
+# bitvise_account provider
+# TODO: Comment the code
 Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   desc 'This provider manages bitvise accounts'
 
@@ -117,13 +107,6 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     r
   end
 
-  def restart_service
-    Puppet.debug('restarting service')
-    `net stop BvSshServer`
-    `net start BvSshServer`
-    Puppet.debug('restarted service')
-  end
-
   #
   # Type and Provider methods
   #
@@ -192,7 +175,6 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def shell_access_type
@@ -239,7 +221,6 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def specify_group
@@ -286,7 +267,6 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def group
@@ -333,7 +313,6 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def win_account
@@ -380,7 +359,6 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def win_domain
@@ -427,7 +405,6 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def security_context
@@ -474,7 +451,6 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   #   def keys
@@ -521,7 +497,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   #     end
   #     cfg.settings.save
   #     cfg.settings.unlock
-  #     restart_service
+  #
   #   end
 
   def create
@@ -555,7 +531,6 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def destroy

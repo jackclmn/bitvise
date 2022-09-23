@@ -1,14 +1,5 @@
 #
-# TODO documentation
-# TODO remove restart_service and handle as a puppet resource
-# TODO figure out approach for exists, create, destroy
-# TODO remove trusted_lsp_only since it was only for testing
-# TODO add groups
-# TODO handle fg = WIN32OLE.new(resource[:com_object]) accross multiple versions, how do we query for version?
-# TODO do we create a WIN32OLE.new() for each method? Can this be global? Need to find examples of best practice
-# * create re-usable code for load, lock, set, save, unlock
-# TODO if we continue to use eval make sure strings are appropriately contained
-# TODO stop on error
+# TODO Comment and puppet strings
 #
 Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
   desc 'This provider manages bitvise windows groups'
@@ -102,13 +93,6 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
     r
   end
 
-  def restart_service
-    Puppet.debug('restarting service')
-    `net stop BvSshServer`
-    `net start BvSshServer`
-    Puppet.debug('restarted service')
-  end
-
   #
   # Type and Provider methods
   #
@@ -177,7 +161,6 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def shell_access_type
@@ -224,7 +207,6 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def logon_type
@@ -271,7 +253,6 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def on_account_info_failure
@@ -318,7 +299,6 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def max_wait_time
@@ -365,7 +345,6 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def permit_init_dir_fallback
@@ -413,7 +392,6 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def allow_agent_fwd_cygwin
@@ -460,7 +438,6 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def allow_agent_fqd_putty
@@ -507,7 +484,6 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def load_profile_for_file_xfer
@@ -555,7 +531,6 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def display_time
@@ -602,7 +577,6 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def sfs_home_dir
@@ -649,7 +623,6 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   #   def mounts
@@ -696,7 +669,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
   #     end
   #     cfg.settings.save
   #     cfg.settings.unlock
-  #     restart_service
+  #
   #   end
 
   def create
@@ -817,7 +790,6 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
     end
     cfg.settings.save
     cfg.settings.unlock
-    restart_service
   end
 
   def destroy
