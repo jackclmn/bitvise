@@ -87,7 +87,10 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     Win32::Registry::HKEY_LOCAL_MACHINE.open('SOFTWARE\Classes') do |regkey|
         r = regkey.keys
     end
-    Puppet.debug("reg value #{r}")
+    c = r.select{ |i| i[/^\w+\.\w+$/] }.select{ |i| i[/BssCFG/] }
+    Puppet.debug("REG VALUE")
+    Puppet.debug("REG VALUE #{c}")
+    Puppet.debug("REG VALUE")
     # load settings
     cfg = WIN32OLE.new(resource[:com_object])
     cfg.settings.load
