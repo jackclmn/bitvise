@@ -15,41 +15,42 @@ Puppet::Type.newtype(:bitvise_setting) do
                 Manages bitvise settings.
                 PUPPET
 
-  ensurable
-
   newparam(:name) do
-    desc 'The name of the bitvise instance.'
+    desc 'The resource name of the bitvise instance. This is the namevar for the resource but does not do anything.'
 
     isnamevar
   end
 
   newparam(:com_object) do
-    desc 'The name of the com object for your version.'
+    desc 'The name of the com object for the version of bitvise. Example: BssCfg815.BssCfg815'
+
+    validate do |value|
+      raise ArgumentError, "Value must be a String'" unless value.is_a?(String)
+    end
   end
 
   newproperty(:send_fwding_rule_descs) do
-    desc 'Valid values: true, false. Defaults to false'
-    newvalue(:false)
-    newvalue(:true)
-    munge { |value| value }
+    desc 'Valid values: true, false.'
+
+    newvalues(:true, :false)
   end
 
   newproperty(:log_file_rollover_by_size) do
-    desc 'Valid values: true, false. Defaults to false'
-    newvalue(:false)
-    newvalue(:true)
+    desc 'Valid values: true, false.'
+
+    newvalues(:true, :false)
   end
 
   newproperty(:ssh_dss) do
-    desc 'Valid values: true, false. Defaults to false'
-    newvalue(:false)
-    newvalue(:true)
+    desc 'Valid values: true, false.'
+
+    newvalues(:true, :false)
   end
 
   newproperty(:alg_3des_ctr) do
-    desc 'Valid values: true, false. Defaults to false'
-    newvalue(:false)
-    newvalue(:true)
+    desc 'Valid values: true, false.'
+
+    newvalues(:true, :false)
   end
 
   newproperty(:min_rsa_key_bits) do
