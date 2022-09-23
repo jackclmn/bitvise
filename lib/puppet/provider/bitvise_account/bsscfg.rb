@@ -84,8 +84,8 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
 
     # test
     r = nil
-    Win32::Registry::HKEY_LOCAL_MACHINE.open('SOFTWARE\Microsoft\Windows NT\CurrentVersion') do |regkey|
-        r = regkey['EditionID']
+    Win32::Registry::HKEY_LOCAL_MACHINE.open('SOFTWARE\Classes') do |regkey|
+        r = regkey.each_key
     end
     Puppet.debug("reg value #{r}")
     # load settings
