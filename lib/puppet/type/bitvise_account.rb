@@ -83,7 +83,7 @@ Puppet::Type.newtype(:bitvise_account) do
 
   newproperty(:security_context) do
     desc 'The security context. Valid values: default, auto, local, domain, service, microsoft.
-      This setting only applies to virtual accounts. Defaults to: default.'
+      This setting only applies to virtual accounts.'
 
     newvalue('default')
     newvalue('auto')
@@ -91,7 +91,6 @@ Puppet::Type.newtype(:bitvise_account) do
     newvalue('domain')
     newvalue('service')
     newvalue('microsoft')
-    defaultto('default')
   end
 
   newproperty(:login_allowed) do

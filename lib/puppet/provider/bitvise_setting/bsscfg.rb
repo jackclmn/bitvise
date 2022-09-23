@@ -33,7 +33,7 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
   # Returns the major version of the bitvise config
   def cfg_major_version
     cfg = WIN32OLE.new(resource[:com_object])
-    cfg.version.cfgFormatVersion.split('.')[0]
+    cfg.version.cfgFormatVersion.split('.')[0].to_i
   end
 
   ##                       ##
