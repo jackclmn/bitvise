@@ -118,18 +118,16 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     cfg.settings.load
     cfg.settings.lock
 
-    Puppet.debug('entering create')
     # Create either the windows or virtual account
     if resource[:account_type] == 'windows'
       cfg.settings.access.winAccounts.new.SetDefaults()
       cfg.settings.access.winAccounts.new.winAccount = resource[:account_name]
-      cfg.settings.access.winAccounts.new.specifyGroup = resource[:specify_group]
+      cfg.settings.access.winAccounts.new.specifyGroup = bool_int_convert(resource[:specify_group])
       cfg.settings.access.winAccounts.new.groupType = group_type_convert(resource[:group_type]) unless resource[:group_type].nil? # optional if specify_group is false
       cfg.settings.access.winAccounts.new.group = resource[:group] unless resource[:group].nil? # optional if specify_group is false
       cfg.settings.access.winAccounts.new.loginAllowed = bool_int_convert(resource[:login_allowed])
       cfg.settings.access.winAccounts.new.term.SetDefaults()
       cfg.settings.access.winAccounts.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
-      Puppet.debug('committing account')
       cfg.settings.access.winAccounts.NewCommit()
     else # Virtual account
       cfg.settings.access.virtAccounts.new.SetDefaults()
@@ -145,7 +143,6 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
     end
 
     # Import public keys once account is created
-    Puppet.debug('start to load keys')
     resource[:keys].each do |key|
       if resource[:account_type] == 'windows'
         cfg.settings.access.winAccounts.entries.each do |entry|
