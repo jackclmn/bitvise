@@ -1,14 +1,4 @@
 #
-# TODO documentation
-# * DONE prove we can modify configuration via the COM object for a sample config (trusted_lsp_only)
-# TODO prove we can add groups
-# TODO add virtual users
-# TODO add virtual groups
-# TODO add certs
-# TODO add license
-# TODO gather other config requirements
-# TODO accept true/false instead of 1/0
-#
 Puppet::Type.newtype(:bitvise_setting) do
   @doc = <<-PUPPET
                 @summary
