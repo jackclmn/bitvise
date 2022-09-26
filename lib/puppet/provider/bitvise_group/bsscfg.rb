@@ -781,12 +781,12 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
           if entry.group == resource[:group_name]
             entry.xfer.mountPoints.Clear()
             value.each do | mount |
-              entry.new.xfer.mountPoints.new.SetDefaults()
-              entry.new.xfer.mountPoints.new.sfsMountPath = mount['sfsMountPath']
-              entry.new.xfer.mountPoints.new.fileSharingBeh = mount['fileSharingBeh']
-              entry.new.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl']
-              entry.new.xfer.mountPoints.new.realRootPath = mount['realRootPath']
-              entry.new.xfer.mountPoints.new.allowUnlimitedAccess = bool_int_convert(mount['allowUnlimitedAccess'])
+              entry.xfer.mountPoints.new.SetDefaults()
+              entry.xfer.mountPoints.new.sfsMountPath = mount['sfsMountPath']
+              entry.xfer.mountPoints.new.fileSharingBeh = mount['fileSharingBeh']
+              entry.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl']
+              entry.xfer.mountPoints.new.realRootPath = mount['realRootPath']
+              entry.xfer.mountPoints.new.allowUnlimitedAccess = bool_int_convert(mount['allowUnlimitedAccess'])
             end
           end
         end
@@ -794,12 +794,12 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
         cfg.settings.access.virtGroups.entries.each do | entry |
           if entry.group == resource[:group_name]
             entry.xfer.mountPoints.entries.each do | mount |
-              entry.new.xfer.mountPoints.new.SetDefaults()
-              entry.new.xfer.mountPoints.new.sfsMountPath = mount['sfsMountPath']
-              entry.new.xfer.mountPoints.new.fileSharingBeh = mount['fileSharingBeh']
-              entry.new.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl']
-              entry.new.xfer.mountPoints.new.realRootPath = mount['realRootPath']
-              entry.new.xfer.mountPoints.new.allowUnlimitedAccess = bool_int_convert(mount['allowUnlimitedAccess'])
+              entry.xfer.mountPoints.new.SetDefaults()
+              entry.xfer.mountPoints.new.sfsMountPath = mount['sfsMountPath']
+              entry.xfer.mountPoints.new.fileSharingBeh = mount['fileSharingBeh']
+              entry.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl']
+              entry.xfer.mountPoints.new.realRootPath = mount['realRootPath']
+              entry.xfer.mountPoints.new.allowUnlimitedAccess = bool_int_convert(mount['allowUnlimitedAccess'])
             end
           end
         end
