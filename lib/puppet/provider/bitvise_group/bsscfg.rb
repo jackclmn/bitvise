@@ -873,26 +873,65 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
   end
 
   def listen_rules=(value)
-    #   Puppet.debug("entering listen_rules=value with group_name: #{resource[:group_name]} and listen_rules #{resource[:listen_rules]} and value #{value}")
-    #   cfg = WIN32OLE.new(cfg_object())
-    #   cfg.settings.load
-    #   cfg.settings.lock
-    #   if resource[:type] == 'windows'
-    #     cfg.settings.access.winGroups.entries.each do |entry|
-    #       if entry.group == resource[:group_name]
-    #         Puppet.debug("setting listenRules to #{value}")
-    #         entry.fwding.listenRules.intfRule = value
-    #       end
-    #     end
-    #   else
-    #     cfg.settings.access.virtGroups.entries.each do |entry|
-    #       if entry.group == resource[:group_name]
-    #         Puppet.debug("setting listenRules to #{value}")
-    #         entry.fwding.listenRules.intfRule = value
-    #       end
-    #     end
-    #   end
-    #   cfg.settings.save
-    #   cfg.settings.unlock
+      Puppet.debug("entering listen_rules=value with group_name: #{resource[:group_name]} and listen_rules #{resource[:listen_rules]} and value #{value}")
+      cfg = WIN32OLE.new(cfg_object())
+      cfg.settings.load
+      cfg.settings.lock
+      if resource[:type] == 'windows'
+        cfg.settings.access.winGroups.entries.each do | entry |
+          if entry.group == resource[:group_name]
+            entry.fwding.listenRules.Clear()
+            value.each do | rule |
+              entry.fwding.listenRules.new.SetDefaults()
+              entry.fwding.listenRules.new.intfRule.SetDefaults()
+              entry.fwding.listenRules.new.intfRule.intfType = rule['intfType']
+              entry.fwding.listenRules.new.intfRule.ipv4range = bool_int_convert(rule['ipv4range'])
+              entry.fwding.listenRules.new.intfRule.ipv4end = rule['ipv4end']
+              entry.fwding.listenRules.new.intfRule.ipv6range = bool_int_convert(rule['ipv6range'])
+              entry.fwding.listenRules.new.intfRule.ipv6end = rule['ipv6end']
+              entry.fwding.listenRules.new.portRangeRule.portFrom = rule['portFrom']
+              entry.fwding.listenRules.new.instr.overrideListenInterface = rule['overrideListenInterface']
+              entry.fwding.listenRules.instr.acceptRules.Clear()
+              rule['acceptRules'].each do | r |
+                entry.fwding.listenRules.instr.acceptRules.new.SetDefaults()
+                entry.fwding.listenRules.instr.acceptRules.new.addressRule.SetDefaults()
+                entry.fwding.listenRules.instr.acceptRules.new.addressRule.addressType = r['addressType']
+                entry.fwding.listenRules.instr.acceptRules.new.addressRule.ipv4range = bool_int_convert(r['ipv4range'])
+                entry.fwding.listenRules.instr.acceptRules.new.addressRule.ipv4end = r['ipv4end']
+                entry.fwding.listenRules.instr.acceptRules.NewCommit()
+              end
+              entry.fwding.listenRules.NewCommit()
+            end
+          end
+        end
+      else
+        cfg.settings.access.virtGroups.entries.each do | entry |
+          if entry.group == resource[:group_name]
+            entry.fwding.listenRules.Clear()
+            value.each do | rule |
+              entry.fwding.listenRules.new.SetDefaults()
+              entry.fwding.listenRules.new.intfRule.SetDefaults()
+              entry.fwding.listenRules.new.intfRule.intfType = rule['intfType']
+              entry.fwding.listenRules.new.intfRule.ipv4range = bool_int_convert(rule['ipv4range'])
+              entry.fwding.listenRules.new.intfRule.ipv4end = rule['ipv4end']
+              entry.fwding.listenRules.new.intfRule.ipv6range = bool_int_convert(rule['ipv6range'])
+              entry.fwding.listenRules.new.intfRule.ipv6end = rule['ipv6end']
+              entry.fwding.listenRules.new.portRangeRule.portFrom = rule['portFrom']
+              entry.fwding.listenRules.new.instr.overrideListenInterface = rule['overrideListenInterface']
+              entry.fwding.listenRules.instr.acceptRules.Clear()
+              rule['acceptRules'].each do | r |
+                entry.fwding.listenRules.instr.acceptRules.new.SetDefaults()
+                entry.fwding.listenRules.instr.acceptRules.new.addressRule.SetDefaults()
+                entry.fwding.listenRules.instr.acceptRules.new.addressRule.addressType = r['addressType']
+                entry.fwding.listenRules.instr.acceptRules.new.addressRule.ipv4range = bool_int_convert(r['ipv4range'])
+                entry.fwding.listenRules.instr.acceptRules.new.addressRule.ipv4end = r['ipv4end']
+                entry.fwding.listenRules.instr.acceptRules.NewCommit()
+              end
+              entry.fwding.listenRules.NewCommit()
+          end
+        end
+      end
+      cfg.settings.save
+      cfg.settings.unlock
   end
 end
