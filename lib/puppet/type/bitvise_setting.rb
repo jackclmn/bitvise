@@ -90,13 +90,17 @@ Puppet::Type.newtype(:bitvise_setting) do
     #   raise ArgumentError, "Value must be an Array'" unless value.is_a?(Array)
     # end
     def insync?(is)
-      s = should
-      s.each do |item|
+      i = is
+      i.each do |item|
         item.keys.each do |key|
-          item[key] = item[key].to_s
+          if item[key] == 'true'
+            item[key] = true
+          elsif item[key] == 'false'
+            item[key] = false
+          end
         end
       end
-      is.sort_by { |k, _v| k['pattern'] } == s.sort_by { |k, _v| k['pattern'] }
+      i.sort_by { |k, _v| k['pattern'] } == should.sort_by { |k, _v| k['pattern'] }
     end
   end
 end
