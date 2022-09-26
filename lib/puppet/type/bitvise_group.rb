@@ -179,7 +179,7 @@ Puppet::Type.newtype(:bitvise_group) do
           end
         end
       end
-      i.sort_by { |k, _v| k['pattern'] } == should.sort_by { |k, _v| k['pattern'] }
+      i.sort_by { |k, _v| k['sfsMoutPath'] } == should.sort_by { |k, _v| k['sfsMoutPath'] }
     end
   end
 
