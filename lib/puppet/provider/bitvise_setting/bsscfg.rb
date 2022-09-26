@@ -178,22 +178,34 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
   end
 
   def client_versions
-    # cfg = WIN32OLE.new(cfg_object)
-    # cfg.settings.load
-    # val = cfg.settings.access.clientVersions.entries
-    # val
-    # Temporarily always match until we get the getter working
-    resource[:client_versions]
+    cfg = WIN32OLE.new('Bitvise.BssCfg')
+    cfg.settings.load
+    arr = []
+    cfg.settings.access.clientVersions.entries.each do |entry|
+      hash = {}
+      hash['matchAll'] = entry.matchAll
+      hash['caseSensitive'] = entry.caseSensitive
+      hash['pattern'] = entry.pattern
+      hash['allowPwKbdiAuth'] = entry.allowPwKbdiAuth
+      hash['sshUserMustMatchGssApi'] = entry.sshUserMustMatchGssApi
+      arr.push(hash)
+    end
+    arr
   end
 
   def client_versions=(value)
-    # cfg = WIN32OLE.new(cfg_object)
-    # cfg.settings.load
-    # cfg.settings.lock
-    # cfg.settings.access.clientVersions.entries.each do | entry |
-    #     entry.matchAll = value['matchAll']
-    # end
-    # cfg.settings.save
-    # cfg.settings.unlock
+    cfg = WIN32OLE.new(cfg_object)
+    cfg.settings.load
+    cfg.settings.lock
+    cfg.settings.access.clientVersions.Clear()
+    cfg.settings.access.clientVersions.entries.each do |entry|
+      entry.matchAll = value['matchAll']
+      entry.caseSensitive = value['caseSensitive']
+      entry.pattern = value['pattern']
+      entry.allowPwKbdiAuth = value['allowPwKbdiAuth']
+      entry.sshUserMustMatchGssApi = value['sshUserMustMatchGssApi']
+    end
+    cfg.settings.save
+    cfg.settings.unlock
   end
 end
