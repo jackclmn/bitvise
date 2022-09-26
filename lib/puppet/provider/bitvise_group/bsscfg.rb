@@ -885,10 +885,10 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
               entry.fwding.listenRules.new.SetDefaults()
               entry.fwding.listenRules.new.intfRule.SetDefaults()
               entry.fwding.listenRules.new.intfRule.intfType = rule['intfType']
-              entry.fwding.listenRules.new.intfRule.ipv4range = bool_int_convert(rule['ipv4range'])
-              entry.fwding.listenRules.new.intfRule.ipv4end = rule['ipv4end']
-              entry.fwding.listenRules.new.intfRule.ipv6range = bool_int_convert(rule['ipv6range'])
-              entry.fwding.listenRules.new.intfRule.ipv6end = rule['ipv6end']
+              entry.fwding.listenRules.new.intfRule.ipv4range = bool_int_convert(rule['ipv4range']) unless rule['ipv6range'] == true
+              entry.fwding.listenRules.new.intfRule.ipv4end = rule['ipv4end'] unless rule['ipv6range'] == true
+              entry.fwding.listenRules.new.intfRule.ipv6range = bool_int_convert(rule['ipv6range']) unless rule['ipv4range'] == true
+              entry.fwding.listenRules.new.intfRule.ipv6end = rule['ipv6end'] unless rule['ipv4range'] == true
               entry.fwding.listenRules.new.portRangeRule.portFrom = rule['portFrom']
               entry.fwding.listenRules.new.instr.overrideListenInterface = rule['overrideListenInterface']
               entry.fwding.listenRules.instr.acceptRules.Clear()
@@ -912,10 +912,10 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
               entry.fwding.listenRules.new.SetDefaults()
               entry.fwding.listenRules.new.intfRule.SetDefaults()
               entry.fwding.listenRules.new.intfRule.intfType = rule['intfType']
-              entry.fwding.listenRules.new.intfRule.ipv4range = bool_int_convert(rule['ipv4range'])
-              entry.fwding.listenRules.new.intfRule.ipv4end = rule['ipv4end']
-              entry.fwding.listenRules.new.intfRule.ipv6range = bool_int_convert(rule['ipv6range'])
-              entry.fwding.listenRules.new.intfRule.ipv6end = rule['ipv6end']
+              entry.fwding.listenRules.new.intfRule.ipv4range = bool_int_convert(rule['ipv4range'])  unless rule['ipv6range'] == true
+              entry.fwding.listenRules.new.intfRule.ipv4end = rule['ipv4end'] unless rule['ipv6range'] == true
+              entry.fwding.listenRules.new.intfRule.ipv6range = bool_int_convert(rule['ipv6range']) unless rule['ipv4range'] == true
+              entry.fwding.listenRules.new.intfRule.ipv6end = rule['ipv6end'] unless rule['ipv4range'] == true
               entry.fwding.listenRules.new.portRangeRule.portFrom = rule['portFrom']
               entry.fwding.listenRules.new.instr.overrideListenInterface = rule['overrideListenInterface']
               entry.fwding.listenRules.instr.acceptRules.Clear()
