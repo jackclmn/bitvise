@@ -29,7 +29,7 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
   # If we put in an integer we get out a boolean
   # Used to convert 0/1s used by bsscfg to human readable values
   def bool_int_convert(val)
-    Puppet.debug("bool_int_convert with val = #{val} and [true, false].include? val #{[true, false].include? val}")
+    Puppet.debug("bool_int_convert with val = #{val} and [true, false].include? val #{[true, false].include? val} and val.is_a?(String) #{val.is_a?(String)}")
     values = {
       false  => 0,
       true   => 1,
