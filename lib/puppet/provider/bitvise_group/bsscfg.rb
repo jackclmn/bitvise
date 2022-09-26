@@ -823,15 +823,17 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
           entry.fwding.listenRules.entries.each do | rule |
             hash = {}
             hash['intfType'] = rule.intfRule.intfType
-            hash['ipv4range'] = rule.intfRule.ipv4range
+            hash['ipv4range'] = bool_int_convert(rule.intfRule.ipv4range)
             hash['ipv4end'] = rule.intfRule.ipv4end
+            hash['ipv6range'] = bool_int_convert(rule.intfRule.ipv6range)
+            hash['ipv6end'] = rule.intfRule.ipv6end
             hash['portFrom'] = rule.portRangeRule.portFrom
             hash['overrideListenInterface'] = rule.instr.overrideListenInterface
             accept_rules = []
             rule.instr.acceptRules.entries.each do | r |
               h = {}
               h['addressType'] = r.addressRule.addressType
-              h['ipv4range'] = r.addressRule.ipv4range
+              h['ipv4range'] = bool_int_convert(r.addressRule.ipv4range)
               h['ipv4end'] = r.addressRule.ipv4end
               accept_rules.push(h)
             end
@@ -846,8 +848,10 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
           entry.fwding.listenRules.entries.each do | rule |
             hash = {}
             hash['intfType'] = rule.intfRule.intfType
-            hash['ipv4range'] = rule.intfRule.ipv4range
+            hash['ipv4range'] = bool_int_convert(rule.intfRule.ipv4range)
             hash['ipv4end'] = rule.intfRule.ipv4end
+            hash['ipv6range'] = bool_int_convert(rule.intfRule.ipv6range)
+            hash['ipv6end'] = rule.intfRule.ipv6end
             hash['portFrom'] = rule.portRangeRule.portFrom
             hash['overrideListenInterface'] = rule.instr.overrideListenInterface
             accept_rules = []
