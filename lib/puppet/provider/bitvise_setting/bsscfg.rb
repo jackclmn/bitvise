@@ -31,8 +31,8 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
   def bool_int_convert(val)
     Puppet.debug("bool_int_convert with val = #{val} and [true, false].include? val #{[true, false].include? val}")
     values = {
-      false: 0,
-      true: 1
+      false => 0,
+      true  => 1
     }
     r = [true, false].include?(val) ? values[val] : values.invert[val]
     Puppet.debug("bool_int_convert with r = #{r}")
@@ -198,7 +198,7 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.load
     cfg.settings.lock
     cfg.settings.access.clientVersions.Clear()
-    resource[:client_versions].each do |client_version|
+    value.each do |client_version|
       cfg.settings.access.clientVersions.new.SetDefaults()
       cfg.settings.access.clientVersions.new.matchAll = bool_int_convert(client_version['matchAll'])
       cfg.settings.access.clientVersions.new.caseSensitive = bool_int_convert(client_version['caseSensitive'])
