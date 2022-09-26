@@ -91,12 +91,12 @@ Puppet::Type.newtype(:bitvise_setting) do
     # end
     def insync?(is)
       s = should
-      s.each do | item |
-        item.keys.each do | key |
+      s.each do |item|
+        item.keys.each do |key|
           item[key] = item[key].to_s
         end
       end
-      is.sort_by { |k, _v| k['pattern'] } == s.sort_by { |k, _v| k['pattern'] }.
+      is.sort_by { |k, _v| k['pattern'] } == s.sort_by { |k, _v| k['pattern'] }
     end
   end
 end
