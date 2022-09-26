@@ -183,11 +183,11 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     arr = []
     cfg.settings.access.clientVersions.entries.each do |entry|
       hash = {}
-      hash['matchAll'] = entry.matchAll
-      hash['caseSensitive'] = entry.caseSensitive
+      hash['matchAll'] = bool_int_convert(entry.matchAll)
+      hash['caseSensitive'] = bool_int_convert(entry.caseSensitive)
       hash['pattern'] = entry.pattern
-      hash['allowPwKbdiAuth'] = entry.allowPwKbdiAuth
-      hash['sshUserMustMatchGssApi'] = entry.sshUserMustMatchGssApi
+      hash['allowPwKbdiAuth'] = bool_int_convert(entry.allowPwKbdiAuth)
+      hash['sshUserMustMatchGssApi'] = bool_int_convert(entry.sshUserMustMatchGssApi)
       arr.push(hash)
     end
     arr
@@ -200,11 +200,11 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.access.clientVersions.Clear()
     resource[:client_versions].each do |client_version|
       cfg.settings.access.clientVersions.new.SetDefaults()
-      cfg.settings.access.clientVersions.new.matchAll = value['matchAll']
-      cfg.settings.access.clientVersions.new.caseSensitive = value['caseSensitive']
+      cfg.settings.access.clientVersions.new.matchAll = bool_int_convert(value['matchAll'])
+      cfg.settings.access.clientVersions.new.caseSensitive = bool_int_convert(value['caseSensitive'])
       cfg.settings.access.clientVersions.new.pattern = value['pattern']
-      cfg.settings.access.clientVersions.new.allowPwKbdiAuth = value['allowPwKbdiAuth']
-      cfg.settings.access.clientVersions.new.sshUserMustMatchGssApi = value['sshUserMustMatchGssApi']
+      cfg.settings.access.clientVersions.new.allowPwKbdiAuth = bool_int_convert(value['allowPwKbdiAuth'])
+      cfg.settings.access.clientVersions.new.sshUserMustMatchGssApi = bool_int_convert(value['sshUserMustMatchGssApi'])
       cfg.settings.access.clientVersions.NewCommit()
     end
     cfg.settings.save
