@@ -928,6 +928,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
                 entry.fwding.listenRules.instr.acceptRules.NewCommit()
               end
               entry.fwding.listenRules.NewCommit()
+            end
           end
         end
       end
