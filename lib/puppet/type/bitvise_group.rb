@@ -199,7 +199,7 @@ Puppet::Type.newtype(:bitvise_group) do
             item[key] = true
           elsif item[key] == :false
             item[key] = false
-          elsif item[key] == 'acceptRules'
+          elsif key == 'acceptRules'
             item[key].each do | rule |
               rule.keys.each do | k |
                 if rule[k] == :true
