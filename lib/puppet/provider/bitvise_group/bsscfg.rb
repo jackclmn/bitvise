@@ -891,7 +891,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
               entry.fwding.listenRules.new.intfRule.ipv6end = rule['ipv6end'] unless rule['ipv4range'] == true
               entry.fwding.listenRules.new.portRangeRule.portFrom = rule['portFrom']
               entry.fwding.listenRules.new.instr.overrideListenInterface = rule['overrideListenInterface']
-              entry.fwding.listenRules.instr.acceptRules.Clear()
+              entry.fwding.listenRules.new.instr.acceptRules.Clear()
               rule['acceptRules'].each do | r |
                 entry.fwding.listenRules.instr.acceptRules.new.SetDefaults()
                 entry.fwding.listenRules.instr.acceptRules.new.addressRule.SetDefaults()
@@ -918,7 +918,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
               entry.fwding.listenRules.new.intfRule.ipv6end = rule['ipv6end'] unless rule['ipv4range'] == true
               entry.fwding.listenRules.new.portRangeRule.portFrom = rule['portFrom']
               entry.fwding.listenRules.new.instr.overrideListenInterface = rule['overrideListenInterface']
-              entry.fwding.listenRules.instr.acceptRules.Clear()
+              entry.fwding.listenRules.new.instr.acceptRules.Clear()
               rule['acceptRules'].each do | r |
                 entry.fwding.listenRules.instr.acceptRules.new.SetDefaults()
                 entry.fwding.listenRules.instr.acceptRules.new.addressRule.SetDefaults()
