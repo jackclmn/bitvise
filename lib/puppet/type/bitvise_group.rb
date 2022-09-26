@@ -166,6 +166,21 @@ Puppet::Type.newtype(:bitvise_group) do
     # validate do |value|
     #   raise ArgumentError, 'Value must be an Array' unless value.is_a?(Array)
     # end
+    def insync?(is)
+      # 'is' true/false values come back as a symbol (:true/:false)
+      # convert them to true/false to we can compare with should values
+      i = is
+      i.each do |item|
+        item.keys.each do |key|
+          if item[key] == :true
+            item[key] = true
+          elsif item[key] == :false
+            item[key] = false
+          end
+        end
+      end
+      i.sort_by { |k, _v| k['pattern'] } == should.sort_by { |k, _v| k['pattern'] }
+    end
   end
 
   newproperty(:listen_rules, array_matching: :all) do

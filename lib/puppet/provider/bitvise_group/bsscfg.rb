@@ -734,27 +734,41 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
   end
 
   def mounts
-    #   Puppet.debug("entering mounts getter with group_name: #{resource[:group_name]} and value #{resource[:mounts]}")
-    #   cfg = WIN32OLE.new(cfg_object())
-    #   cfg.settings.load
-    #   val = nil
-    #   if resource[:type] == 'windows'
-    #     cfg.settings.access.winGroups.entries.each do |entry|
-    #       if entry.group == resource[:group_name]
-    #         val = entry.xfer.mountPoints.sfsMountPath
-    #       end
-    #     end
-    #   else
-    #     cfg.settings.access.virtGroups.entries.each do |entry|
-    #       if entry.group == resource[:group_name]
-    #         val = entry.xfer.mountPoints.sfsMountPath
-    #       end
-    #     end
-    #   end
-    #   Puppet.debug("value of mounts is #{val}}")
-    #   val
-    # Temporarily returrn this as always matching until we get the getter/setter working
-    resource[:mounts]
+      Puppet.debug("entering mounts getter with group_name: #{resource[:group_name]} and value #{resource[:mounts]}")
+      cfg = WIN32OLE.new(cfg_object())
+      cfg.settings.load
+      arr = []
+      if resource[:type] == 'windows'
+        cfg.settings.access.winGroups.entries.each do | entry |
+          if entry.group == resource[:group_name]
+            entry.xfer.mountPoints.entries.each do | mount |
+              hash = {}
+              hash['sfsMountPath'] = mount.sfsMountPath
+              hash['fileSharingBeh'] = mount.fileSharingBeh
+              hash['fileSharingDl'] = mount.fileSharingDl
+              hash['realRootPath'] = mount.realRootPath
+              hash['allowUnlimitedAccess'] = mount.allowUnlimitedAccess
+              arr.push(hash)
+            end
+          end
+        end
+      else
+        cfg.settings.access.virtGroups.entries.each do | entry |
+          if entry.group == resource[:group_name]
+            entry.xfer.mountPoints.entries.each do | mount |
+              hash = {}
+              hash['sfsMountPath'] = mount.sfsMountPath
+              hash['fileSharingBeh'] = mount.fileSharingBeh
+              hash['fileSharingDl'] = mount.fileSharingDl
+              hash['realRootPath'] = mount.realRootPath
+              hash['allowUnlimitedAccess'] = mount.allowUnlimitedAccess
+              arr.push(hash)
+            end
+          end
+        end
+      end
+      Puppet.debug("value of mounts is #{arr}}")
+      arr
   end
 
   def mounts=(value)
