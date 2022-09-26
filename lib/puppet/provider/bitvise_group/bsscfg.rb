@@ -893,12 +893,12 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
               entry.fwding.listenRules.new.instr.overrideListenInterface = rule['overrideListenInterface']
               entry.fwding.listenRules.new.instr.acceptRules.Clear()
               rule['acceptRules'].each do | r |
-                entry.fwding.listenRules.instr.acceptRules.new.SetDefaults()
-                entry.fwding.listenRules.instr.acceptRules.new.addressRule.SetDefaults()
-                entry.fwding.listenRules.instr.acceptRules.new.addressRule.addressType = r['addressType']
-                entry.fwding.listenRules.instr.acceptRules.new.addressRule.ipv4range = bool_int_convert(r['ipv4range'])
-                entry.fwding.listenRules.instr.acceptRules.new.addressRule.ipv4end = r['ipv4end']
-                entry.fwding.listenRules.instr.acceptRules.NewCommit()
+                entry.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
+                entry.fwding.listenRules.new.instr.acceptRules.new.addressRule.SetDefaults()
+                entry.fwding.listenRules.new.instr.acceptRules.new.addressRule.addressType = r['addressType']
+                entry.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4range = bool_int_convert(r['ipv4range'])
+                entry.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4end = r['ipv4end']
+                entry.fwding.listenRules.new.instr.acceptRules.NewCommit()
               end
               entry.fwding.listenRules.NewCommit()
             end
@@ -920,12 +920,12 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
               entry.fwding.listenRules.new.instr.overrideListenInterface = rule['overrideListenInterface']
               entry.fwding.listenRules.new.instr.acceptRules.Clear()
               rule['acceptRules'].each do | r |
-                entry.fwding.listenRules.instr.acceptRules.new.SetDefaults()
-                entry.fwding.listenRules.instr.acceptRules.new.addressRule.SetDefaults()
-                entry.fwding.listenRules.instr.acceptRules.new.addressRule.addressType = r['addressType']
-                entry.fwding.listenRules.instr.acceptRules.new.addressRule.ipv4range = bool_int_convert(r['ipv4range'])
-                entry.fwding.listenRules.instr.acceptRules.new.addressRule.ipv4end = r['ipv4end']
-                entry.fwding.listenRules.instr.acceptRules.NewCommit()
+                entry.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
+                entry.fwding.listenRules.new.instr.acceptRules.new.addressRule.SetDefaults()
+                entry.fwding.listenRules.new.instr.acceptRules.new.addressRule.addressType = r['addressType']
+                entry.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4range = bool_int_convert(r['ipv4range'])
+                entry.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4end = r['ipv4end']
+                entry.fwding.listenRules.new.instr.acceptRules.NewCommit()
               end
               entry.fwding.listenRules.NewCommit()
             end
