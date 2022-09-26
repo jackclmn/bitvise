@@ -772,27 +772,40 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
   end
 
   def mounts=(value)
-    #   Puppet.debug("entering mounts=value with group_name: #{resource[:group_name]} and mounts #{resource[:mounts]} and value #{value}")
-    #   cfg = WIN32OLE.new(cfg_object())
-    #   cfg.settings.load
-    #   cfg.settings.lock
-    #   if resource[:type] == 'windows'
-    #     cfg.settings.access.winGroups.entries.each do |entry|
-    #       if entry.group == resource[:group_name]
-    #         Puppet.debug("setting mounts to #{value}")
-    #         entry.xfer.mountPoints.sfsMountPath = value
-    #       end
-    #     end
-    #   else
-    #     cfg.settings.access.virtGroups.entries.each do |entry|
-    #       if entry.group == resource[:group_name]
-    #         Puppet.debug("setting mounts to #{value}")
-    #         entry.xfer.mountPoints.sfsMountPath = value
-    #       end
-    #     end
-    #   end
-    #   cfg.settings.save
-    #   cfg.settings.unlock
+      Puppet.debug("entering mounts=value with group_name: #{resource[:group_name]} and mounts #{resource[:mounts]} and value #{value}")
+      cfg = WIN32OLE.new(cfg_object())
+      cfg.settings.load
+      cfg.settings.lock
+      if resource[:type] == 'windows'
+        cfg.settings.access.winGroups.entries.each do | entry |
+          if entry.group == resource[:group_name]
+            entry.xfer.mountPoints.Clear()
+            value.each do | mount |
+              entry.new.xfer.mountPoints.new.SetDefaults()
+              entry.new.xfer.mountPoints.new.sfsMountPath = mount['sfsMountPath']
+              entry.new.xfer.mountPoints.new.fileSharingBeh = mount['fileSharingBeh']
+              entry.new.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl']
+              entry.new.xfer.mountPoints.new.realRootPath = mount['realRootPath']
+              entry.new.xfer.mountPoints.new.allowUnlimitedAccess = bool_int_convert(mount['allowUnlimitedAccess'])
+            end
+          end
+        end
+      else
+        cfg.settings.access.virtGroups.entries.each do | entry |
+          if entry.group == resource[:group_name]
+            entry.xfer.mountPoints.entries.each do | mount |
+              entry.new.xfer.mountPoints.new.SetDefaults()
+              entry.new.xfer.mountPoints.new.sfsMountPath = mount['sfsMountPath']
+              entry.new.xfer.mountPoints.new.fileSharingBeh = mount['fileSharingBeh']
+              entry.new.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl']
+              entry.new.xfer.mountPoints.new.realRootPath = mount['realRootPath']
+              entry.new.xfer.mountPoints.new.allowUnlimitedAccess = bool_int_convert(mount['allowUnlimitedAccess'])
+            end
+          end
+        end
+      end
+      cfg.settings.save
+      cfg.settings.unlock
   end
 
   def listen_rules
