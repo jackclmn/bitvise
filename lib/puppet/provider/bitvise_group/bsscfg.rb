@@ -747,7 +747,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
               hash['fileSharingBeh'] = mount.fileSharingBeh
               hash['fileSharingDl'] = mount.fileSharingDl
               hash['realRootPath'] = mount.realRootPath
-              hash['allowUnlimitedAccess'] = mount.allowUnlimitedAccess
+              hash['allowUnlimitedAccess'] = bool_int_convert(mount.allowUnlimitedAccess)
               arr.push(hash)
             end
           end
@@ -761,7 +761,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
               hash['fileSharingBeh'] = mount.fileSharingBeh
               hash['fileSharingDl'] = mount.fileSharingDl
               hash['realRootPath'] = mount.realRootPath
-              hash['allowUnlimitedAccess'] = mount.allowUnlimitedAccess
+              hash['allowUnlimitedAccess'] = bool_int_convert(mount.allowUnlimitedAccess)
               arr.push(hash)
             end
           end
