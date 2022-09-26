@@ -102,9 +102,6 @@ Puppet::Type.newtype(:bitvise_setting) do
           end
         end
       end
-      Puppet.debug("is: #{is}")
-      Puppet.debug("i: #{i}")
-      Puppet.debug("should: #{should}")
       i.sort_by { |k, _v| k['pattern'] } == should.sort_by { |k, _v| k['pattern'] }
     end
   end
