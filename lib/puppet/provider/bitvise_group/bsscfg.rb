@@ -789,6 +789,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
               entry.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl']
               entry.xfer.mountPoints.new.realRootPath = mount['realRootPath'] unless mount['realRootPath'] == ''
               entry.xfer.mountPoints.new.allowUnlimitedAccess = bool_int_convert(mount['allowUnlimitedAccess'])
+              entry.xfer.mountPoints.new..NewCommit()
             end
           end
         end
@@ -802,6 +803,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
               entry.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl']
               entry.xfer.mountPoints.new.realRootPath = mount['realRootPath'] unless mount['realRootPath'] == ''
               entry.xfer.mountPoints.new.allowUnlimitedAccess = bool_int_convert(mount['allowUnlimitedAccess'])
+              entry.xfer.mountPoints.new..NewCommit()
             end
           end
         end
