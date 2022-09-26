@@ -30,10 +30,12 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
   # Used to convert 0/1s used by bsscfg to human readable values
   def bool_int_convert(val)
     values = {
-      false: 0,
-      true: 1
+      false  => 0,
+      true   => 1,
+      :false => 0,
+      :true  => 1
     }
-    r = [:true, :false].include?(val) ? values[val] : values.invert[val]
+    r = [true, :true, false, :false].include?(val) ? values[val] : values.invert[val]
     r
   end
 
