@@ -813,27 +813,45 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
   end
 
   def listen_rules
-    #   Puppet.debug("entering listen_rules getter with group_name: #{resource[:group_name]} and value #{resource[:listen_rules]}")
-    #   cfg = WIN32OLE.new(cfg_object())
-    #   cfg.settings.load
-    #   val = nil
-    #   if resource[:type] == 'windows'
-    #     cfg.settings.access.winGroups.entries.each do |entry|
-    #       if entry.group == resource[:group_name]
-    #         val = entry.fwding.listenRules.intfRule
-    #       end
-    #     end
-    #   else
-    #     cfg.settings.access.virtGroups.entries.each do |entry|
-    #       if entry.group == resource[:group_name]
-    #         val = entry.fwding.listenRules.intfRule
-    #       end
-    #     end
-    #   end
-    #   Puppet.debug("value of listen_rules is #{val}}")
-    #   val
-    # Temporarily returrn this as always matching until we get the getter/setter working
-    resource[:listen_rules]
+    Puppet.debug("entering listen_rules getter with group_name: #{resource[:group_name]} and value #{resource[:listen_rules]}")
+    cfg = WIN32OLE.new(cfg_object())
+    cfg.settings.load
+    arr = []
+    if resource[:type] == 'windows'
+      cfg.settings.access.winGroups.entries.each do | entry |
+        if entry.group == resource[:group_name]
+          entry.fwding.listenRules.entries.each do | rule |
+            hash = {}
+            hash['intfType'] = rule.intfType
+            hash['ipv4range'] = bool_int_convert(rule.ipv4range)
+            hash['ipv4end'] = rule.ipv4end
+            hash['portFrom'] = rule.portFrom
+            hash['overrideListenInterface'] = rule.overrideListenInterface
+            hash['acceptRules'] = rule.acceptRules
+            arr.push(hash)
+          end
+        end
+      end
+    else
+      cfg.settings.access.virtGroups.entries.each do | entry |
+        if entry.group == resource[:group_name]
+          entry.fwding.listenRules.entries.each do | rule |
+            hash = {}
+            hash['intfType'] = rule.intfType
+            hash['ipv4range'] = bool_int_convert(rule.ipv4range)
+            hash['ipv4end'] = rule.ipv4end
+            hash['ipv6range'] = bool_int_convert(rule.ipv6range)
+            hash['ipv6end'] = rule.ipv6end
+            hash['portFrom'] = rule.portFrom
+            hash['overrideListenInterface'] = rule.overrideListenInterface
+            hash['acceptRules'] = rule.acceptRules
+            arr.push(hash)
+          end
+        end
+      end
+    end
+    Puppet.debug("value of listen_rules is #{arr}}")
+    arr
   end
 
   def listen_rules=(value)
