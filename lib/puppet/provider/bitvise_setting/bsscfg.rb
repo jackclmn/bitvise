@@ -198,12 +198,14 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.load
     cfg.settings.lock
     cfg.settings.access.clientVersions.Clear()
-    cfg.settings.access.clientVersions.entries.each do |entry|
-      entry.matchAll = value['matchAll']
-      entry.caseSensitive = value['caseSensitive']
-      entry.pattern = value['pattern']
-      entry.allowPwKbdiAuth = value['allowPwKbdiAuth']
-      entry.sshUserMustMatchGssApi = value['sshUserMustMatchGssApi']
+    resource[:client_versions].each do |client_version|
+      cfg.settings.access.clientVersions.new.SetDefaults()
+      cfg.settings.access.clientVersions.new.matchAll = value['matchAll']
+      cfg.settings.access.clientVersions.new.caseSensitive = value['caseSensitive']
+      cfg.settings.access.clientVersions.new.pattern = value['pattern']
+      cfg.settings.access.clientVersions.new.allowPwKbdiAuth = value['allowPwKbdiAuth']
+      cfg.settings.access.clientVersions.new.sshUserMustMatchGssApi = value['sshUserMustMatchGssApi']
+      cfg.settings.access.clientVersions.NewCommit()
     end
     cfg.settings.save
     cfg.settings.unlock
