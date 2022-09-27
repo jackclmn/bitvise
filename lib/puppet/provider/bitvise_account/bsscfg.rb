@@ -491,7 +491,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
       Puppet.debug('entering keys getter')
       cfg = WIN32OLE.new(cfg_object())
       cfg.settings.load
-      arr = nil
+      arr = []
       if resource[:account_type] == 'windows'
         cfg.settings.access.winAccounts.entries.each do |entry|
           if entry.winAccount == resource[:account_name]
