@@ -488,26 +488,29 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def keys
-    #   Puppet.debug('entering keys getter')
-    #   cfg = WIN32OLE.new(cfg_object())
-    #   cfg.settings.load
-    #   val = nil
-    #   if resource[:account_type] == 'windows'
-    #     cfg.settings.access.winAccounts.entries.each do |entry|
-    #       if entry.winAccount == resource[:account_name]
-    #         val = entry.auth.keys
-    #       end
-    #     end
-    #   else # Virtual account
-    #     cfg.settings.access.virtAccounts.entries.each do |entry|
-    #       if entry.virtAccount == resource[:account_name]
-    #         val = entry.auth.keys
-    #       end
-    #     end
-    #   end
-    #   Puppet.debug("value of keys found is #{val}, value converted to be returned is #{val}")
-    #   val
-    resource[:keys]
+      Puppet.debug('entering keys getter')
+      cfg = WIN32OLE.new(cfg_object())
+      cfg.settings.load
+      val = nil
+      if resource[:account_type] == 'windows'
+        cfg.settings.access.winAccounts.entries.each do |entry|
+          if entry.winAccount == resource[:account_name]
+            entry.auth.keys.entries.each do | key |
+              val = key.exportToBase64String(1)
+            end
+          end
+        end
+      else # Virtual account
+        cfg.settings.access.virtAccounts.entries.each do |entry|
+          if entry.virtAccount == resource[:account_name]
+            entry.auth.keys.entries.each do | key |
+              val = key.exportToBase64String(1)
+            end
+          end
+        end
+      end
+      Puppet.debug("value of keys found is #{val}, value converted to be returned is #{val}")
+      val
   end
 
   def keys=(value)
