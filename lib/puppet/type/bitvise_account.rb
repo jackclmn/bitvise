@@ -117,8 +117,8 @@ Puppet::Type.newtype(:bitvise_account) do
     # end
     def insync?(is)
       i = is
-      i.gsub('\n', '')
-      i == should
+      m = i.each { | key | key.gsub('\n', '') }
+      m == should
     end
   end
 end
