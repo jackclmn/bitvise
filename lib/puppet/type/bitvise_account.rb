@@ -116,6 +116,7 @@ Puppet::Type.newtype(:bitvise_account) do
     #   raise ArgumentError, "Value must be an Array'" unless value.is_a?(Array)
     # end
     def insync?(is)
+      # Remove newline characters being added to the 'is' array
       m = is.map { | k | k.gsub("\n",'')}
       m == should
     end

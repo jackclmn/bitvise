@@ -514,26 +514,30 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def keys=(value)
-    #   Puppet.debug("entering keys=value with name: #{resource[:account_name]} and keys #{resource[:keys]} and value #{value}")
-    #   cfg = WIN32OLE.new(cfg_object())
-    #   cfg.settings.load
-    #   cfg.settings.lock
-    #   if resource[:account_type] == 'windows'
-    #     cfg.settings.access.winAccounts.entries.each do |entry|
-    #       if entry.winAccount == resource[:account_name]
-    #         Puppet.debug("setting keys to #{value}")
-    #         entry.keys = value
-    #       end
-    #     end
-    #   else
-    #     cfg.settings.access.virtAccounts.entries.each do |entry|
-    #       if entry.virtAccount == resource[:account_name]
-    #         Puppet.debug("setting keys to #{value}")
-    #         entry.keys = value
-    #       end
-    #     end
-    #   end
-    #   cfg.settings.save
-    #   cfg.settings.unlock
+      Puppet.debug("entering keys=value with name: #{resource[:account_name]} and keys #{resource[:keys]} and value #{value}")
+      cfg = WIN32OLE.new(cfg_object())
+      cfg.settings.load
+      cfg.settings.lock
+      if resource[:account_type] == 'windows'
+        cfg.settings.access.winAccounts.entries.each do |entry|
+          if entry.winAccount == resource[:account_name]
+            entry.auth.keys.Clear()
+            value.each do | key |
+              entry.auth.keys.importFromBase64String(key)
+            end
+          end
+        end
+      else
+        cfg.settings.access.virtAccounts.entries.each do |entry|
+          if entry.virtAccount == resource[:account_name]
+            entry.auth.keys.Clear()
+            value.each do | key |
+              entry.auth.keys.importFromBase64String(key)
+            end
+          end
+        end
+      end
+      cfg.settings.save
+      cfg.settings.unlock
   end
 end
