@@ -117,8 +117,8 @@ Puppet::Type.newtype(:bitvise_account) do
     # end
     def insync?(is)
       s = should
-      s.map { | key | key.split.first(2).join }
-      is == s
+      m = s.map { | key | key.split.first(2).join }
+      is == m
     end
   end
 end
