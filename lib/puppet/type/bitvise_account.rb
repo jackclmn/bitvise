@@ -115,5 +115,10 @@ Puppet::Type.newtype(:bitvise_account) do
     # validate do |value|
     #   raise ArgumentError, "Value must be an Array'" unless value.is_a?(Array)
     # end
+    def insync?(is)
+      s = should
+      s.split.first(2).join()
+      is == s
+    end
   end
 end
