@@ -509,7 +509,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
           end
         end
       end
-      Puppet.debug("value of keys found is #{val}, value converted to be returned is #{val}")
+      Puppet.debug("value of keys found is #{arr}, value converted to be returned is #{arr}")
       arr
   end
 
