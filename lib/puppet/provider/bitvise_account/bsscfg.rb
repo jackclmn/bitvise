@@ -496,7 +496,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
         cfg.settings.access.winAccounts.entries.each do |entry|
           if entry.winAccount == resource[:account_name]
             entry.auth.keys.entries.each do | key |
-              arr.push(key.exportToBase64String(1))
+              arr.push(key.exportToBase64String(1).gsub('\n', ''))
             end
           end
         end
@@ -504,7 +504,7 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
         cfg.settings.access.virtAccounts.entries.each do |entry|
           if entry.virtAccount == resource[:account_name]
             entry.auth.keys.entries.each do | key |
-              arr.push(key.exportToBase64String(1))
+              arr.push(key.exportToBase64String(1).gsub('\n', ''))
             end
           end
         end
