@@ -205,7 +205,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
           cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.SetDefaults()
           cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.overrideListenInterface = rule['overrideListenInterface'] unless rule['overrideListenInterface'].nil?
           cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.Clear() unless rule['acceptRules'].empty?
-          rule['accept_rules'].each do |r|
+          rule['acceptRules'].each do |r|
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.SetDefaults()
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.addressType = r['addressType'] unless r['addressType'].nil?
@@ -276,7 +276,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
           cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.SetDefaults()
           cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.overrideListenInterface = rule['overrideListenInterface'] unless rule['overrideListenInterface'].nil?
           cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.Clear() unless rule['acceptRules'].empty?
-          rule['accept_rules'].each do |r|
+          rule['acceptRules'].each do |r|
             cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
             cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.SetDefaults()
             cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.addressType = r['addressType'] unless r['addressType'].nil?
