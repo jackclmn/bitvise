@@ -10,7 +10,9 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
   defaultfor kernel: :windows
   confine    kernel: :windows
 
-  require 'win32ole'
+  if Puppet::Util::Platform.windows?
+    require 'win32ole'
+  end
 
   ##                ##
   ## Helper Methods ##
