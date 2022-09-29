@@ -154,6 +154,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.new.session.logonType = logon_type_convert(resource[:logon_type])
       cfg.settings.access.winGroups.new.session.onAccountInfoFailure = account_failure_convert(resource[:on_account_info_failure])
       if cfg_major_version == 9
+        cfg.settings.access.winGroups.new.session.windowsOnLogonCmd.SetDefaults()
         cfg.settings.access.winGroups.new.session.windowsOnLogonCmd.maxWaitTime = resource[:max_wait_time]
       elsif cfg_major_version == 8
         cfg.settings.access.winGroups.new.session.onUploadCmd.maxWaitTime = resource[:max_wait_time]
@@ -225,6 +226,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
       cfg.settings.access.virtGroups.new.session.logonType = logon_type_convert(resource[:logon_type])
       cfg.settings.access.virtGroups.new.session.onAccountInfoFailure = account_failure_convert(resource[:on_account_info_failure])
       if cfg_major_version == 9
+        cfg.settings.access.winGroups.new.session.windowsOnLogonCmd.SetDefaults()
         cfg.settings.access.winGroups.new.session.windowsOnLogonCmd.maxWaitTime = resource[:max_wait_time]
       elsif cfg_major_version == 8
         cfg.settings.access.winGroups.new.session.onUploadCmd.maxWaitTime = resource[:max_wait_time]
