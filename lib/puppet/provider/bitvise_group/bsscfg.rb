@@ -204,7 +204,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
           cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.ipv6end = rule['ipv6end'] unless rule['ipv6range'] == false
           cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.SetDefaults()
           cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.overrideListenInterface = rule['overrideListenInterface'] unless rule['overrideListenInterface'].nil?
-          cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.Clear() unless rule['acceptRules'].empty?
+          cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.Clear()
           rule['acceptRules'].each do |r|
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.SetDefaults()
@@ -275,7 +275,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
           cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.ipv6end = rule['ipv6end'] unless rule['ipv6range'] == false
           cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.SetDefaults()
           cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.overrideListenInterface = rule['overrideListenInterface'] unless rule['overrideListenInterface'].nil?
-          cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.Clear() unless rule['acceptRules'].empty?
+          cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.Clear()
           rule['acceptRules'].each do |r|
             cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.SetDefaults()
             cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.SetDefaults()
