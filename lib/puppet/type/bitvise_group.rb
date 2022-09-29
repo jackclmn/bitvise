@@ -85,8 +85,9 @@ Puppet::Type.newtype(:bitvise_group) do
   end
 
   newproperty(:on_account_info_failure) do
-    desc 'on_account_info_failure. Valid values are: deny login, restrict access, disable profile, no restrictions. Default is: restrict access.'
+    desc 'on_account_info_failure. Valid values are: default, deny login, restrict access, disable profile, no restrictions. Default is: restrict access.'
 
+    newvalue('default')
     newvalue('deny login')
     newvalue('restrict access')
     newvalue('disable profile')
@@ -200,8 +201,8 @@ Puppet::Type.newtype(:bitvise_group) do
           elsif item[key] == :false
             item[key] = false
           elsif key == 'acceptRules'
-            item[key].each do | rule |
-              rule.keys.each do | k |
+            item[key].each do |rule|
+              rule.keys.each do |k|
                 if rule[k] == :true
                   rule[k] = true
                 elsif rule[k] == :false

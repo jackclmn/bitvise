@@ -488,56 +488,52 @@ Puppet::Type.type(:bitvise_account).provide(:bsscfg) do
   end
 
   def keys
-      Puppet.debug('entering keys getter')
-      cfg = WIN32OLE.new(cfg_object())
-      cfg.settings.load
-      arr = []
-      if resource[:account_type] == 'windows'
-        cfg.settings.access.winAccounts.entries.each do |entry|
-          if entry.winAccount == resource[:account_name]
-            entry.auth.keys.entries.each do | key |
-              arr.push(key.exportToBase64String(1).gsub('\n', ''))
-            end
-          end
-        end
-      else # Virtual account
-        cfg.settings.access.virtAccounts.entries.each do |entry|
-          if entry.virtAccount == resource[:account_name]
-            entry.auth.keys.entries.each do | key |
-              arr.push(key.exportToBase64String(1).gsub('\n', ''))
-            end
-          end
+    Puppet.debug('entering keys getter')
+    cfg = WIN32OLE.new(cfg_object)
+    cfg.settings.load
+    arr = []
+    if resource[:account_type] == 'windows'
+      cfg.settings.access.winAccounts.entries.each do |entry|
+        next unless entry.winAccount == resource[:account_name]
+        entry.auth.keys.entries.each do |key|
+          arr.push(key.exportToBase64String(1).gsub('\n', ''))
         end
       end
-      Puppet.debug("value of keys found is #{arr}, value converted to be returned is #{arr}")
-      arr
+    else # Virtual account
+      cfg.settings.access.virtAccounts.entries.each do |entry|
+        next unless entry.virtAccount == resource[:account_name]
+        entry.auth.keys.entries.each do |key|
+          arr.push(key.exportToBase64String(1).gsub('\n', ''))
+        end
+      end
+    end
+    Puppet.debug("value of keys found is #{arr}, value converted to be returned is #{arr}")
+    arr
   end
 
   def keys=(value)
-      Puppet.debug("entering keys=value with name: #{resource[:account_name]} and keys #{resource[:keys]} and value #{value}")
-      cfg = WIN32OLE.new(cfg_object())
-      cfg.settings.load
-      cfg.settings.lock
-      if resource[:account_type] == 'windows'
-        cfg.settings.access.winAccounts.entries.each do |entry|
-          if entry.winAccount == resource[:account_name]
-            entry.auth.keys.Clear()
-            value.each do | key |
-              entry.auth.keys.importFromBase64String(key)
-            end
-          end
-        end
-      else
-        cfg.settings.access.virtAccounts.entries.each do |entry|
-          if entry.virtAccount == resource[:account_name]
-            entry.auth.keys.Clear()
-            value.each do | key |
-              entry.auth.keys.importFromBase64String(key)
-            end
-          end
+    Puppet.debug("entering keys=value with name: #{resource[:account_name]} and keys #{resource[:keys]} and value #{value}")
+    cfg = WIN32OLE.new(cfg_object)
+    cfg.settings.load
+    cfg.settings.lock
+    if resource[:account_type] == 'windows'
+      cfg.settings.access.winAccounts.entries.each do |entry|
+        next unless entry.winAccount == resource[:account_name]
+        entry.auth.keys.Clear()
+        value.each do |key|
+          entry.auth.keys.importFromBase64String(key)
         end
       end
-      cfg.settings.save
-      cfg.settings.unlock
+    else
+      cfg.settings.access.virtAccounts.entries.each do |entry|
+        next unless entry.virtAccount == resource[:account_name]
+        entry.auth.keys.Clear()
+        value.each do |key|
+          entry.auth.keys.importFromBase64String(key)
+        end
+      end
+    end
+    cfg.settings.save
+    cfg.settings.unlock
   end
 end

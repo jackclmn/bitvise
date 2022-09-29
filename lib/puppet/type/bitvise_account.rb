@@ -117,7 +117,7 @@ Puppet::Type.newtype(:bitvise_account) do
     # end
     def insync?(is)
       # Remove newline characters being added to the 'is' array
-      m = is.map { | k | k.gsub("\n",'')}
+      m = is.map { |k| k.delete("\n") }
       m == should
     end
   end
