@@ -151,9 +151,9 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
       cfg.settings.access.winGroups.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
       cfg.settings.access.winGroups.new.session.logonType = logon_type_convert(resource[:logon_type])
       cfg.settings.access.winGroups.new.session.onAccountInfoFailure = account_failure_convert(resource[:on_account_info_failure])
-      if cfg_major_version() == 9
+      if cfg_major_version == 9
         cfg.settings.access.winGroups.new.session.windowsOnLogonCmd.maxWaitTime = resource[:max_wait_time]
-      elsif cfg_major_version() == 8
+      elsif cfg_major_version == 8
         cfg.settings.access.winGroups.new.session.onUploadCmd.maxWaitTime = resource[:max_wait_time]
       end
       cfg.settings.access.winGroups.new.term.permitInitDirFallback = bool_int_convert(resource[:permit_init_dir_fallback])
@@ -171,7 +171,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
           cfg.settings.access.winGroups.new.xfer.mountPoints.new.SetDefaults()
           cfg.settings.access.winGroups.new.xfer.mountPoints.new.sfsMountPath = mount['sfsMountPath'] unless mount['sfsMountPath'].nil?
           cfg.settings.access.winGroups.new.xfer.mountPoints.new.allowUnlimitedAccess = mount['allowUnlimitedAccess'] unless mount['allowUnlimitedAccess'].nil?
-          cfg.settings.access.winGroups.new.xfer.mountPoints.new.realRootPath = mount['realRootPath'] unless mount['realRootPath'].nil? or mount['allowUnlimitedAccess'] == true
+          cfg.settings.access.winGroups.new.xfer.mountPoints.new.realRootPath = mount['realRootPath'] unless mount['realRootPath'].nil? || (mount['allowUnlimitedAccess'] == true)
           cfg.settings.access.winGroups.new.xfer.mountPoints.new.fileSharingBeh = mount['fileSharingBeh'] unless mount['fileSharingBeh'].nil?
           if cfg_major_version == 9
             cfg.settings.access.winGroups.new.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl'] unless mount['fileSharingDl'].nil?
@@ -222,9 +222,9 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
       cfg.settings.access.virtGroups.new.term.shellAccessType = shell_access_type_convert(resource[:shell_access_type])
       cfg.settings.access.virtGroups.new.session.logonType = logon_type_convert(resource[:logon_type])
       cfg.settings.access.virtGroups.new.session.onAccountInfoFailure = account_failure_convert(resource[:on_account_info_failure])
-      if cfg_major_version() == 9
+      if cfg_major_version == 9
         cfg.settings.access.winGroups.new.session.windowsOnLogonCmd.maxWaitTime = resource[:max_wait_time]
-      elsif cfg_major_version() == 8
+      elsif cfg_major_version == 8
         cfg.settings.access.winGroups.new.session.onUploadCmd.maxWaitTime = resource[:max_wait_time]
       end
       cfg.settings.access.virtGroups.new.term.permitInitDirFallback = bool_int_convert(resource[:permit_init_dir_fallback])
@@ -242,7 +242,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
           cfg.settings.access.virtGroups.new.xfer.mountPoints.new.SetDefaults()
           cfg.settings.access.virtGroups.new.xfer.mountPoints.new.sfsMountPath = mount['sfsMountPath'] unless mount['sfsMountPath'].nil?
           cfg.settings.access.virtGroups.new.xfer.mountPoints.new.allowUnlimitedAccess = mount['allowUnlimitedAccess'] unless mount['allowUnlimitedAccess'].nil?
-          cfg.settings.access.virtGroups.new.xfer.mountPoints.new.realRootPath = mount['realRootPath'] unless mount['realRootPath'].nil? or mount['allowUnlimitedAccess'] == true
+          cfg.settings.access.virtGroups.new.xfer.mountPoints.new.realRootPath = mount['realRootPath'] unless mount['realRootPath'].nil? || (mount['allowUnlimitedAccess'] == true)
           cfg.settings.access.virtGroups.new.xfer.mountPoints.new.fileSharingBeh = mount['fileSharingBeh'] unless mount['fileSharingBeh'].nil?
           if cfg_major_version == 9
             cfg.settings.access.virtGroups.new.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl'] unless mount['fileSharingDl'].nil?
