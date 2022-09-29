@@ -200,7 +200,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
           cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.intfType = rule['intfType'] unless rule['intfType'].nil?
           cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.ipv4range = rule['ipv4range'] unless rule['ipv4range'].nil?
           cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.ipv4end = rule['ipv4end'] unless rule['ipv4end'].nil?
-          cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.ipv6range = rule['ipv6range'] unless rule['ipv6range'].nil?
+          cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.ipv6range = rule['ipv6range'] unless rule['ipv6range'] == false
           cfg.settings.access.winGroups.new.fwding.listenRules.new.intfRule.ipv6end = rule['ipv6end'] unless rule['ipv6end'].nil?
           cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.SetDefaults()
           cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.overrideListenInterface = rule['overrideListenInterface'] unless rule['overrideListenInterface'].nil?
@@ -271,7 +271,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
           cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.intfType = rule['intfType'] unless rule['intfType'].nil?
           cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.ipv4range = rule['ipv4range'] unless rule['ipv4range'].nil?
           cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.ipv4end = rule['ipv4end'] unless rule['ipv4end'].nil?
-          cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.ipv6range = rule['ipv6range'] unless rule['ipv6range'].nil?
+          cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.ipv6range = rule['ipv6range'] unless rule['ipv6range'] == false
           cfg.settings.access.virtGroups.new.fwding.listenRules.new.intfRule.ipv6end = rule['ipv6end'] unless rule['ipv6end'].nil?
           cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.SetDefaults()
           cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.overrideListenInterface = rule['overrideListenInterface'] unless rule['overrideListenInterface'].nil?
