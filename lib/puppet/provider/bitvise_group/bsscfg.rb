@@ -176,7 +176,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
           cfg.settings.access.winGroups.new.xfer.mountPoints.new.realRootPath = mount['realRootPath'] unless mount['realRootPath'].nil? || (mount['allowUnlimitedAccess'] == true)
           cfg.settings.access.winGroups.new.xfer.mountPoints.new.fileSharingBeh = mount['fileSharingBeh'] unless mount['fileSharingBeh'].nil?
           if cfg_major_version == 9
-            cfg.settings.access.winGroups.new.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl'] unless mount['fileSharingDl'].nil?
+            cfg.settings.access.winGroups.new.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl'] unless mount['fileSharingDl'].nil? || (mount['allowUnlimitedAccess'] == true)
           else
             cfg.settings.access.winGroups.new.xfer.mountPoints.new.fileSharing = mount['fileSharingDl'] unless mount['fileSharingDl'].nil?
           end
@@ -213,7 +213,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4end = r['ipv4end'] unless r['ipv4end'].nil?
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.NewCommit()
           end
-          cfg.settings.access.winGroups.new.fwding.listenRules.NewCommit()
+          cfg.settings.access.virtGroups.new.fwding.listenRules.NewCommit()
         end
       end
       cfg.settings.access.winGroups.NewCommit()
@@ -247,7 +247,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
           cfg.settings.access.virtGroups.new.xfer.mountPoints.new.realRootPath = mount['realRootPath'] unless mount['realRootPath'].nil? || (mount['allowUnlimitedAccess'] == true)
           cfg.settings.access.virtGroups.new.xfer.mountPoints.new.fileSharingBeh = mount['fileSharingBeh'] unless mount['fileSharingBeh'].nil?
           if cfg_major_version == 9
-            cfg.settings.access.virtGroups.new.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl'] unless mount['fileSharingDl'].nil?
+            cfg.settings.access.virtGroups.new.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl'] unless mount['fileSharingDl'].nil? || (mount['allowUnlimitedAccess'] == true)
           else
             cfg.settings.access.virtGroups.new.xfer.mountPoints.new.fileSharing = mount['fileSharingDl'] unless mount['fileSharingDl'].nil?
           end
@@ -284,7 +284,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
             cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4end = r['ipv4end'] unless r['ipv4end'].nil?
             cfg.settings.access.virtGroups.new.fwding.listenRules.new.instr.acceptRules.NewCommit()
           end
-          cfg.settings.access.winGroups.new.fwding.listenRules.NewCommit()
+          cfg.settings.access.virtGroups.new.fwding.listenRules.NewCommit()
         end
       end
       cfg.settings.access.virtGroups.NewCommit()
@@ -830,8 +830,12 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
           entry.xfer.mountPoints.new.SetDefaults()
           entry.xfer.mountPoints.new.sfsMountPath = mount['sfsMountPath']
           entry.xfer.mountPoints.new.fileSharingBeh = mount['fileSharingBeh']
-          entry.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl']
-          entry.xfer.mountPoints.new.realRootPath = mount['realRootPath'] unless mount['realRootPath'] == ''
+          if cfg_major_version == 9
+            entry.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl'] unless mount['allowUnlimitedAccess'] == true
+          else
+            entry.xfer.mountPoints.new.fileSharing = mount['fileSharingDl']
+          end
+          entry.xfer.mountPoints.new.realRootPath = mount['realRootPath'] unless mount['allowUnlimitedAccess'] == true
           entry.xfer.mountPoints.new.allowUnlimitedAccess = bool_int_convert(mount['allowUnlimitedAccess'])
           entry.xfer.mountPoints.NewCommit()
         end
@@ -843,8 +847,12 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
           entry.xfer.mountPoints.new.SetDefaults()
           entry.xfer.mountPoints.new.sfsMountPath = mount['sfsMountPath']
           entry.xfer.mountPoints.new.fileSharingBeh = mount['fileSharingBeh']
-          entry.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl']
-          entry.xfer.mountPoints.new.realRootPath = mount['realRootPath'] unless mount['realRootPath'] == ''
+          if cfg_major_version == 9
+            entry.xfer.mountPoints.new.fileSharingDl = mount['fileSharingDl'] unless mount['allowUnlimitedAccess'] == true
+          else
+            entry.xfer.mountPoints.new.fileSharing = mount['fileSharingDl']
+          end
+          entry.xfer.mountPoints.new.realRootPath = mount['realRootPath'] unless mount['allowUnlimitedAccess'] == true
           entry.xfer.mountPoints.new.allowUnlimitedAccess = bool_int_convert(mount['allowUnlimitedAccess'])
           entry.xfer.mountPoints.NewCommit()
         end
@@ -899,7 +907,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
           rule.instr.acceptRules.entries.each do |r|
             h = {}
             h['addressType'] = r.addressRule.addressType
-            h['ipv4range'] = r.addressRule.ipv4range
+            h['ipv4range'] = bool_int_convert(r.addressRule.ipv4range)
             h['ipv4end'] = r.addressRule.ipv4end
             accept_rules.push(h)
           end
