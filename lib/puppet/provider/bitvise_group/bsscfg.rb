@@ -213,7 +213,7 @@ Puppet::Type.type(:bitvise_group).provide(:bsscfg) do
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.new.addressRule.ipv4end = r['ipv4end'] unless r['ipv4end'].nil?
             cfg.settings.access.winGroups.new.fwding.listenRules.new.instr.acceptRules.NewCommit()
           end
-          cfg.settings.access.virtGroups.new.fwding.listenRules.NewCommit()
+          cfg.settings.access.winGroups.new.fwding.listenRules.NewCommit()
         end
       end
       cfg.settings.access.winGroups.NewCommit()
