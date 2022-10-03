@@ -43,6 +43,18 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     r
   end
 
+  def update_type_convert(val)
+    values = {
+      'do not check'         => 0,
+      'check only'           => 1,
+      'strongly recommended' => 2,
+      'recommended'          => 3,
+      'all available'        => 4
+    }
+    r = val.is_a?(Integer) ? values.invert[val] : values[val.to_s]
+    r
+  end
+
   # Returns the major version of the bitvise config
   def cfg_major_version
     cfg = WIN32OLE.new(cfg_object)
@@ -113,6 +125,22 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
     cfg.settings.load
     cfg.settings.lock
     cfg.settings.algs.encr.alg_3des_ctr = bool_int_convert(value)
+    cfg.settings.save
+    cfg.settings.unlock
+  end
+
+  def update_type
+    cfg = WIN32OLE.new(cfg_object)
+    cfg.settings.load
+    val = update_type_convert(cfg.instanceSettings.update.updateType)
+    val
+  end
+
+  def update_type=(value)
+    cfg = WIN32OLE.new(cfg_object)
+    cfg.settings.load
+    cfg.settings.lock
+    cfg.instanceSettings.update.updateType = update_type_convert(value)
     cfg.settings.save
     cfg.settings.unlock
   end

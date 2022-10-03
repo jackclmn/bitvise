@@ -35,6 +35,12 @@ Puppet::Type.newtype(:bitvise_setting) do
     newvalues(:true, :false)
   end
 
+  newproperty(:update_type) do
+    desc 'Update type. Valid values: "do not check", "check only", "strongly recommended", "recommended", "all available"'
+
+    newvalues('do not check', 'check only', 'strongly recommended', 'recommended', 'all available')
+  end
+
   newproperty(:min_rsa_key_bits) do
     desc 'min_rsa_key_bits. Valid values are: any integer.'
 
