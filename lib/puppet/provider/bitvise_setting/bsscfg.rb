@@ -131,18 +131,18 @@ Puppet::Type.type(:bitvise_setting).provide(:bsscfg) do
 
   def update_type
     cfg = WIN32OLE.new(cfg_object)
-    cfg.settings.load
+    cfg.instanceSettings.load
     val = update_type_convert(cfg.instanceSettings.update.updateType)
     val
   end
 
   def update_type=(value)
     cfg = WIN32OLE.new(cfg_object)
-    cfg.settings.load
-    cfg.settings.lock
+    cfg.instanceSettings.load
+    cfg.instanceSettings.lock
     cfg.instanceSettings.update.updateType = update_type_convert(value)
-    cfg.settings.save
-    cfg.settings.unlock
+    cfg.instanceSettings.save
+    cfg.instanceSettings.unlock
   end
 
   def min_rsa_key_bits
