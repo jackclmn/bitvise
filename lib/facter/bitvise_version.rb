@@ -1,7 +1,9 @@
 Facter.add('bitvise_version') do
   confine kernel: :windows
-
-  require 'win32ole'
+  
+  if Puppet::Util::Platform.windows?
+    require 'win32ole'
+  end
 
   setcode do
     keys = nil
